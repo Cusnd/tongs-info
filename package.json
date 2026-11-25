@@ -1,0 +1,31 @@
+{
+  "name": "tongs-information",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Tong's Information — Agent-native, zero-build, Swiss modernist bilingual static publication with shared engine and dual-site (demo + prod) Cloudflare Workers Static Assets deployment.",
+  "scripts": {
+    "sync": "python tools/editorial_sync.py --all",
+    "sync:demo": "python tools/editorial_sync.py --site demo",
+    "sync:prod": "python tools/editorial_sync.py --site prod",
+    "check": "python tools/editorial_sync.py --all --check",
+    "check:demo": "python tools/editorial_sync.py --site demo --check",
+    "check:prod": "python tools/editorial_sync.py --site prod --check",
+    "stage:demo": "python tools/editorial_sync.py --site demo --check --stage",
+    "stage:prod": "python tools/editorial_sync.py --site prod --check --stage",
+    "smoke:demo": "python tools/editorial_sync.py --site demo --check --stage && python tools/smoke_test.py --site demo --local --dist .dist/demo",
+    "smoke:prod": "python tools/editorial_sync.py --site prod --check --stage && python tools/smoke_test.py --site prod --local --dist .dist/prod",
+    "preview:demo": "python tools/preview_server.py --site demo --port 8788",
+    "preview:prod": "python tools/preview_server.py --site prod --port 8789",
+    "deploy:demo": "python tools/deploy.py --site demo",
+    "deploy:demo:dry": "python tools/deploy.py --site demo --dry-run",
+    "deploy:demo:preview": "python tools/deploy.py --site demo --preview",
+    "deploy:prod": "python tools/deploy.py --site prod",
+    "deploy:prod:dry": "python tools/deploy.py --site prod --dry-run",
+    "deploy:prod:preview": "python tools/deploy.py --site prod --preview"
+  },
+  "devDependencies": {
+    "cf": "1.0.0-rc.5"
+  }
+}

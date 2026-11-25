@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>双面万维网：同时写给人类眼睛与 AI Agent 的出版架构 | Tong's Information - Demo</title>
+  <meta name="description" content="拆解一文双面的静态出版范式，并内置人类/Agent 透视实验室与瑞士网格字阶实验台两套零依赖交互装置。">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://info-demo.esoren.com/posts/dual-audience-web/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/dual-audience-web/">
+  <link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/dual-audience-web/">
+  <link rel="alternate" hreflang="x-default" href="https://info-demo.esoren.com/posts/dual-audience-web/">
+  <link rel="alternate" type="text/markdown" title="Agent Markdown Twin" href="./index.md">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="preload" as="image" href="/assets/images/issue-02-dual-audience-web.jpg" fetchpriority="high">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <style>
+    .specimen-box {
+      background-color: var(--bg-subtle);
+      padding: var(--space-5);
+      min-block-size: 15rem;
+    }
+
+    .specimen-code {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      max-block-size: 17rem;
+      overflow: auto;
+      font-size: var(--text-xs);
+    }
+
+    .grid-poster {
+      position: relative;
+      background-color: var(--bg-subtle);
+      padding: var(--space-5);
+      overflow: hidden;
+      min-block-size: 17rem;
+      display: grid;
+      grid-template-columns: repeat(var(--lab-cols, 12), minmax(0, 1fr));
+      gap: 0.5rem;
+      align-content: start;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(var(--lab-cols, 12), minmax(0, 1fr));
+      gap: 0.5rem;
+      padding-inline: var(--space-5);
+      pointer-events: none;
+    }
+
+    .grid-overlay span {
+      border-inline: 1px solid var(--accent);
+      opacity: var(--lab-grid-opacity, 0.2);
+    }
+
+    .poster-kicker {
+      grid-column: 1 / -1;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--ink-muted);
+      z-index: 1;
+    }
+
+    .poster-headline {
+      grid-column: 1 / span var(--lab-title-span, 8);
+      font-size: calc(1rem * var(--lab-scale, 1.333) * var(--lab-scale, 1.333));
+      line-height: 1.14;
+      font-weight: 700;
+      z-index: 1;
+    }
+
+    .poster-copy {
+      grid-column: 1 / span var(--lab-copy-span, 7);
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
+      line-height: 1.72;
+      z-index: 1;
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "双面万维网：同时写给人类眼睛与 AI Agent 的出版架构",
+    "description": "拆解一文双面的静态出版范式，并内置人类/Agent 透视实验室与瑞士网格字阶实验台两套零依赖交互装置。",
+    "datePublished": "2026-11-24",
+    "dateModified": "2026-11-24",
+    "inLanguage": "zh-Hans",
+    "url": "https://info-demo.esoren.com/posts/dual-audience-web/",
+    "author": { "@type": "Person", "name": "Tong" },
+    "publisher": { "@type": "Organization", "name": "Tong's Information - Demo" }
+  }
+  </script>
+</head>
+<body data-page-type="article" data-post-slug="dual-audience-web">
+  <div class="reading-progress" aria-hidden="true"><div class="reading-progress-fill"></div></div>
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="Tong's Information - Demo" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">Tong's Information - Demo</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/">封面</a></li>
+        <li><a href="/archive/">归档</a></li>
+        <li><a href="/graph/">图谱</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="/en/posts/dual-audience-web/" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span class="tier-label">特稿 · No. 05</span>
+          <time datetime="2026-11-24">2026.11.24</time>
+          <span>7 分钟 · 含 2 组交互实验</span>
+        </div>
+        <h1 class="article-h1">双面万维网：同时写给人类眼睛与 AI Agent 的出版架构</h1>
+        <p class="article-deck">
+          当互联网一半以上的读者不再拥有视网膜，个人网站应该如何在不牺牲一丝人类审美的前提下，成为一台高信噪比的机器可读信息仪器？
+        </p>
+        <div class="article-tools" role="region" aria-label="文章工具">
+          <button type="button" class="btn subtle" data-copy-md="./index.md">复制 Markdown</button>
+          <a href="./index.md">index.md</a>
+          <button type="button" class="btn subtle" data-copy-cite data-cite-title="双面万维网：同时写给人类眼睛与 AI Agent 的出版架构" data-cite-date="2026-11-24" data-cite-issue="05">复制引用</button>
+          <a href="/en/posts/dual-audience-web/" hreflang="en" lang="en">English ↗</a>
+        </div>
+      </div>
+      <figure class="shell article-cover-plate editorial-plate">
+        <img
+          src="/assets/images/issue-02-dual-audience-web.jpg"
+          alt="瑞士现代主义版画封面：左侧由深蓝与墨黑同心弧构成人类视觉隐喻，右侧穿过网格收束为棱柱与一点朱红，象征机器结构化感知"
+          width="1376"
+          height="768"
+          fetchpriority="high"
+        >
+      </figure>
+    </header>
+
+    <div class="shell article-body-wrap">
+      <div class="essay-grid">
+        <aside class="essay-rail" aria-label="特稿目录">
+          <ul class="toc-list">
+            <li><a href="#s01">§ 01 两种阅读器官</a></li>
+            <li><a href="#s02">§ 02 一文双面架构</a></li>
+            <li><a href="#lab-01">实验 01 · 双面透视</a></li>
+            <li><a href="#lab-02">实验 02 · 瑞士网格</a></li>
+            <li><a href="#s03">§ 03 Workers Static Assets</a></li>
+            <li><a href="#s04">§ 04 静态是发射台</a></li>
+          </ul>
+        </aside>
+
+        <article class="prose">
+          <h2 id="s01"><span class="section-index">§ 01</span>两种截然不同的“阅读器官”</h2>
+          <div class="sidenote-anchor">
+            <p>
+              二十世纪的平面设计师只需要面对一种读者：拥有视网膜、注意力有限、通过版面秩序和视觉留白建立理解的人类。瑞士现代主义（International Typographic Style）正是为此而生——用数学网格、极细分割线与清晰的字号层级，让信息在扫视的一瞬间显露骨架。<span class="sidenote-ref" aria-hidden="true">01</span>
+            </p>
+            <aside class="sidenote" aria-label="边注 01">
+              <span class="sidenote-num">01</span>
+              约瑟夫·穆勒-布罗克曼在《平面设计中的网格系统》中强调：秩序不是束缚，而是让复杂信息被快速解码的脚手架。
+            </aside>
+          </div>
+          <p>
+            但从 2025 年之后，任何公开发布在互联网上的文章，几乎同时都在迎接第二类读者：<strong>AI Agent、检索代理与个人知识助理</strong>。它们的“阅读器官”优化的目标截然不同：
+          </p>
+          <ul>
+            <li><strong>人类需要</strong>：排印呼吸感、边注与图表、暗色护眼配色、甚至可以动手拖拽参数的交互实验。</li>
+            <li><strong>Agent 需要</strong>：极高的语义信噪比、极低的 Token 噪声、显式的目录索引、稳定的规范 URL、以及清晰的概念拓扑关系。</li>
+          </ul>
+
+          <h2 id="s02"><span class="section-index">§ 02</span>一文双面：Human Edition × Agent Edition</h2>
+          <p>
+            <em>Tong's Information</em> 采用的解法叫做 <strong>Dual-Surface Static Publishing（双面静态出版）</strong>。每一篇文章在同一个 URL 目录下同时拥有两张面孔：由 Agent 编排的杂志版 <code>index.html</code>，以及零噪音的洁净 <code>index.md</code>，并在文档头部通过 <code>&lt;link rel="alternate" type="text/markdown" href="./index.md"&gt;</code> 显式宣告机器可读孪生体。
+          </p>
+
+          <section id="lab-01" class="feature-lab" aria-labelledby="lab01-title" data-dual-lab>
+            <div class="lab-header">
+              <div>
+                <div class="lab-kicker">实验 01 · 双面渲染透视</div>
+                <h3 id="lab01-title" style="font-size: var(--text-lg); margin-block-start: 0.25rem;">人类浏览器与 AI Agent 眼中的同一篇文章</h3>
+              </div>
+              <div class="lab-tabs" role="tablist" aria-label="切换视角模式">
+                <button id="tab-human" type="button" class="btn subtle" role="tab" aria-selected="true" aria-controls="dual-specimen-view" tabindex="0" data-surface="human">人类版</button>
+                <button id="tab-dom" type="button" class="btn subtle" role="tab" aria-selected="false" aria-controls="dual-specimen-view" tabindex="-1" data-surface="dom">语义 DOM</button>
+                <button id="tab-markdown" type="button" class="btn subtle" role="tab" aria-selected="false" aria-controls="dual-specimen-view" tabindex="-1" data-surface="markdown">Agent 孪生 (.md)</button>
+              </div>
+            </div>
+            <div class="lab-grid-2">
+              <div class="specimen-box" id="dual-specimen-view" role="tabpanel" aria-labelledby="tab-human" aria-live="polite" tabindex="0">
+                <div class="stack-sm">
+                  <div class="meta-line"><span class="tier-label">人类视口</span><span>瑞士网格</span></div>
+                  <p style="font-size: var(--text-xl); font-weight: 700; line-height: 1.3;">视觉层级、右侧边注与零框架交互装置</p>
+                  <p style="font-size: var(--text-sm); color: var(--ink-secondary);">启用 JavaScript 可实时切换语义 DOM 与 <a href="./index.md">./index.md</a> 对比视图；禁用脚本时可直接点击打开洁净 Markdown 原稿。</p>
+                </div>
+              </div>
+              <div class="metric-stack">
+                <div class="metric-card">
+                  <div class="metric-label">载荷体积</div>
+                  <div class="metric-value" id="metric-bytes">—</div>
+                  <div class="meter-track"><div class="meter-bar" id="meter-bytes" style="inline-size: 40%;"></div></div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">估算 Token 消耗</div>
+                  <div class="metric-value" id="metric-tokens">—</div>
+                  <div class="meter-track"><div class="meter-bar" id="meter-tokens" style="inline-size: 35%;"></div></div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">信息信噪比</div>
+                  <div class="metric-value" id="metric-signal">—</div>
+                  <p id="metric-note" style="font-size: var(--text-xs); color: var(--ink-secondary); margin-block-start: 0.35rem;"></p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <p>
+            切到 <strong>Agent 孪生 (.md)</strong> 后你可以看到：右侧数据实时拉取本篇同目录下的 <code>./index.md</code> 计算出真实体积与估算 Token 消耗。在保留丰富交互视觉的同时，外部 AI 无需替导航栏、样式与脚本支付多余上下文预算。
+          </p>
+
+          <section id="lab-02" class="feature-lab" aria-labelledby="lab02-title" data-grid-lab>
+            <div class="lab-header">
+              <div>
+                <div class="lab-kicker">实验 02 · 瑞士网格与字阶</div>
+                <h3 id="lab02-title" style="font-size: var(--text-lg); margin-block-start: 0.25rem;">零前端框架：直接内嵌在静态文章中的排版实验台</h3>
+              </div>
+            </div>
+            <div class="lab-grid-2">
+              <div class="grid-poster" id="swiss-grid-poster" style="--lab-cols: 12; --lab-scale: 1.333; --lab-grid-opacity: 0.2; --lab-title-span: 9; --lab-copy-span: 7;">
+                <div class="grid-overlay" id="swiss-grid-overlay" aria-hidden="true"></div>
+                <div class="poster-kicker">GRID SPECIMEN</div>
+                <div class="poster-headline">秩序让信息在毫秒间显形。</div>
+                <p class="poster-copy">
+                  滑块状态直接通过 CSS 自定义属性传递给样式表，无需虚拟 DOM 或前端组件库。
+                </p>
+              </div>
+              <div class="control-grid">
+                <div class="control-field">
+                  <label for="lab-cols-input">
+                    <span>网格列数</span>
+                    <output id="lab-cols-out" class="tabular">12 cols</output>
+                  </label>
+                  <input id="lab-cols-input" type="range" min="4" max="12" step="2" value="12">
+                </div>
+                <div class="control-field">
+                  <label for="lab-scale-input">
+                    <span>字阶比例</span>
+                    <output id="lab-scale-out" class="tabular">1.33 (Perfect Fourth)</output>
+                  </label>
+                  <input id="lab-scale-input" type="range" min="1.15" max="1.45" step="0.01" value="1.33">
+                </div>
+                <div class="control-field">
+                  <label for="lab-opacity-input">
+                    <span>参考网格显影</span>
+                    <output id="lab-opacity-out" class="tabular">20%</output>
+                  </label>
+                  <input id="lab-opacity-input" type="range" min="0" max="50" step="2" value="20">
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">实时标题字号</div>
+                  <div class="metric-value" id="lab-computed-size">1.77 rem</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <h2 id="s03"><span class="section-index">§ 03</span>为什么选 Cloudflare Workers Static Assets</h2>
+          <div class="sidenote-anchor">
+            <p>
+              既然当下的核心产物是 100% 纯静态的 <code>site/</code> 目录，为什么不随便找个静态托管，而特意选在 <strong>Cloudflare Workers Static Assets</strong> 上？因为它是面向未来演进阻力最小的一条跑道。<span class="sidenote-ref" aria-hidden="true">02</span>
+            </p>
+            <aside class="sidenote" aria-label="边注 02">
+              <span class="sidenote-num">02</span>
+              使用官方 <code>cf deploy ./site</code> 即可跳过任何构建工具，将纯静态文件部署为 assets-only Worker，零冷启动、支持自定义 <code>_headers</code> 与 <code>404.html</code>。
+            </aside>
+          </div>
+          <ol>
+            <li><strong>HTTP 内容协商（Content Negotiation）</strong>：未来只需挂一个几十行 Worker 脚本，当外部 Agent 请求带 <code>Accept: text/markdown</code> 时边缘直接返回 <code>index.md</code>，人类浏览器则照常收到完整杂志版。</li>
+            <li><strong>个人博客 Remote MCP Server</strong>：基于 Cloudflare Agents SDK 暴露只读工具（<code>search_essays</code>、<code>read_issue</code>、<code>explore_graph</code>），让任何支持 MCP 的 AI 客户端直接把你的个人思想库挂载为外脑。</li>
+            <li><strong>边缘语义检索</strong>：按需接入 Cloudflare AI Search，在不破坏纯静态阅读核心的前提下提供基于全站内容的语义检索与问答。</li>
+          </ol>
+
+          <h2 id="s04"><span class="section-index">§ 04</span>结语：静态不是守旧，而是最稳固的发射台</h2>
+          <p>
+            许多人误以为“全静态 HTML”是一种复古怀旧。恰恰相反：在技术栈半年一迭代的今天，<strong>把内容、排印与机器协议沉淀为透明、无框架、可版本控制的静态文件，同时把边缘计算作为按需挂载的可选能力</strong>，才是个人数字领地最具前瞻性的架构选择。
+          </p>
+
+          <section class="article-footer-band" aria-label="关联概念与延伸阅读">
+            <div>
+              <h3 class="footer-heading">关联概念</h3>
+              <ul class="concept-list">
+                <li><a class="concept-tag" href="/archive/?concept=agent-web">Agent 万维网</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=knowledge-graph">思想图谱</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=edge-architecture">边缘演进架构</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=swiss-typography">瑞士排印与网格</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">延伸阅读</h3>
+              <ul class="footer-list">
+                <li><a href="/posts/ambient-interfaces/">No. 04 宁静界面：当交互从点击转向意图 →</a></li>
+                <li><a href="/posts/agent-era-publishing/">No. 01 后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML →</a></li>
+                <li><a href="/graph/">在思想图谱中查看概念连接 →</a></li>
+              </ul>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information - Demo</span>
+    <ul class="footer-links" aria-label="订阅与语言">
+      <li><a href="/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/en/posts/dual-audience-web/" hreflang="en" lang="en">English</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/posts/dual-audience-web/labs.js"></script>
+</body>
+</html>

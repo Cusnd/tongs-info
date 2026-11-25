@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>思想图谱 | Tong's Information - Demo</title>
+  <meta name="description" content="以几何网络展示 Tong's Information 中各期文章与核心概念之间的关联，由静态 /api/graph.json 驱动。">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://info-demo.esoren.com/graph/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/graph/">
+  <link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/graph/">
+  <link rel="alternate" hreflang="x-default" href="https://info-demo.esoren.com/graph/">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "思想图谱 | Tong's Information - Demo",
+    "url": "https://info-demo.esoren.com/graph/",
+    "inLanguage": "zh-Hans"
+  }
+  </script>
+</head>
+<body data-page-type="graph">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="Tong's Information - Demo" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">Tong's Information - Demo</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/">封面</a></li>
+        <li><a href="/archive/">归档</a></li>
+        <li><a href="/graph/" aria-current="page">图谱</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="/en/graph/" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span>概念拓扑</span>
+          <a href="/api/graph.json">/api/graph.json</a>
+        </div>
+        <h1 class="article-h1">思想图谱</h1>
+        <p class="article-deck">
+          圆形节点代表文章，方形节点代表核心概念。点击画布或下方索引表可追踪双向关联。
+        </p>
+      </div>
+    </header>
+
+    <section class="shell section-band" aria-label="交互式知识图谱">
+      <div class="graph-workspace">
+        <div class="graph-stage">
+          <canvas id="knowledge-graph-canvas" aria-label="Tong's Information 文章与概念关系图谱，可通过下方结构化表格进行键盘浏览"></canvas>
+        </div>
+        <aside class="graph-inspector" aria-label="节点检查器">
+          <div id="graph-inspector-body" class="stack-sm">
+            <span class="badge">拓扑概览</span>
+            <h2 style="font-size: var(--text-xl);">5 期文章 × 7 个核心概念</h2>
+            <p style="font-size: var(--text-sm); color: var(--ink-secondary);">
+              启用 JavaScript 后可在画布或下方索引中交互高亮双向连接；也可直接点击下方结构化索引表中的文章与概念链接，或访问 <a href="/api/graph.json">/api/graph.json</a>。
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="shell section-band" aria-labelledby="graph-table-heading">
+      <div class="section-head">
+        <h2 id="graph-table-heading" class="section-title">结构化节点索引</h2>
+        <span class="section-meta">无障碍对照表</span>
+      </div>
+      <div class="table-scroll" role="region" aria-label="文章与概念映射清单" tabindex="0">
+      <table class="swiss-table">
+        <caption>文章与概念映射清单</caption>
+        <thead>
+          <tr>
+            <th scope="col">节点</th>
+            <th scope="col">类型</th>
+            <th scope="col">说明</th>
+            <th scope="col">定位</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="/posts/dual-audience-web/">No. 05 双面万维网</a></strong></td>
+            <td class="mono">Feature</td>
+            <td>关联：Agent 万维网、思想图谱、边缘演进架构、瑞士排印与网格</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:dual-audience-web" hidden>查看</button><noscript><a class="btn subtle" href="/posts/dual-audience-web/">阅读 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/posts/ambient-interfaces/">No. 04 宁静界面</a></strong></td>
+            <td class="mono">Feature</td>
+            <td>关联：界面克制与意图设计、Agent 万维网、瑞士排印与网格</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:ambient-interfaces" hidden>查看</button><noscript><a class="btn subtle" href="/posts/ambient-interfaces/">阅读 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/posts/bilingual-thought/">No. 03 双语即思考</a></strong></td>
+            <td class="mono">Essay</td>
+            <td>关联：Agent 原生双语、Agent 万维网、思想图谱</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:bilingual-thought" hidden>查看</button><noscript><a class="btn subtle" href="/posts/bilingual-thought/">阅读 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/posts/software-longevity/">No. 02 十年之后依然可读</a></strong></td>
+            <td class="mono">Essay</td>
+            <td>关联：纯静态架构、边缘演进架构、界面克制与意图设计</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:software-longevity" hidden>查看</button><noscript><a class="btn subtle" href="/posts/software-longevity/">阅读 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/posts/agent-era-publishing/">No. 01 后模板时代</a></strong></td>
+            <td class="mono">Essay</td>
+            <td>关联：Agent 万维网、纯静态架构、瑞士排印与网格、Agent 原生双语</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:agent-era-publishing" hidden>查看</button><noscript><a class="btn subtle" href="/posts/agent-era-publishing/">阅读 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/archive/?concept=agent-web">Agent 万维网</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>将网站同时设计为人类阅读界面与机器可消费的知识协议。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:agent-web" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=agent-web">归档 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/archive/?concept=interface-craft">界面克制与意图设计</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>剥离多余控件与视觉噪音，让界面回归清晰意图与安静秩序。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:interface-craft" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=interface-craft">归档 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/archive/?concept=static-architecture">纯静态架构</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>告别重型构建链与依赖腐烂，回归长期可持续的原生 Web 标准。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:static-architecture" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=static-architecture">归档 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/archive/?concept=swiss-typography">瑞士排印与网格</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>以数学网格、清晰层级、发丝分割线与克制留白构建理性阅读秩序。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:swiss-typography" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=swiss-typography">归档 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/archive/?concept=bilingual-i18n">Agent 原生双语</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>以单一灵感源稿出发，由 Agent 编辑部产出同等文学与排印品质的双语版本。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:bilingual-i18n" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=bilingual-i18n">归档 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/archive/?concept=knowledge-graph">思想图谱</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>用概念拓扑与双向连接取代扁平时间线，沉淀可演进的个人知识网络。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:knowledge-graph" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=knowledge-graph">归档 →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/archive/?concept=edge-architecture">边缘演进架构</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>基于 Cloudflare Workers Static Assets，兼顾当下纯静态与未来边缘 Agent 能力。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:edge-architecture" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=edge-architecture">归档 →</a></noscript></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information - Demo</span>
+    <ul class="footer-links" aria-label="订阅与语言">
+      <li><a href="/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/en/graph/" hreflang="en" lang="en">English</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/graph.js"></script>
+</body>
+</html>

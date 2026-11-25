@@ -1,0 +1,316 @@
+{
+  "site": "Tong's Information - Demo",
+  "nodes": [
+    {
+      "id": "post:dual-audience-web",
+      "type": "post",
+      "issue_no": "05",
+      "tier": "feature",
+      "zh": "双面万维网：同时写给人类眼睛与 AI Agent 的出版架构",
+      "en": "The Dual-Audience Web: Publishing for Human Eyes and AI Agents",
+      "description": {
+        "zh": "拆解“一文双面”的静态出版范式，内置「人类/Agent 透视实验室」与「瑞士网格字阶实验台」两套零依赖交互装置。",
+        "en": "An architectural blueprint for dual-surface static publishing, complete with a live Human/Agent Representation Inspector and a Swiss Modular Grid Workbench."
+      },
+      "url": {
+        "zh": "/posts/dual-audience-web/",
+        "en": "/en/posts/dual-audience-web/"
+      },
+      "md_url": {
+        "zh": "/posts/dual-audience-web/index.md",
+        "en": "/en/posts/dual-audience-web/index.md"
+      }
+    },
+    {
+      "id": "post:ambient-interfaces",
+      "type": "post",
+      "issue_no": "04",
+      "tier": "feature",
+      "zh": "宁静界面：当交互从点击转向意图",
+      "en": "Quiet Interfaces: Designing Beyond the Click",
+      "description": {
+        "zh": "剖析界面过度装饰的根源，并内置「界面信噪比校准器」交互装置，实时对比控件堆砌与克制意图界面之间的视觉熵值。",
+        "en": "An inquiry into chrome fatigue and intent-driven surfaces, complete with a live Interface Noise-to-Signal Calibrator."
+      },
+      "url": {
+        "zh": "/posts/ambient-interfaces/",
+        "en": "/en/posts/ambient-interfaces/"
+      },
+      "md_url": {
+        "zh": "/posts/ambient-interfaces/index.md",
+        "en": "/en/posts/ambient-interfaces/index.md"
+      }
+    },
+    {
+      "id": "post:bilingual-thought",
+      "type": "post",
+      "issue_no": "03",
+      "tier": "essay",
+      "zh": "双语即思考：Agent 时代的写作不再被单一语言围困",
+      "en": "Thinking in Stereo: Writing Beyond Monolingual Boundaries",
+      "description": {
+        "zh": "讨论中英双语写作如何反哺逻辑清晰度，并支持在段落左右留白处双击唤醒当前段落的英文对照版本。",
+        "en": "Why maintaining idiomatic Chinese and English editions sharpens thought itself — featuring a margin double-click gesture that unfolds each paragraph's counterpart language in place."
+      },
+      "url": {
+        "zh": "/posts/bilingual-thought/",
+        "en": "/en/posts/bilingual-thought/"
+      },
+      "md_url": {
+        "zh": "/posts/bilingual-thought/index.md",
+        "en": "/en/posts/bilingual-thought/index.md"
+      }
+    },
+    {
+      "id": "post:software-longevity",
+      "type": "post",
+      "issue_no": "02",
+      "tier": "essay",
+      "zh": "十年之后依然可读：静态网页与数字资产的半衰期",
+      "en": "Readable in Ten Years: Static HTML and the Half-Life of Digital Work",
+      "description": {
+        "zh": "以数字出版物的半衰期为线索，对比动态栈、重型构建链与零依赖纯静态 HTML 在十年尺度下的维护成本与可迁移性。",
+        "en": "Measuring the half-life of personal publishing stacks across a ten-year horizon, from dynamic CMS databases to zero-dependency static HTML on the edge."
+      },
+      "url": {
+        "zh": "/posts/software-longevity/",
+        "en": "/en/posts/software-longevity/"
+      },
+      "md_url": {
+        "zh": "/posts/software-longevity/index.md",
+        "en": "/en/posts/software-longevity/index.md"
+      }
+    },
+    {
+      "id": "post:agent-era-publishing",
+      "type": "post",
+      "issue_no": "01",
+      "tier": "essay",
+      "zh": "后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML",
+      "en": "Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML",
+      "description": {
+        "zh": "阐述 Tong's Information 的发刊哲学：如何通过秩序层与创意层分离，实现零框架、抗熵增、原生双语的静态出版工作流。",
+        "en": "The founding thesis of Tong's Information: separating structural order from creative layout to achieve a zero-framework, entropy-resistant, agent-bilingual static publication."
+      },
+      "url": {
+        "zh": "/posts/agent-era-publishing/",
+        "en": "/en/posts/agent-era-publishing/"
+      },
+      "md_url": {
+        "zh": "/posts/agent-era-publishing/index.md",
+        "en": "/en/posts/agent-era-publishing/index.md"
+      }
+    },
+    {
+      "id": "concept:agent-web",
+      "type": "concept",
+      "zh": "Agent 万维网",
+      "en": "Agent Web",
+      "description": {
+        "zh": "将网站同时设计为人类阅读界面与机器可消费的知识协议。",
+        "en": "Designing websites simultaneously as human reading surfaces and machine-consumable knowledge protocols."
+      }
+    },
+    {
+      "id": "concept:interface-craft",
+      "type": "concept",
+      "zh": "界面克制与意图设计",
+      "en": "Interface Craft",
+      "description": {
+        "zh": "剥离多余控件与视觉噪音，让界面回归清晰意图与安静秩序。",
+        "en": "Stripping away decorative chrome and control clutter so interfaces serve human intent quietly."
+      }
+    },
+    {
+      "id": "concept:static-architecture",
+      "type": "concept",
+      "zh": "纯静态架构",
+      "en": "Static Architecture",
+      "description": {
+        "zh": "告别重型构建链与依赖腐烂，回归长期可持续的原生 Web 标准。",
+        "en": "Leaving heavy build chains and dependency rot behind in favor of durable, native web standards."
+      }
+    },
+    {
+      "id": "concept:swiss-typography",
+      "type": "concept",
+      "zh": "瑞士排印与网格",
+      "en": "Swiss Typography",
+      "description": {
+        "zh": "以数学网格、清晰层级、发丝分割线与克制留白构建理性阅读秩序。",
+        "en": "Building rational reading order through modular grids, typographic hierarchy, hairlines, and negative space."
+      }
+    },
+    {
+      "id": "concept:bilingual-i18n",
+      "type": "concept",
+      "zh": "Agent 原生双语",
+      "en": "Agent-Native i18n",
+      "description": {
+        "zh": "以单一灵感源稿出发，由 Agent 编辑部产出同等文学与排印品质的双语版本。",
+        "en": "Writing from a single source of thought while an agent editorial desk crafts idiomatic bilingual editions."
+      }
+    },
+    {
+      "id": "concept:knowledge-graph",
+      "type": "concept",
+      "zh": "思想图谱",
+      "en": "Knowledge Graph",
+      "description": {
+        "zh": "用概念拓扑与双向连接取代扁平时间线，沉淀可演进的个人知识网络。",
+        "en": "Replacing flat chronological feeds with conceptual topology and bidirectional links."
+      }
+    },
+    {
+      "id": "concept:edge-architecture",
+      "type": "concept",
+      "zh": "边缘演进架构",
+      "en": "Edge Architecture",
+      "description": {
+        "zh": "基于 Cloudflare Workers Static Assets，保持当下零运维静态，同时预留内容协商与 MCP 接口。",
+        "en": "Hosting on Cloudflare Workers Static Assets for zero-ops static delivery today with seamless upgrades to content negotiation and MCP tomorrow."
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "post:dual-audience-web",
+      "target": "concept:agent-web",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:dual-audience-web",
+      "target": "concept:knowledge-graph",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:dual-audience-web",
+      "target": "concept:edge-architecture",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:dual-audience-web",
+      "target": "concept:swiss-typography",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:ambient-interfaces",
+      "target": "concept:interface-craft",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:ambient-interfaces",
+      "target": "concept:agent-web",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:ambient-interfaces",
+      "target": "concept:swiss-typography",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:bilingual-thought",
+      "target": "concept:bilingual-i18n",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:bilingual-thought",
+      "target": "concept:agent-web",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:bilingual-thought",
+      "target": "concept:knowledge-graph",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:software-longevity",
+      "target": "concept:static-architecture",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:software-longevity",
+      "target": "concept:edge-architecture",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:software-longevity",
+      "target": "concept:interface-craft",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:agent-era-publishing",
+      "target": "concept:agent-web",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:agent-era-publishing",
+      "target": "concept:static-architecture",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:agent-era-publishing",
+      "target": "concept:swiss-typography",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:agent-era-publishing",
+      "target": "concept:bilingual-i18n",
+      "kind": "tagged"
+    },
+    {
+      "source": "post:dual-audience-web",
+      "target": "post:ambient-interfaces",
+      "kind": "shared-concepts",
+      "weight": 2
+    },
+    {
+      "source": "post:dual-audience-web",
+      "target": "post:bilingual-thought",
+      "kind": "shared-concepts",
+      "weight": 2
+    },
+    {
+      "source": "post:dual-audience-web",
+      "target": "post:software-longevity",
+      "kind": "shared-concepts",
+      "weight": 1
+    },
+    {
+      "source": "post:dual-audience-web",
+      "target": "post:agent-era-publishing",
+      "kind": "shared-concepts",
+      "weight": 2
+    },
+    {
+      "source": "post:ambient-interfaces",
+      "target": "post:bilingual-thought",
+      "kind": "shared-concepts",
+      "weight": 1
+    },
+    {
+      "source": "post:ambient-interfaces",
+      "target": "post:software-longevity",
+      "kind": "shared-concepts",
+      "weight": 1
+    },
+    {
+      "source": "post:ambient-interfaces",
+      "target": "post:agent-era-publishing",
+      "kind": "shared-concepts",
+      "weight": 2
+    },
+    {
+      "source": "post:bilingual-thought",
+      "target": "post:agent-era-publishing",
+      "kind": "shared-concepts",
+      "weight": 2
+    },
+    {
+      "source": "post:software-longevity",
+      "target": "post:agent-era-publishing",
+      "kind": "shared-concepts",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# Tong's Information welcomes both human search engines and AI agents.
+# Agent discovery manifest: https://www.esoren.com/llms.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://www.esoren.com/sitemap.xml

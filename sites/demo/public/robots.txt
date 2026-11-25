@@ -1,0 +1,6 @@
+# Tong's Information - Demo welcomes both human search engines and AI agents.
+# Agent discovery manifest: https://info-demo.esoren.com/llms.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://info-demo.esoren.com/sitemap.xml

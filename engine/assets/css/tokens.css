@@ -1,0 +1,200 @@
+@layer reset, tokens, base, layout, editorial, components, motion, utilities;
+
+@layer tokens {
+  :root {
+    color-scheme: light dark;
+    --color-scheme: light;
+
+    /* Calm unified paper canvas & matte dark graphite */
+    --bg-canvas-light: #ffffff;
+    --bg-canvas-dark: #0d0f13;
+
+    --bg-surface-light: #ffffff;
+    --bg-surface-dark: #12151c;
+
+    --bg-subtle-light: #f4f5f7;
+    --bg-subtle-dark: #171b24;
+
+    --cover-paper-light: #f1f2f4;
+    --cover-paper-dark: #0d0f13;
+
+    --ink-primary-light: #111318;
+    --ink-primary-dark: #eceff4;
+
+    --ink-secondary-light: #4e5666;
+    --ink-secondary-dark: #a2acbd;
+
+    --ink-muted-light: #747d8f;
+    --ink-muted-dark: #7a8496;
+
+    --rule-light: #e5e8ee;
+    --rule-dark: #232834;
+
+    --rule-strong-light: #111318;
+    --rule-strong-dark: #d8dee9;
+
+    --accent-light: #0047ff;
+    --accent-dark: #689bff;
+
+    --accent-soft-light: rgba(0, 71, 255, 0.06);
+    --accent-soft-dark: rgba(104, 155, 255, 0.14);
+
+    --accent-ink-light: #ffffff;
+    --accent-ink-dark: #081226;
+
+    --signal-light: #d9381a;
+    --signal-dark: #ff6b4e;
+
+    --scrollbar-track-light: #f4f5f7;
+    --scrollbar-track-dark: #12151c;
+    --scrollbar-thumb-light: #747d8f;
+    --scrollbar-thumb-dark: #687387;
+
+    --bg-canvas: var(--bg-canvas-light);
+    --bg-surface: var(--bg-surface-light);
+    --bg-subtle: var(--bg-subtle-light);
+    --cover-paper: var(--cover-paper-light);
+    --ink-primary: var(--ink-primary-light);
+    --ink-secondary: var(--ink-secondary-light);
+    --ink-muted: var(--ink-muted-light);
+    --rule: var(--rule-light);
+    --rule-strong: var(--rule-strong-light);
+    --accent: var(--accent-light);
+    --accent-soft: var(--accent-soft-light);
+    --accent-ink: var(--accent-ink-light);
+    --signal: var(--signal-light);
+    --scrollbar-track: var(--scrollbar-track-light);
+    --scrollbar-thumb: var(--scrollbar-thumb-light);
+
+    @media (prefers-color-scheme: dark) {
+      --color-scheme: dark;
+      --bg-canvas: var(--bg-canvas-dark);
+      --bg-surface: var(--bg-surface-dark);
+      --bg-subtle: var(--bg-subtle-dark);
+      --cover-paper: var(--cover-paper-dark);
+      --ink-primary: var(--ink-primary-dark);
+      --ink-secondary: var(--ink-secondary-dark);
+      --ink-muted: var(--ink-muted-dark);
+      --rule: var(--rule-dark);
+      --rule-strong: var(--rule-strong-dark);
+      --accent: var(--accent-dark);
+      --accent-soft: var(--accent-soft-dark);
+      --accent-ink: var(--accent-ink-dark);
+      --signal: var(--signal-dark);
+      --scrollbar-track: var(--scrollbar-track-dark);
+      --scrollbar-thumb: var(--scrollbar-thumb-dark);
+    }
+
+    &:has(> head > meta[name="color-scheme"][content="dark"]) {
+      color-scheme: dark;
+      --color-scheme: dark;
+      --bg-canvas: var(--bg-canvas-dark);
+      --bg-surface: var(--bg-surface-dark);
+      --bg-subtle: var(--bg-subtle-dark);
+      --cover-paper: var(--cover-paper-dark);
+      --ink-primary: var(--ink-primary-dark);
+      --ink-secondary: var(--ink-secondary-dark);
+      --ink-muted: var(--ink-muted-dark);
+      --rule: var(--rule-dark);
+      --rule-strong: var(--rule-strong-dark);
+      --accent: var(--accent-dark);
+      --accent-soft: var(--accent-soft-dark);
+      --accent-ink: var(--accent-ink-dark);
+      --signal: var(--signal-dark);
+      --scrollbar-track: var(--scrollbar-track-dark);
+      --scrollbar-thumb: var(--scrollbar-thumb-dark);
+    }
+
+    &:has(> head > meta[name="color-scheme"][content="light"]) {
+      color-scheme: light;
+      --color-scheme: light;
+      --bg-canvas: var(--bg-canvas-light);
+      --bg-surface: var(--bg-surface-light);
+      --bg-subtle: var(--bg-subtle-light);
+      --cover-paper: var(--cover-paper-light);
+      --ink-primary: var(--ink-primary-light);
+      --ink-secondary: var(--ink-secondary-light);
+      --ink-muted: var(--ink-muted-light);
+      --rule: var(--rule-light);
+      --rule-strong: var(--rule-strong-light);
+      --accent: var(--accent-light);
+      --accent-soft: var(--accent-soft-light);
+      --accent-ink: var(--accent-ink-light);
+      --signal: var(--signal-light);
+      --scrollbar-track: var(--scrollbar-track-light);
+      --scrollbar-thumb: var(--scrollbar-thumb-light);
+    }
+
+    @supports (color: light-dark(white, black)) {
+      --bg-canvas: light-dark(var(--bg-canvas-light), var(--bg-canvas-dark));
+      --bg-surface: light-dark(var(--bg-surface-light), var(--bg-surface-dark));
+      --bg-subtle: light-dark(var(--bg-subtle-light), var(--bg-subtle-dark));
+      --cover-paper: light-dark(var(--cover-paper-light), var(--cover-paper-dark));
+      --ink-primary: light-dark(var(--ink-primary-light), var(--ink-primary-dark));
+      --ink-secondary: light-dark(var(--ink-secondary-light), var(--ink-secondary-dark));
+      --ink-muted: light-dark(var(--ink-muted-light), var(--ink-muted-dark));
+      --rule: light-dark(var(--rule-light), var(--rule-dark));
+      --rule-strong: light-dark(var(--rule-strong-light), var(--rule-strong-dark));
+      --accent: light-dark(var(--accent-light), var(--accent-dark));
+      --accent-soft: light-dark(var(--accent-soft-light), var(--accent-soft-dark));
+      --accent-ink: light-dark(var(--accent-ink-light), var(--accent-ink-dark));
+      --signal: light-dark(var(--signal-light), var(--signal-dark));
+      --scrollbar-track: light-dark(var(--scrollbar-track-light), var(--scrollbar-track-dark));
+      --scrollbar-thumb: light-dark(var(--scrollbar-thumb-light), var(--scrollbar-thumb-dark));
+    }
+
+    --font-sans: "Inter", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+    --font-editorial: "Newsreader", "Iowan Old Style", "Georgia", "Songti SC", "Noto Serif SC", serif;
+    --font-mono: "JetBrains Mono", "IBM Plex Mono", "SFMono-Regular", ui-monospace, Consolas, monospace;
+
+    /* Fluid type scale (max <= 2.5 * min for WCAG 1.4.4 200% zoom) */
+    --text-xs: 0.78rem;
+    --text-sm: 0.875rem;
+    --text-base: 1.03125rem;
+    --text-lg: clamp(1.1rem, 1.03rem + 0.32vw, 1.28rem);
+    --text-xl: clamp(1.3rem, 1.16rem + 0.65vw, 1.72rem);
+    --text-2xl: clamp(1.65rem, 1.32rem + 1.4vw, 2.4rem);
+    --text-display: clamp(2rem, 1.48rem + 2.3vw, 3.4rem);
+
+    --gutter: clamp(1.25rem, 3.5vw, 3rem);
+    --container-max: 74rem;
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2.25rem;
+    --space-7: 3.5rem;
+    --space-8: 5rem;
+
+    --radius-none: 0;
+    --radius-xs: 0.125rem;
+
+    /* Swiss Modernist Motion Grammar */
+    --ease-swiss: cubic-bezier(0.2, 0, 0, 1);
+    --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+    --ease-standard: cubic-bezier(0.32, 0, 0.15, 1);
+
+    --duration-instant: 90ms;
+    --duration-fast: 150ms;
+    --duration-base: 240ms;
+    --duration-moderate: 340ms;
+    --duration-deliberate: 460ms;
+    --stagger-step: 36ms;
+
+    --motion-shift-sm: 6px;
+    --motion-shift-md: 16px;
+    --motion-shift-lg: 24px;
+
+    accent-color: var(--accent);
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+
+    @media (prefers-contrast: more) {
+      --scrollbar-track-light: #ffffff;
+      --scrollbar-track-dark: #0d0f13;
+      --scrollbar-thumb-light: #111318;
+      --scrollbar-thumb-dark: #ffffff;
+    }
+  }
+}

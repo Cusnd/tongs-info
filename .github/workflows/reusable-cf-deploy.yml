@@ -1,0 +1,238 @@
+name: Reusable Cloudflare Static Assets Deploy
+
+on:
+  workflow_call:
+    inputs:
+      site:
+        description: "Target site key in sites/sites.json (e.g. demo, prod)"
+        required: true
+        type: string
+      environment:
+        description: "GitHub Actions release Environment name (e.g. demo, production)"
+        required: true
+        type: string
+      skip_live_smoke:
+        description: "Skip post-deploy live URL smoke test (use on first deploy before binding Custom Domain)"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    name: Deploy (${{ inputs.site }})
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ steps.target.outputs.base_url }}
+    permissions:
+      contents: read
+    steps:
+      - name: Enforce trusted release branch (main)
+        shell: bash
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Release deployments are restricted to refs/heads/main (got '${GITHUB_REF}')."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Resolve site manifest & verify release credentials
+        id: target
+        shell: bash
+        env:
+          INPUT_SITE: ${{ inputs.site }}
+          INPUT_ENV: ${{ inputs.environment }}
+          VAR_WORKER: ${{ vars.CF_WORKER_NAME }}
+          VAR_BASE_URL: ${{ vars.SITE_BASE_URL }}
+          VAR_SKIP_SMOKE: ${{ vars.SKIP_LIVE_SMOKE }}
+          INPUT_SKIP_SMOKE: ${{ inputs.skip_live_smoke }}
+          HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+          HAS_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, sys
+
+          site = os.environ["INPUT_SITE"]
+          env_name = os.environ["INPUT_ENV"]
+          gh_out = pathlib.Path(os.environ["GITHUB_OUTPUT"])
+
+          catalog_path = pathlib.Path("sites") / site / "catalog.json"
+          reg_path = pathlib.Path("sites/sites.json")
+          if not reg_path.is_file():
+              print("::error::Missing sites/sites.json registry.")
+              sys.exit(1)
+          raw_registry = json.loads(reg_path.read_text(encoding="utf-8"))
+          registry = raw_registry.get("sites") if isinstance(raw_registry, dict) else None
+          if not isinstance(registry, dict) or not registry:
+              print("::error::Malformed sites/sites.json: expected non-empty top-level 'sites' object.")
+              sys.exit(1)
+
+          if site not in registry:
+              print(f"::notice::Site '{site}' is not registered in sites/sites.json; skipping deploy.")
+              with gh_out.open("a", encoding="utf-8") as fh:
+                  fh.write("enabled=false\n")
+                  fh.write("base_url=\n")
+              sys.exit(0)
+
+          if not catalog_path.is_file():
+              print(f"::error::Registered site '{site}' is missing required {catalog_path}.")
+              sys.exit(1)
+
+          entry = registry[site]
+          expected_env = entry.get("environment")
+          if expected_env and expected_env != env_name:
+              print(f"::error::Environment mismatch: site '{site}' expects '{expected_env}', got '{env_name}'.")
+              sys.exit(1)
+
+          if os.environ["HAS_TOKEN"] != "true" or os.environ["HAS_ACCOUNT"] != "true":
+              print(
+                  f"::error::Missing CLOUDFLARE_API_TOKEN or CLOUDFLARE_ACCOUNT_ID in GitHub Environment '{env_name}'. "
+                  "Configure environment-scoped secrets under Settings -> Environments."
+              )
+              sys.exit(1)
+
+          reg_base = str(entry["base_url"]).rstrip("/")
+          var_base = os.environ.get("VAR_BASE_URL", "").strip().rstrip("/")
+          if var_base and var_base != reg_base:
+              print(
+                  f"::error::Domain guard failed: Environment variable SITE_BASE_URL='{var_base}' disagrees with "
+                  f"sites/sites.json base_url='{reg_base}' for site '{site}'."
+              )
+              sys.exit(1)
+
+          expected_worker = str(entry["worker_name"]).strip()
+          var_worker = os.environ.get("VAR_WORKER", "").strip()
+          if var_worker and var_worker != expected_worker:
+              print(
+                  f"::error::Worker registry guard failed: Environment variable CF_WORKER_NAME='{var_worker}' "
+                  f"does not match sites/sites.json worker_name='{expected_worker}' for site '{site}'."
+              )
+              sys.exit(1)
+          worker_name = expected_worker
+
+          skip_smoke = (
+              "true"
+              if os.environ.get("INPUT_SKIP_SMOKE") == "true" or os.environ.get("VAR_SKIP_SMOKE") == "true"
+              else "false"
+          )
+          short_sha = os.environ.get("GITHUB_SHA", "")[:7]
+          stage_dir = str(pathlib.Path(os.environ["RUNNER_TEMP"]) / f"dist-{site}-{short_sha}")
+
+          with gh_out.open("a", encoding="utf-8") as fh:
+              fh.write("enabled=true\n")
+              fh.write(f"worker_name={worker_name}\n")
+              fh.write(f"base_url={reg_base}\n")
+              fh.write(f"skip_smoke={skip_smoke}\n")
+              fh.write(f"short_sha={short_sha}\n")
+              fh.write(f"stage_dir={stage_dir}\n")
+          PY
+
+      - name: Set up Node.js
+        if: steps.target.outputs.enabled == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install pinned Cloudflare cf CLI
+        if: steps.target.outputs.enabled == 'true'
+        run: npm ci
+
+      - name: Audit gate, domain guard & immutable bundle staging
+        if: steps.target.outputs.enabled == 'true'
+        shell: bash
+        env:
+          SITE_NAME: ${{ inputs.site }}
+          EXPECTED_BASE_URL: ${{ steps.target.outputs.base_url }}
+          STAGE_DIR: ${{ steps.target.outputs.stage_dir }}
+        run: |
+          python tools/editorial_sync.py \
+            --site "$SITE_NAME" \
+            --check \
+            --stage-dir "$STAGE_DIR" \
+            --expect-base-url "$EXPECTED_BASE_URL"
+
+      - name: Run local HTTP contract smoke test on staged bundle
+        if: steps.target.outputs.enabled == 'true'
+        shell: bash
+        env:
+          SITE_NAME: ${{ inputs.site }}
+          STAGE_DIR: ${{ steps.target.outputs.stage_dir }}
+        run: |
+          python tools/smoke_test.py \
+            --site "$SITE_NAME" \
+            --local \
+            --dist "$STAGE_DIR"
+
+      - name: Deploy to Cloudflare Workers Static Assets
+        id: cf_deploy
+        if: steps.target.outputs.enabled == 'true'
+        shell: bash
+        env:
+          SITE_NAME: ${{ inputs.site }}
+          CF_WORKER_NAME: ${{ steps.target.outputs.worker_name }}
+          EXPECTED_BASE_URL: ${{ steps.target.outputs.base_url }}
+          STAGE_DIR: ${{ steps.target.outputs.stage_dir }}
+          SHORT_SHA: ${{ steps.target.outputs.short_sha }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          python tools/deploy.py \
+            --site "$SITE_NAME" \
+            --dist-dir "$STAGE_DIR" \
+            --skip-sync \
+            --worker-name "$CF_WORKER_NAME" \
+            --expect-base-url "$EXPECTED_BASE_URL" \
+            --expect-git-sha "$GITHUB_SHA" \
+            --tag "${SITE_NAME}-${SHORT_SHA}" \
+            --message "GitHub Actions deploy (${SITE_NAME} @ ${SHORT_SHA})"
+
+      - name: Run post-deploy live smoke test (verifies release digest & catalog parity)
+        id: live_smoke
+        if: steps.target.outputs.enabled == 'true' && steps.target.outputs.skip_smoke != 'true'
+        shell: bash
+        env:
+          SITE_NAME: ${{ inputs.site }}
+          LIVE_BASE_URL: ${{ steps.target.outputs.base_url }}
+          STAGE_DIR: ${{ steps.target.outputs.stage_dir }}
+        run: |
+          python tools/smoke_test.py \
+            --site "$SITE_NAME" \
+            --base-url "$LIVE_BASE_URL" \
+            --expect-dist "$STAGE_DIR" \
+            --retries 6 \
+            --retry-delay 5
+
+      - name: Publish deployment summary
+        if: always()
+        shell: bash
+        env:
+          SITE_NAME: ${{ inputs.site }}
+          ENV_NAME: ${{ inputs.environment }}
+          ENABLED: ${{ steps.target.outputs.enabled }}
+          WORKER_NAME: ${{ steps.target.outputs.worker_name }}
+          BASE_URL: ${{ steps.target.outputs.base_url }}
+          DEPLOY_OUTCOME: ${{ steps.cf_deploy.outcome }}
+          LIVE_SMOKE_OUTCOME: ${{ steps.live_smoke.outcome }}
+        run: |
+          {
+            echo "### Cloudflare Deployment Summary (\`${SITE_NAME}\`)"
+            echo ""
+            echo "| Field | Value |"
+            echo "| :--- | :--- |"
+            echo "| Site | \`${SITE_NAME}\` |"
+            echo "| Enabled | \`${ENABLED:-false}\` |"
+            echo "| Environment | \`${ENV_NAME}\` |"
+            echo "| Worker | \`${WORKER_NAME:-unresolved}\` |"
+            echo "| Canonical URL | ${BASE_URL:-unresolved} |"
+            echo "| Commit | \`${GITHUB_SHA}\` |"
+            echo "| Cloudflare Deploy | \`${DEPLOY_OUTCOME:-skipped}\` |"
+            echo "| Live Smoke Test | \`${LIVE_SMOKE_OUTCOME:-skipped}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"

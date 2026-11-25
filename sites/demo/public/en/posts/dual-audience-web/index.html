@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>The Dual-Audience Web: Publishing for Human Eyes and AI Agents | Tong's Information - Demo</title>
+  <meta name="description" content="An architectural blueprint for dual-surface static publishing, complete with a live Human/Agent Representation Inspector and a Swiss Modular Grid Workbench.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://info-demo.esoren.com/en/posts/dual-audience-web/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/dual-audience-web/">
+  <link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/dual-audience-web/">
+  <link rel="alternate" hreflang="x-default" href="https://info-demo.esoren.com/posts/dual-audience-web/">
+  <link rel="alternate" type="text/markdown" title="Agent Markdown Twin" href="./index.md">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="preload" as="image" href="/assets/images/issue-02-dual-audience-web.jpg" fetchpriority="high">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <style>
+    .specimen-box {
+      background-color: var(--bg-subtle);
+      padding: var(--space-5);
+      min-block-size: 15rem;
+    }
+
+    .specimen-code {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      max-block-size: 17rem;
+      overflow: auto;
+      font-size: var(--text-xs);
+    }
+
+    .grid-poster {
+      position: relative;
+      background-color: var(--bg-subtle);
+      padding: var(--space-5);
+      overflow: hidden;
+      min-block-size: 17rem;
+      display: grid;
+      grid-template-columns: repeat(var(--lab-cols, 12), minmax(0, 1fr));
+      gap: 0.5rem;
+      align-content: start;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(var(--lab-cols, 12), minmax(0, 1fr));
+      gap: 0.5rem;
+      padding-inline: var(--space-5);
+      pointer-events: none;
+    }
+
+    .grid-overlay span {
+      border-inline: 1px solid var(--accent);
+      opacity: var(--lab-grid-opacity, 0.2);
+    }
+
+    .poster-kicker {
+      grid-column: 1 / -1;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--ink-muted);
+      z-index: 1;
+    }
+
+    .poster-headline {
+      grid-column: 1 / span var(--lab-title-span, 8);
+      font-size: calc(1rem * var(--lab-scale, 1.333) * var(--lab-scale, 1.333));
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      z-index: 1;
+    }
+
+    .poster-copy {
+      grid-column: 1 / span var(--lab-copy-span, 7);
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
+      line-height: 1.65;
+      z-index: 1;
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "The Dual-Audience Web: Publishing for Human Eyes and AI Agents",
+    "description": "An architectural blueprint for dual-surface static publishing, complete with a live Human/Agent Representation Inspector and a Swiss Modular Grid Workbench.",
+    "datePublished": "2026-11-24",
+    "dateModified": "2026-11-24",
+    "inLanguage": "en",
+    "url": "https://info-demo.esoren.com/en/posts/dual-audience-web/",
+    "author": { "@type": "Person", "name": "Tong" },
+    "publisher": { "@type": "Organization", "name": "Tong's Information - Demo" }
+  }
+  </script>
+</head>
+<body data-page-type="article" data-post-slug="dual-audience-web">
+  <div class="reading-progress" aria-hidden="true"><div class="reading-progress-fill"></div></div>
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="Tong's Information - Demo" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">Tong's Information - Demo</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/">Cover</a></li>
+        <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/graph/">Graph</a></li>
+        <li><a href="/en/about/">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="/posts/dual-audience-web/" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span class="tier-label">Feature · No. 05</span>
+          <time datetime="2026-11-24">2026.11.24</time>
+          <span>7 min · 2 interactive labs</span>
+        </div>
+        <h1 class="article-h1">The Dual-Audience Web: Publishing for Human Eyes and AI Agents</h1>
+        <p class="article-deck">
+          When half the web's readers no longer have retinas, how can a personal publication remain an uncompromising visual work for humans while acting as a high-signal instrument for machines?
+        </p>
+        <div class="article-tools" role="region" aria-label="Article tools">
+          <button type="button" class="btn subtle" data-copy-md="./index.md">Copy Markdown</button>
+          <a href="./index.md">index.md</a>
+          <button type="button" class="btn subtle" data-copy-cite data-cite-title="The Dual-Audience Web: Publishing for Human Eyes and AI Agents" data-cite-date="2026-11-24" data-cite-issue="05">Copy Citation</button>
+          <a href="/posts/dual-audience-web/" hreflang="zh-Hans" lang="zh-Hans">中文版 ↗</a>
+        </div>
+      </div>
+      <figure class="shell article-cover-plate editorial-plate">
+        <img
+          src="/assets/images/issue-02-dual-audience-web.jpg"
+          alt="Swiss modernist lithograph cover pairing concentric cobalt and obsidian optical arcs on the left with structured geometric prisms and a vermilion focal dot on the right"
+          width="1376"
+          height="768"
+          fetchpriority="high"
+        >
+      </figure>
+    </header>
+
+    <div class="shell article-body-wrap">
+      <div class="essay-grid">
+        <aside class="essay-rail" aria-label="Feature contents">
+          <ul class="toc-list">
+            <li><a href="#s01">§ 01 Two Reading Organs</a></li>
+            <li><a href="#s02">§ 02 Dual-Surface Publishing</a></li>
+            <li><a href="#lab-01">Lab 01 · Dual Inspector</a></li>
+            <li><a href="#lab-02">Lab 02 · Swiss Grid</a></li>
+            <li><a href="#s03">§ 03 Workers Static Assets</a></li>
+            <li><a href="#s04">§ 04 Static as a Launchpad</a></li>
+          </ul>
+        </aside>
+
+        <article class="prose">
+          <h2 id="s01"><span class="section-index">§ 01</span>Two Radically Different Reading Organs</h2>
+          <div class="sidenote-anchor">
+            <p>
+              Twentieth-century graphic designers served a single audience: humans with retinas, finite attention, and a visual cortex that grasps meaning through hierarchy, alignment, and negative space. The Swiss International Typographic Style perfected that craft — using modular grids, crisp hairlines, and disciplined typographic scale so the skeleton of an argument reveals itself at a glance.<span class="sidenote-ref" aria-hidden="true">01</span>
+            </p>
+            <aside class="sidenote" aria-label="Sidenote 01">
+              <span class="sidenote-num">01</span>
+              Josef Müller-Brockmann argued in <cite>Grid Systems in Graphic Design</cite> that mathematical order is not rigidity — it is the scaffolding that lets complex ideas decode effortlessly.
+            </aside>
+          </div>
+          <p>
+            Since 2025, however, every public essay immediately meets a second class of reader: <strong>AI agents, research crawlers, and personal synthesis assistants</strong>. Their reading organs optimize for completely different properties:
+          </p>
+          <ul>
+            <li><strong>Humans want</strong>: typographic breathing room, margin sidenotes, visual diagrams, comfortable light/dark contrast, and hands-on interactive laboratories.</li>
+            <li><strong>Agents want</strong>: high semantic signal-to-noise ratio, minimal token overhead, explicit discovery manifests, stable canonical URLs, and structured conceptual topology.</li>
+          </ul>
+
+          <h2 id="s02"><span class="section-index">§ 02</span>Dual-Surface Static Publishing</h2>
+          <p>
+            <em>Tong's Information</em> resolves this tension through <strong>Dual-Surface Static Publishing</strong>. Every issue ships two synchronized files inside the same URL directory: an agent-art-directed Swiss editorial <code>index.html</code> alongside a spotless Markdown twin <code>index.md</code>, explicitly linked in the document head via <code>&lt;link rel="alternate" type="text/markdown" href="./index.md"&gt;</code>.
+          </p>
+
+          <section id="lab-01" class="feature-lab" aria-labelledby="lab01-title-en" data-dual-lab>
+            <div class="lab-header">
+              <div>
+                <div class="lab-kicker">Lab 01 · Dual-Surface Inspector</div>
+                <h3 id="lab01-title-en" style="font-size: var(--text-lg); margin-block-start: 0.25rem;">Human Browser Rendering vs. Machine Agent Perception</h3>
+              </div>
+              <div class="lab-tabs" role="tablist" aria-label="Select representation surface">
+                <button id="tab-human" type="button" class="btn subtle" role="tab" aria-selected="true" aria-controls="dual-specimen-view" tabindex="0" data-surface="human">Human</button>
+                <button id="tab-dom" type="button" class="btn subtle" role="tab" aria-selected="false" aria-controls="dual-specimen-view" tabindex="-1" data-surface="dom">Semantic DOM</button>
+                <button id="tab-markdown" type="button" class="btn subtle" role="tab" aria-selected="false" aria-controls="dual-specimen-view" tabindex="-1" data-surface="markdown">Agent Twin (.md)</button>
+              </div>
+            </div>
+            <div class="lab-grid-2">
+              <div class="specimen-box" id="dual-specimen-view" role="tabpanel" aria-labelledby="tab-human" aria-live="polite" tabindex="0">
+                <div class="stack-sm">
+                  <div class="meta-line"><span class="tier-label">Human Viewport</span><span>Swiss Grid</span></div>
+                  <p style="font-size: var(--text-xl); font-weight: 700; line-height: 1.25;">Visual Hierarchy, Sidenotes &amp; Interactive Labs</p>
+                  <p style="font-size: var(--text-sm); color: var(--ink-secondary);">Enable JavaScript to inspect live Semantic DOM and <a href="./index.md">./index.md</a> telemetry, or open the clean Markdown twin directly.</p>
+                </div>
+              </div>
+              <div class="metric-stack">
+                <div class="metric-card">
+                  <div class="metric-label">Payload Size</div>
+                  <div class="metric-value" id="metric-bytes">—</div>
+                  <div class="meter-track"><div class="meter-bar" id="meter-bytes" style="inline-size: 40%;"></div></div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Estimated LLM Tokens</div>
+                  <div class="metric-value" id="metric-tokens">—</div>
+                  <div class="meter-track"><div class="meter-bar" id="meter-tokens" style="inline-size: 35%;"></div></div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Semantic Signal Ratio</div>
+                  <div class="metric-value" id="metric-signal">—</div>
+                  <p id="metric-note" style="font-size: var(--text-xs); color: var(--ink-secondary); margin-block-start: 0.35rem;"></p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <p>
+            When you switch to <strong>Agent Twin (.md)</strong>, the telemetry on the right fetches this issue's live sibling <code>./index.md</code> file and computes its exact byte size and estimated token footprint in real time. Human readers keep interactive craft; autonomous agents never pay context tax for layout chrome.
+          </p>
+
+          <section id="lab-02" class="feature-lab" aria-labelledby="lab02-title-en" data-grid-lab>
+            <div class="lab-header">
+              <div>
+                <div class="lab-kicker">Lab 02 · Swiss Grid Workbench</div>
+                <h3 id="lab02-title-en" style="font-size: var(--text-lg); margin-block-start: 0.25rem;">Zero Frameworks: Live Typographic Controls Inside Static HTML</h3>
+              </div>
+            </div>
+            <div class="lab-grid-2">
+              <div class="grid-poster" id="swiss-grid-poster" style="--lab-cols: 12; --lab-scale: 1.333; --lab-grid-opacity: 0.2; --lab-title-span: 9; --lab-copy-span: 7;">
+                <div class="grid-overlay" id="swiss-grid-overlay" aria-hidden="true"></div>
+                <div class="poster-kicker">GRID SPECIMEN</div>
+                <div class="poster-headline">Order makes structure legible in milliseconds.</div>
+                <p class="poster-copy">
+                  Slider inputs pass raw parameters straight into CSS custom properties — no virtual DOM, no bundler, no UI runtime.
+                </p>
+              </div>
+              <div class="control-grid">
+                <div class="control-field">
+                  <label for="lab-cols-input">
+                    <span>Grid Columns</span>
+                    <output id="lab-cols-out" class="tabular">12 cols</output>
+                  </label>
+                  <input id="lab-cols-input" type="range" min="4" max="12" step="2" value="12">
+                </div>
+                <div class="control-field">
+                  <label for="lab-scale-input">
+                    <span>Modular Type Ratio</span>
+                    <output id="lab-scale-out" class="tabular">1.33 (Perfect Fourth)</output>
+                  </label>
+                  <input id="lab-scale-input" type="range" min="1.15" max="1.45" step="0.01" value="1.33">
+                </div>
+                <div class="control-field">
+                  <label for="lab-opacity-input">
+                    <span>Grid Visibility</span>
+                    <output id="lab-opacity-out" class="tabular">20%</output>
+                  </label>
+                  <input id="lab-opacity-input" type="range" min="0" max="50" step="2" value="20">
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">Computed Display Size</div>
+                  <div class="metric-value" id="lab-computed-size">1.77 rem</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <h2 id="s03"><span class="section-index">§ 03</span>Why Cloudflare Workers Static Assets</h2>
+          <div class="sidenote-anchor">
+            <p>
+              If today's publication is 100% static files inside <code>site/</code>, why specifically build on <strong>Cloudflare Workers Static Assets</strong>? Because it gives you the lowest-friction evolutionary runway on the modern web.<span class="sidenote-ref" aria-hidden="true">02</span>
+            </p>
+            <aside class="sidenote" aria-label="Sidenote 02">
+              <span class="sidenote-num">02</span>
+              Running <code>cf deploy ./site</code> deploys a pure static directory directly as an assets-only Worker with zero cold starts, custom <code>_headers</code>, and native <code>404.html</code> routing.
+            </aside>
+          </div>
+          <ol>
+            <li><strong>HTTP Content Negotiation</strong>: Layering a tiny edge script later lets requests carrying <code>Accept: text/markdown</code> transparently receive <code>index.md</code> while browsers continue receiving the full magazine HTML.</li>
+            <li><strong>Personal Remote MCP Server</strong>: Expose read-only knowledge tools (<code>search_essays</code>, <code>read_issue</code>, <code>explore_graph</code>) via Cloudflare's Agents SDK so any MCP client can mount your essays directly.</li>
+            <li><strong>Edge Semantic Retrieval</strong>: Add Cloudflare AI Search over your static corpus for grounded Q&amp;A without disturbing the pure static reading core.</li>
+          </ol>
+
+          <h2 id="s04"><span class="section-index">§ 04</span>Static Is Not Nostalgia — It Is a Launchpad</h2>
+          <p>
+            It is easy to mistake pure static HTML for retro minimalism. In reality, when frameworks churn every eighteen months, <strong>crystallizing your writing, visual craft, and machine protocols as transparent, dependency-free static files — while keeping edge compute as an optional, modular layer — is the most future-proof architecture a personal publication can own.</strong>
+          </p>
+
+          <section class="article-footer-band" aria-label="Concepts and related reading">
+            <div>
+              <h3 class="footer-heading">Concepts</h3>
+              <ul class="concept-list">
+                <li><a class="concept-tag" href="/en/archive/?concept=agent-web">Agent Web</a></li>
+                <li><a class="concept-tag" href="/en/archive/?concept=knowledge-graph">Knowledge Graph</a></li>
+                <li><a class="concept-tag" href="/en/archive/?concept=edge-architecture">Edge Architecture</a></li>
+                <li><a class="concept-tag" href="/en/archive/?concept=swiss-typography">Swiss Typography</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">Related</h3>
+              <ul class="footer-list">
+                <li><a href="/en/posts/ambient-interfaces/">No. 04 Quiet Interfaces: Designing Beyond the Click →</a></li>
+                <li><a href="/en/posts/agent-era-publishing/">No. 01 Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML →</a></li>
+                <li><a href="/en/graph/">Trace connections in the Knowledge Graph →</a></li>
+              </ul>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information - Demo</span>
+    <ul class="footer-links" aria-label="Feeds and language">
+      <li><a href="/en/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/posts/dual-audience-web/" hreflang="zh-Hans" lang="zh-Hans">中文</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/posts/dual-audience-web/labs.js"></script>
+</body>
+</html>

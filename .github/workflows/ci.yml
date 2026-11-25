@@ -1,0 +1,321 @@
+name: CI Audit & PR Preview
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    name: Discover configured sites
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.scan.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build site validation matrix from sites/sites.json
+        id: scan
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, sys
+
+          reg_path = pathlib.Path("sites/sites.json")
+          registry = json.loads(reg_path.read_text(encoding="utf-8")).get("sites", {})
+          include = []
+          for site_name, cfg in sorted(registry.items()):
+              catalog_path = pathlib.Path("sites") / site_name / "catalog.json"
+              if not catalog_path.is_file():
+                  print(f"::error::Registered site '{site_name}' is missing required {catalog_path}.")
+                  sys.exit(1)
+              include.append({
+                  "site": site_name,
+                  "expected_base_url": str(cfg["base_url"]).rstrip("/"),
+              })
+          if not include:
+              print("::error::No sites declared in sites/sites.json.")
+              sys.exit(1)
+
+          payload = json.dumps({"include": include}, separators=(",", ":"))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"matrix={payload}\n")
+          print(f"Discovered sites: {[x['site'] for x in include]}")
+          PY
+
+  validate:
+    name: Validate (${{ matrix.site }})
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install pinned Cloudflare cf CLI
+        run: npm ci
+
+      - name: Editorial audit gate, domain guard & immutable staging
+        shell: bash
+        env:
+          SITE_NAME: ${{ matrix.site }}
+          EXPECTED_BASE_URL: ${{ matrix.expected_base_url }}
+        run: |
+          STAGE_DIR="${RUNNER_TEMP}/dist-${SITE_NAME}"
+          python tools/editorial_sync.py \
+            --site "$SITE_NAME" \
+            --check \
+            --stage-dir "$STAGE_DIR" \
+            --expect-base-url "$EXPECTED_BASE_URL"
+
+      - name: Local HTTP contract smoke test (staged bundle)
+        shell: bash
+        env:
+          SITE_NAME: ${{ matrix.site }}
+        run: |
+          python tools/smoke_test.py \
+            --site "$SITE_NAME" \
+            --local \
+            --dist "${RUNNER_TEMP}/dist-${SITE_NAME}"
+
+      - name: Local HTTP contract smoke test (zero-copy overlay server)
+        shell: bash
+        env:
+          SITE_NAME: ${{ matrix.site }}
+        run: |
+          python tools/smoke_test.py \
+            --site "$SITE_NAME" \
+            --local
+
+      - name: Dry-run Cloudflare deploy (credential-free)
+        shell: bash
+        env:
+          SITE_NAME: ${{ matrix.site }}
+          EXPECTED_BASE_URL: ${{ matrix.expected_base_url }}
+        run: |
+          python tools/deploy.py \
+            --site "$SITE_NAME" \
+            --dist-dir "${RUNNER_TEMP}/dist-${SITE_NAME}" \
+            --expect-base-url "$EXPECTED_BASE_URL" \
+            --skip-sync \
+            --dry-run
+
+      - name: Upload validated static bundle for same-repo PR preview
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: staged-${{ matrix.site }}
+          path: ${{ runner.temp }}/dist-${{ matrix.site }}
+          include-hidden-files: true
+          retention-days: 1
+
+  detect-changes:
+    name: Detect affected sites
+    needs: discover
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      demo: ${{ steps.changes.outputs.demo }}
+      prod: ${{ steps.changes.outputs.prod }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Classify changed paths via merge-base NUL-delimited diff
+        id: changes
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, re, subprocess
+
+          base_sha = os.environ["BASE_SHA"]
+          head_sha = os.environ["HEAD_SHA"]
+          reg_path = pathlib.Path("sites/sites.json")
+          registry = json.loads(reg_path.read_text(encoding="utf-8")).get("sites", {})
+
+          active = set()
+          for name in ("demo", "prod"):
+              if name in registry:
+                  if not (pathlib.Path("sites") / name / "catalog.json").is_file():
+                      print(f"::error::Registered site '{name}' is missing sites/{name}/catalog.json.")
+                      raise SystemExit(1)
+                  active.add(name)
+          affected = {"demo": False, "prod": False}
+
+          res = subprocess.run(
+              ["git", "diff", "--name-only", "-z", "--no-renames", f"{base_sha}...{head_sha}"],
+              capture_output=True,
+          )
+          if res.returncode != 0:
+              # Conservative fallback if base/head revision cannot be diffed cleanly
+              for name in active:
+                  affected[name] = True
+          else:
+              shared_re = re.compile(
+                  r"^(engine/|editorial/|tools/|sites/sites\.json$|cloudflare\.config\.ts$|package(-lock)?\.json$)"
+              )
+              paths = [p.decode("utf-8", errors="surrogateescape") for p in res.stdout.split(b"\0") if p]
+              for p in paths:
+                  if shared_re.match(p):
+                      for name in active:
+                          affected[name] = True
+                  for name in active:
+                      if p.startswith(f"sites/{name}/"):
+                          affected[name] = True
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              for name in ("demo", "prod"):
+                  val = "true" if affected[name] else "false"
+                  fh.write(f"{name}={val}\n")
+                  print(f"affected[{name}]={val}")
+          PY
+
+  # B1 security boundary:
+  # Preview jobs NEVER enter release environments (`demo`/`production`), NEVER target release Workers,
+  # and check out trusted `main` (`base.sha`) tooling/config while uploading only the pre-validated static bundle.
+  preview-demo:
+    name: Preview (demo)
+    needs: [validate, detect-changes]
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      needs.detect-changes.outputs.demo == 'true'
+    runs-on: ubuntu-latest
+    environment: preview-demo
+    steps:
+      - name: Checkout trusted base branch tooling
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - name: Download validated static bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: staged-demo
+          path: ${{ runner.temp }}/preview-demo
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install pinned Cloudflare cf CLI
+        run: npm ci
+
+      - name: Deploy isolated Cloudflare Preview (demo)
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          CF_WORKER_NAME: ${{ vars.CF_PREVIEW_WORKER_NAME }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "Skipping demo preview: preview-demo environment credentials are not configured."
+            exit 0
+          fi
+          python tools/deploy.py \
+            --site demo \
+            --preview \
+            --preview-name "pr-${PR_NUMBER}-demo" \
+            --dist-dir "${RUNNER_TEMP}/preview-demo" \
+            --expect-git-sha "$GITHUB_SHA" \
+            --skip-sync
+
+  preview-prod:
+    name: Preview (prod)
+    needs: [validate, detect-changes]
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      needs.detect-changes.outputs.prod == 'true'
+    runs-on: ubuntu-latest
+    environment: preview-prod
+    steps:
+      - name: Checkout trusted base branch tooling
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - name: Download validated static bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: staged-prod
+          path: ${{ runner.temp }}/preview-prod
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install pinned Cloudflare cf CLI
+        run: npm ci
+
+      - name: Deploy isolated Cloudflare Preview (prod)
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          CF_WORKER_NAME: ${{ vars.CF_PREVIEW_WORKER_NAME }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "Skipping prod preview: preview-prod environment credentials are not configured."
+            exit 0
+          fi
+          python tools/deploy.py \
+            --site prod \
+            --preview \
+            --preview-name "pr-${PR_NUMBER}-prod" \
+            --dist-dir "${RUNNER_TEMP}/preview-prod" \
+            --expect-git-sha "$GITHUB_SHA" \
+            --skip-sync

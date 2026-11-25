@@ -1,0 +1,587 @@
+# Tong's Information — Complete Bilingual Compendium
+Base URL: https://www.esoren.com
+
+========================================================================
+ISSUE 05 [EN] — https://www.esoren.com/en/posts/dual-audience-web/
+========================================================================
+---
+title: "The Dual-Audience Web: Publishing for Human Eyes and AI Agents"
+publication: "Tong's Information"
+author: "Tong"
+issue: "05"
+tier: "feature"
+lang: "en"
+date: "2026-11-24"
+updated: "2026-11-24"
+concepts: ["agent-web", "knowledge-graph", "edge-architecture", "swiss-typography"]
+canonical_html: "https://www.esoren.com/en/posts/dual-audience-web/"
+canonical_md: "https://www.esoren.com/en/posts/dual-audience-web/index.md"
+counterpart_md: "https://www.esoren.com/posts/dual-audience-web/index.md"
+---
+
+# The Dual-Audience Web: Publishing for Human Eyes and AI Agents
+
+> When half the web's readers no longer have retinas, how can a personal publication remain an uncompromising visual work for humans while acting as a high-signal instrument for machines?
+
+## § 01 Two Radically Different Reading Organs
+
+Twentieth-century graphic designers served a single audience: humans with retinas, finite attention, and a visual cortex that grasps meaning through hierarchy, alignment, and negative space. The Swiss International Typographic Style perfected that craft — using modular grids, crisp hairlines, and disciplined typographic scale so the skeleton of an argument reveals itself at a glance.
+
+Since 2025, however, every public essay immediately meets a second class of reader: **AI agents, research crawlers, and personal synthesis assistants**.
+
+Their reading organs optimize for completely different properties:
+
+- **Humans want**: typographic breathing room, margin sidenotes, visual diagrams, comfortable light/dark contrast, and hands-on interactive laboratories.
+- **Agents want**: high semantic signal-to-noise ratio, minimal token overhead, explicit discovery manifests, stable canonical URLs, and structured conceptual topology.
+
+Stripping a site down to bare plain text just to please scrapers surrenders the web's soul as a visual medium. Conversely, hiding ideas inside JavaScript-heavy single-page apps forces every visiting agent to wade through hydration payloads and meaningless wrapper `<div>` soup.
+
+## § 02 Dual-Surface Static Publishing
+
+*Tong's Information* resolves this tension through **Dual-Surface Static Publishing**.
+
+Every article lives in a clean directory with two synchronized faces:
+
+1. **`index.html` (Human Magazine Edition)**: An agent-art-directed Swiss editorial spread with modular grid rhythm, sidenotes, interactive labs, and embedded JSON-LD structured data.
+2. **`index.md` (Agent Twin Edition)**: A clean Markdown twin alongside it, carrying structured YAML frontmatter and pure prose — explicitly advertised in the HTML `<head>` via `<link rel="alternate" type="text/markdown" href="./index.md">`.
+
+Across the site root, four static machine protocols complete the discovery layer:
+
+- `/llms.txt`: A concise directory map allowing an agent to understand the entire publication and both language editions in a single request.
+- `/llms-full.txt`: A complete bilingual compendium ready for one-shot context loading.
+- `/api/posts.json` and `/api/graph.json`: Zero-backend static JSON endpoints exposing publication metadata and concept-to-essay topology.
+- **In-article Agent Toolbar**: Giving human readers one-click access to Copy Markdown, raw `.md` twins, and structured citations for their own AI workflows.
+
+> Note: The interactive HTML edition of this feature embeds **Lab 01: Dual-Surface Representation Inspector** and **Lab 02: Swiss Modular Grid & Type Scale Workbench**, allowing readers to compare live byte size, estimated token count, and visual clarity across human and agent surfaces directly in the browser.
+
+## § 03 Why Cloudflare Workers Static Assets
+
+If today's publication is 100% static files inside `site/`, why specifically build on **Cloudflare Workers Static Assets**?
+
+Because it offers the lowest-friction evolutionary runway on the modern web:
+
+- **Today (Zero Runtime, 100% Static)**: Run `cf deploy ./site` to ship pure static assets globally with zero cold starts, custom `_headers`, clean `404.html` handling, and edge caching.
+- **Tomorrow (Zero-Migration Edge Agent Capabilities)**: Without moving domains or rewriting the publication, a lightweight Worker entrypoint can be layered on top whenever desired to unlock next-generation Agent Web capabilities:
+  1. **HTTP Content Negotiation**: When an external agent requests `/en/posts/dual-audience-web/` with `Accept: text/markdown`, the edge transparently serves `index.md`; a human browser receives the full magazine `index.html`.
+  2. **Personal Remote MCP Server**: Expose read-only tools (`search_essays`, `read_issue`, `explore_graph`) via Cloudflare's Agents SDK so any MCP-compatible client can mount your personal publication directly as a knowledge source.
+  3. **Edge Semantic Retrieval**: Layer Cloudflare AI Search over your static editions for grounded Q&A without disturbing the pure static reading core.
+
+## § 04 Static Is Not Nostalgia — It Is a Launchpad
+
+It is easy to mistake pure static HTML for retro minimalism. In reality, when frameworks churn every eighteen months, **crystallizing your writing, visual craft, and machine protocols as transparent, dependency-free static files — while keeping edge compute as an optional, modular layer — is the most future-proof architecture a personal publication can own.**
+
+========================================================================
+ISSUE 05 [ZH] — https://www.esoren.com/posts/dual-audience-web/
+========================================================================
+---
+title: "双面万维网：同时写给人类眼睛与 AI Agent 的出版架构"
+publication: "Tong's Information"
+author: "Tong"
+issue: "05"
+tier: "feature"
+lang: "zh-Hans"
+date: "2026-11-24"
+updated: "2026-11-24"
+concepts: ["agent-web", "knowledge-graph", "edge-architecture", "swiss-typography"]
+canonical_html: "https://www.esoren.com/posts/dual-audience-web/"
+canonical_md: "https://www.esoren.com/posts/dual-audience-web/index.md"
+counterpart_md: "https://www.esoren.com/en/posts/dual-audience-web/index.md"
+---
+
+# 双面万维网：同时写给人类眼睛与 AI Agent 的出版架构
+
+> 当互联网一半以上的读者不再拥有视网膜，个人网站应该如何在不牺牲一丝人类审美的前提下，成为一台高信噪比的机器可读信息仪器？
+
+## § 01 两种截然不同的“阅读器官”
+
+二十世纪的平面设计师只需要面对一种读者：拥有视网膜、注意力有限、通过版面秩序和视觉留白建立理解的人类。瑞士现代主义（International Typographic Style）正是为此而生——用数学网格、极细分割线与清晰的字号层级，让信息在扫视的一瞬间显露骨架。
+
+但从 2025 年之后，任何公开发布在互联网上的文章，几乎同时都在迎接第二类读者：**AI Agent、检索代理与个人知识助理**。
+
+它们的“阅读器官”完全不同：
+
+- **人类需要**：排印呼吸感、边注与图表、暗色护眼配色、甚至可以动手拖拽参数的交互实验。
+- **Agent 需要**：极高的语义信噪比、极低的 Token 噪声、显式的目录索引、稳定的规范 URL、以及清晰的概念拓扑关系。
+
+如果为了迎合机器而把网站做成简陋的纯文本堆砌，我们失去了 Web 作为视觉媒介的灵魂；如果只顾着做炫酷的前端单页应用（SPA），外部 Agent 抓到的只会是一堆充满水合脚本和无意义 `<div>` 的噪音。
+
+## § 02 一文双面：Human Edition × Agent Edition
+
+*Tong's Information* 采用的解法叫做 **Dual-Surface Static Publishing（双面静态出版）**。
+
+每一篇文章在同一个 URL 目录下同时拥有两张面孔：
+
+1. **`index.html`（人类杂志版）**：由 Agent 依据 `DESIGN.md` 编排的瑞士现代主义网页，包含视觉层级、边注、交互实验装置与结构化 JSON-LD。
+2. **`index.md`（Agent 孪生版）**：同一路径下的洁净 Markdown 文件，只保留 YAML 元数据与高密度正文，并在 HTML `<head>` 中通过 `<link rel="alternate" type="text/markdown" href="./index.md">` 显式声明。
+
+配合站点根目录的四件机器协议基础设施：
+
+- `/llms.txt`：全站导览目录，让外部 Agent 在一次请求内掌握整本刊物的全貌与双语入口；
+- `/llms-full.txt`：全站全文合集，适合直接作为长上下文加载进个人研究工作流；
+- `/api/posts.json` 与 `/api/graph.json`：零后端、纯静态的 JSON 索引与概念知识图谱；
+- 文章顶部的 **Agent 工具栏**：让人类读者也能一键复制洁净 Markdown 喂给自己常用的模型进行追问。
+
+> 注：本篇杂志版 HTML 页面中内嵌了**「实验 01：双面渲染透视实验室」**与**「实验 02：瑞士网格字阶实验台」**两套零依赖交互装置，可在浏览器中实时对比同一篇文章在人类视觉版、语义 DOM 与 Agent Markdown 孪生版下的体积、Token 消耗与信息密度。
+
+## § 03 为什么选 Cloudflare Workers Static Assets
+
+既然当下的核心产物是 100% 纯静态的 `site/` 目录，为什么不随便找个静态托管，而特意选在 **Cloudflare Workers Static Assets** 上？
+
+因为这是面向未来演进阻力最小的一条跑道：
+
+- **今天（零运行时，100% 纯静态）**：通过 `cf deploy ./site` 直接将纯静态文件推上全球边缘节点，享受零冷启动、自定义 `_headers`、优雅 `404.html` 以及极致的缓存命中率。
+- **明天（按需无缝叠加边缘 Agent 能力）**：无需迁移域名、目录或架构，随时可以在同一个项目里启用一个轻量 Worker 入口，解锁三类更前沿的 Agent Web 特性：
+  1. **HTTP 内容协商（Content Negotiation）**：当外部 Agent 请求 `/posts/dual-audience-web/` 并携带 `Accept: text/markdown` 请求头时，边缘节点直接无感返回同路径下的 `index.md`；人类浏览器请求则返回完整的杂志版 `index.html`。
+  2. **个人博客 Remote MCP Server**：基于 Cloudflare Agents SDK 暴露只读工具（`search_essays`、`read_issue`、`explore_graph`），让任何支持 MCP 的 AI 客户端直接把你的个人思想库挂载为外脑。
+  3. **边缘语义检索与轻互动**：按需接入 Cloudflare AI Search，在不破坏纯静态阅读体验的前提下提供基于全站内容的对话式检索。
+
+## § 04 结语：静态不是守旧，而是最稳固的发射台
+
+许多人误以为“全静态 HTML”是一种复古怀旧。恰恰相反：在技术栈半年一迭代的今天，**把内容、排印与机器协议沉淀为透明、无框架、可版本控制的静态文件，同时把边缘计算作为按需挂载的可选能力**，才是个人数字领地最具前瞻性的架构选择。
+
+========================================================================
+ISSUE 04 [EN] — https://www.esoren.com/en/posts/ambient-interfaces/
+========================================================================
+---
+title: "Quiet Interfaces: Designing Beyond the Click"
+publication: "Tong's Information"
+author: "Tong"
+issue: "04"
+tier: "feature"
+lang: "en"
+date: "2026-11-18"
+updated: "2026-11-18"
+concepts: ["interface-craft", "agent-web", "swiss-typography"]
+canonical_html: "https://www.esoren.com/en/posts/ambient-interfaces/"
+canonical_md: "https://www.esoren.com/en/posts/ambient-interfaces/index.md"
+counterpart_md: "https://www.esoren.com/posts/ambient-interfaces/index.md"
+---
+
+# Quiet Interfaces: Designing Beyond the Click
+
+> Software spent twenty years piling badges, borders, and status ribbons onto every screen. As agents absorb mechanical clicks, interfaces can finally learn the art of silence.
+
+## § 01 Why Modern Interfaces Keep Getting Louder
+
+Open most modern web applications or publications and your eyes collide with five layers of chrome before reading a single sentence: announcement ribbons, boxed toolbar buttons, notification dots, pill badges, and cards nested inside cards.
+
+This fear of empty space is a relic of the **manual-click era**. When every capability had to expose a visible button waiting to be hunted down by human eyes, interfaces inevitably inflated into anxious cockpits.
+
+## § 02 Decorative Chrome vs. Visual Craft
+
+Removing visual noise never means starving a page into a bare text dump.
+
+- **Decorative chrome**: wrapping every secondary link in a rectangular box, displaying backend plumbing on human front pages, and substituting stacked borders for real typographic hierarchy.
+- **Genuine visual craft**: a single calm paper surface, unmistakable typographic contrast, art-directed illustration or tactile kinetic models, and generous margins that let the eye breathe.
+
+Dieter Rams summarized it in three words: *Weniger, aber besser* — less, but better. A quiet interface is not empty; **every remaining pixel serves human comprehension or delight, and zero pixels shout for attention.**
+
+## § 03 Three Rules for Intent-Driven Surfaces
+
+1. **Keep mechanical utilities weightless until summoned**: Search and navigation shortcuts wait silently inside a native command dialog (`⌘K`), claiming only a single quiet word in the header.
+2. **Ground motion in calm physical intuition**: One elastic geometric focal point responding smoothly to pointer gravity carries far more presence than a dozen blinking call-to-action badges.
+3. **Give humans visual breathing room; give machines clean protocols**: Once machine-readable structure moves silently into headers and alternate links, the human page recovers the poise of print editorial design.
+
+> Note: The HTML edition embeds an interactive **Interface Noise-to-Signal Calibrator** allowing readers to strip borders, status dots, and chrome live while observing visual entropy drop.
+
+========================================================================
+ISSUE 04 [ZH] — https://www.esoren.com/posts/ambient-interfaces/
+========================================================================
+---
+title: "宁静界面：当交互从点击转向意图"
+publication: "Tong's Information"
+author: "Tong"
+issue: "04"
+tier: "feature"
+lang: "zh-Hans"
+date: "2026-11-18"
+updated: "2026-11-18"
+concepts: ["interface-craft", "agent-web", "swiss-typography"]
+canonical_html: "https://www.esoren.com/posts/ambient-interfaces/"
+canonical_md: "https://www.esoren.com/posts/ambient-interfaces/index.md"
+counterpart_md: "https://www.esoren.com/en/posts/ambient-interfaces/index.md"
+---
+
+# 宁静界面：当交互从点击转向意图
+
+> 软件工业花了二十年往屏幕上堆砌按钮、红点与带框卡片。当 Agent 接管繁琐操作，真正高级的界面终于可以学会闭嘴。
+
+## § 01 为什么今天的界面越来越吵
+
+打开绝大多数现代软件或内容站点，你的视线往往还没碰到正文，就已经被五层“镀铬装饰（Chrome）”包围：顶部状态横幅、带框工具按钮、红点提示、悬浮徽章、嵌套两层的灰色卡片。
+
+这种“恐惧留白”的设计习惯，来自**纯手动点击时代**的遗产——因为每项功能都必须把开关裸露在屏幕上等待人类寻找，于是界面不可避免地膨胀成一座精密却焦躁的仪表盘。
+
+## § 02 装饰过度 vs. 视觉表达
+
+去掉噪音，并不意味着把网站退化成干瘪的纯文本清单。
+
+- **坏的装饰**：给每个次级按钮套矩形框、把技术实现细节（接口路径、版本号、状态灯）当成卖点贴在人类眼前、用无意义的嵌套边框替代真正的排版层级。
+- **好的视觉设计**：克制的单一纸面、精准的字号与字重对比、有艺术指导的专属插画或可把玩的动态几何模型、以及让眼睛得以喘息的四周留白。
+
+迪特·拉姆斯说过 *Weniger, aber besser*（少，但更好）。真正的宁静界面不是“什么都没有”，而是**屏幕上的每一像素都在为人的理解或愉悦服务，没有一像素是在自我炫耀**。
+
+## § 03 意图优先的三条设计准绳
+
+1. **把机械选项折叠进按需触发的入口**：全局检索与快捷动作安静地待在 `⌘K` 命令面板里，平时只占两个轻盈的字，不抢走任何视觉重心。
+2. **让动效服从物理直觉，而非吸引注意力**：一个可拖拽、带阻尼弹簧回弹的几何焦点，比十个闪烁的 CTA 按钮更有生命力，却从不打扰阅读。
+3. **为人类留白，为机器留协议**：当你不再需要把机器可读信息硬塞给人类看，界面立刻就能恢复如纸质杂志般的安静与气场。
+
+> 注：本篇网页版内嵌了**「界面信噪比校准器」**交互实验，可实时滑动剥离边框、红点与装饰条，直观感受视觉熵值的下降过程。
+
+========================================================================
+ISSUE 03 [EN] — https://www.esoren.com/en/posts/bilingual-thought/
+========================================================================
+---
+title: "Thinking in Stereo: Writing Beyond Monolingual Boundaries"
+publication: "Tong's Information"
+author: "Tong"
+issue: "03"
+tier: "essay"
+lang: "en"
+date: "2026-11-11"
+updated: "2026-11-25"
+concepts: ["bilingual-i18n", "agent-web", "knowledge-graph"]
+canonical_html: "https://www.esoren.com/en/posts/bilingual-thought/"
+canonical_md: "https://www.esoren.com/en/posts/bilingual-thought/index.md"
+counterpart_md: "https://www.esoren.com/posts/bilingual-thought/index.md"
+---
+
+# Thinking in Stereo: Writing Beyond Monolingual Boundaries
+
+> Legacy i18n reduced language to brittle key-value lookup tables. Agent-native bilingual publishing lets an idea resonate simultaneously in the compression of Chinese and the precision of English.
+
+## § 01 Why Personal Publications Defaulted to One Language
+
+Finishing a thoughtful three-thousand-word essay already takes real effort. Translating every paragraph by hand, harmonizing terminology, and maintaining parallel routes and feeds almost always exhausts an independent writer by issue five.
+
+For a decade, that quiet friction sealed ideas inside monolingual islands — Chinese engineering essays rarely crossed into English, and English reflections stayed inside English circles.
+
+## § 02 Auditing an Argument in Two Languages
+
+With an agent at the editorial desk, bilingual localization stops feeling like mechanical word replacement and starts acting like **cross-lingual co-editing**: Chinese paratactic cadence packs conceptual density into calm prose, while English grammatical subordination routinely exposes logical leaps that sounded smooth in the first draft.
+
+> Bilingual publishing is not merely wider distribution — it is calibrating one idea against two coordinate systems.
+
+Reading the counterpart edition frequently sends me back to tighten the original manuscript itself. When an argument must survive two distinct syntactic gravities at once, decorative phrasing evaporates and only the load-bearing structure remains.
+
+## § 03 The Second Channel in the Margins
+
+Yet even when both editions are crafted with care, web interfaces usually fall back on clumsy compromises: either hiding a language switch in the header that tears you away from the sentence you were reading, or cramming both scripts into a cramped side-by-side table. Both treat the second language as an interruption rather than a harmonic layer.
+
+In truth, generous quiet whitespace already flanks every paragraph on this page. Double-clicking the text itself belongs to selecting a word — while **double-clicking the empty margin to the left or right of a paragraph** can belong to language. Right here in this essay, double-click the blank margin beside any paragraph and its Chinese counterpart unfolds directly beneath it; double-click the margin again to fold it back into stillness.
+
+> The quietest interactions never shout through extra buttons; they fold a second layer of meaning into the margins, waiting for a gentle double-tap.
+
+## § 04 Honoring the Physical Typography of Each Script
+
+Respecting both languages also means refusing a one-size-fits-all stylesheet. Chinese ideographs form dense visual blocks without word spaces, calling for generous leading (`1.85`) and a shorter measure (`38em`); Latin text relies on word silhouettes, thriving at `1.66` line-height, tighter display tracking (`-0.025em`), and `lang="en"`-driven automatic hyphenation. Even a counterpart paragraph unfolded inside another language's page carries its own `lang` attribute so each script breathes by its own physics.
+
+With standard HTML `lang` attributes, symmetric `hreflang` links, and lightweight progressive enhancement, this essay remains a clean, self-contained Swiss print column even with JavaScript disabled — yet the moment you double-click its margins, a second voice resonates quietly beneath the line.
+
+========================================================================
+ISSUE 03 [ZH] — https://www.esoren.com/posts/bilingual-thought/
+========================================================================
+---
+title: "双语即思考：Agent 时代的写作不再被单一语言围困"
+publication: "Tong's Information"
+author: "Tong"
+issue: "03"
+tier: "essay"
+lang: "zh-Hans"
+date: "2026-11-11"
+updated: "2026-11-25"
+concepts: ["bilingual-i18n", "agent-web", "knowledge-graph"]
+canonical_html: "https://www.esoren.com/posts/bilingual-thought/"
+canonical_md: "https://www.esoren.com/posts/bilingual-thought/index.md"
+counterpart_md: "https://www.esoren.com/en/posts/bilingual-thought/index.md"
+---
+
+# 双语即思考：Agent 时代的写作不再被单一语言围困
+
+> 传统国际化的本质是“把界面硬塞进翻译字典”；而 Agent 时代的双语出版，让每篇思考同时在中文的凝练与英文的精密中获得立体感。
+
+## § 01 为什么过去的个人站几乎都是单语的
+
+写完一篇三千字的长文已经足够消耗心力，再逐段翻成另一种语言、手动校对术语、维护两套路由与 RSS，几乎没有独立作者能坚持超过五篇。
+
+于是过去十年里，绝大多数中文技术写作停留在中文语境，绝大多数英文随笔也只停留在英文世界。语言成了个人思想传播的一堵隐形墙。
+
+## § 02 在两种语境里重新审视同一个论点
+
+当 Agent 加入编辑部，双语本地化不再是机械的“逐句替换”，而更像一次**跨语种的共同编辑**：中文的四字格与意合结构擅长提炼概念密度，让标题与导语充满节奏感与留白；英文显性的主谓与限定逻辑则会迫使你审视原稿里被语感带过的论证跳跃。
+
+> 双语不是事后的传播附赠品，而是用两套坐标系校准同一个想法的立体声思考。
+
+许多时候，读完 Agent 打磨出的英文对照版，我反而会回头把中文原稿改得更准确。当你把一个论点同时放进两种句法重力场中检验，含糊的修辞无处藏身，真正站得住脚的骨架才会浮现出来。
+
+## § 03 留白里的第二声道：双击边缘唤醒对照
+
+但有了高质量的双语内容之后，界面却往往走回老路：传统网站要么把 `EN` 按钮藏在页眉角落，迫使你跳离正在阅读的位置重新加载整页；要么粗暴地把中英文并排塞进左右分栏，把原本舒展的版面切成密不透风的对照表。两种做法都把第二语言当成了阅读的打断。
+
+其实，每一段正文左右两侧原本就铺着大片安静的留白。双击文字本身属于选中词语，而**双击段落左右的空白处**，恰恰可以归还给语言——此刻在你正在阅读的这篇文章里，试着双击任意段落左侧或右侧的留白，它的英文版本就会在同一呼吸节奏下轻声展开；再次双击留白，它又会退回寂静。
+
+> 好的交互不靠按钮大喊大叫，而是把第二层意义安静地折叠在段落两侧的留白里，等读者轻轻敲开。
+
+## § 04 尊重两种文字各自的排印物理属性
+
+真正体面的双语网站绝不会用一套 CSS 参数敷衍两种文字。中文方块字密度高、无词间空格，需要更舒展的行高（`1.85`）与更克制的单行字数（约 `38em`）；英文依靠单词轮廓与空格建立节律，适合略紧凑的标题字距（`-0.025em`）、`1.66` 行高与 `lang="en"` 驱动的自动连字符断行。哪怕是在中文页面里临时展开的一段英文对照，也应当携带独立的 `lang="en"` 属性，按拉丁文字自己的物理律动呼吸。
+
+借助原生 HTML `lang` 属性、对称的 `hreflang` 互链以及只在需要时唤醒的渐进增强脚本，这篇文章在关闭 JavaScript 时依然是一篇洁净克制的瑞士排印专栏；而当你轻轻双击段落边缘的留白，双语的立体声便在纸面之下悄然响起。
+
+========================================================================
+ISSUE 02 [EN] — https://www.esoren.com/en/posts/software-longevity/
+========================================================================
+---
+title: "Readable in Ten Years: Static HTML and the Half-Life of Digital Work"
+publication: "Tong's Information"
+author: "Tong"
+issue: "02"
+tier: "essay"
+lang: "en"
+date: "2026-11-04"
+updated: "2026-11-04"
+concepts: ["static-architecture", "edge-architecture", "interface-craft"]
+canonical_html: "https://www.esoren.com/en/posts/software-longevity/"
+canonical_md: "https://www.esoren.com/en/posts/software-longevity/index.md"
+counterpart_md: "https://www.esoren.com/posts/software-longevity/index.md"
+---
+
+# Readable in Ten Years: Static HTML and the Half-Life of Digital Work
+
+> Most personal sites do not die from a lack of ideas — they die from a broken dependency tree. Crystallizing writing and craft as plain standard HTML is the surest hedge against link rot and tooling churn.
+
+## § 01 The Hidden Half-Life of Digital Publishing
+
+Lay out everything you have written and built over the past decade by storage medium, and a quiet law emerges: **the thicker the abstraction stack, the shorter the half-life.**
+
+| Publishing Stack | Typical Half-Life | Primary Failure Mode |
+| :--- | :--- | :--- |
+| Hosted SaaS Newsletter / Platform | 2 – 5 yrs | Business pivots, paywalls, link rot |
+| Database-Backed Dynamic CMS | 3 – 6 yrs | Hosting lapses, plugin security churn |
+| Heavy Frontend SSG Pipeline | 2 – 4 yrs | Dependency rot, breaking bundler upgrades |
+| **Plain Sources + Standard HTML5** | **20+ yrs** | Evergreen browser compatibility, zero runtime |
+
+- Essays locked inside a proprietary SaaS platform vanish the day business models pivot.
+- Database-backed dynamic sites decay the moment hosting lapses or plugin security patches pile up.
+- Heavy bundler pipelines with hundreds of transitive packages often refuse to even install locally after twenty-four months untouched.
+- **Plain-text sources compiled into standard HTML5, CSS, and vanilla JS** open cleanly thirty years later in any browser on earth.
+
+## § 02 Zero Dependencies No Longer Means Low Craft
+
+Developers once tolerated heavy frontend stacks because the raw web platform lacked ergonomic primitives. By 2026, the browser itself ships nearly everything an independent publication needs:
+
+- Native `@layer` cascade zones and CSS nesting replace preprocessors.
+- `light-dark()` and `<meta name="color-scheme">` coordinate light and dark themes cleanly.
+- Native `<dialog closedby="any">` handles top-layer focus containment and dismissal without custom traps.
+- `@view-transition { navigation: auto; }` brings fluid cross-document transitions to pure static pages.
+
+Building directly on web standards anchors your work to the most backwards-compatible runtime ever engineered.
+
+## § 03 Static Core, Modular Edge
+
+Inside *Tong's Information*, every essay, image plate, and machine manifest lives transparently inside Git and `site/`. It runs off any static host — or directly off a local disk — yet deploying on Cloudflare Workers Static Assets preserves an effortless path to add HTTP content negotiation and Remote MCP tools later without disturbing the static foundation.
+
+**True longevity pairs an unbreakable static core with a modular doorway to the future.**
+
+========================================================================
+ISSUE 02 [ZH] — https://www.esoren.com/posts/software-longevity/
+========================================================================
+---
+title: "十年之后依然可读：静态网页与数字资产的半衰期"
+publication: "Tong's Information"
+author: "Tong"
+issue: "02"
+tier: "essay"
+lang: "zh-Hans"
+date: "2026-11-04"
+updated: "2026-11-04"
+concepts: ["static-architecture", "edge-architecture", "interface-craft"]
+canonical_html: "https://www.esoren.com/posts/software-longevity/"
+canonical_md: "https://www.esoren.com/posts/software-longevity/index.md"
+counterpart_md: "https://www.esoren.com/en/posts/software-longevity/index.md"
+---
+
+# 十年之后依然可读：静态网页与数字资产的半衰期
+
+> 绝大多数个人博客不是死于失去写作热情，而是死于一次失败的依赖升级。把文字与交互沉淀为标准 HTML 文件，是数字时代最朴素的抗衰法则。
+
+## § 01 数字内容的隐形半衰期
+
+如果把你过去十年写下的笔记、博客和演示项目按存储介质摊在桌上，会发现一个残酷的规律：**抽象层越厚，半衰期越短。**
+
+| 发布形态 | 典型半衰期 | 主要失效原因 |
+| :--- | :--- | :--- |
+| 商业内容平台专栏 | 2 – 5 年 | 平台关停、策略调整或链接失效 |
+| 数据库驱动动态 CMS | 3 – 6 年 | 主机续费中断、插件漏洞与版本断层 |
+| 重型前端 SSG 构建链 | 2 – 4 年 | 依赖树腐烂、主版本破坏性升级 |
+| **纯文本原稿 + 静态 HTML5** | **20+ 年** | 浏览器向后兼容标准，零运行依赖 |
+
+- 依附于某个商业 SaaS 平台的专栏：平台转型或关停，链接即刻失效；
+- 依赖复杂数据库与动态插件的 CMS：服务器过期或安全漏洞爆发，整站下线；
+- 绑定特定主版本前端构建框架与上百个 npm 包的站点：搁置两年后连本地预览都跑不起来；
+- **纯文本原稿 + 标准静态 HTML5/CSS/原生 JS**：1996 年的 HTML 页面在 2026 年的浏览器里依然毫秒级打开。
+
+## § 02 零依赖并不等于低表达力
+
+过去我们忍受框架复杂性，是因为浏览器原生能力太弱。但到 2026 年，Web 平台本身已经补齐了几乎所有关键积木：
+
+- 级联层 `@layer` 与 CSS 原生嵌套取代了预处理器；
+- `light-dark()` 与 `<meta name="color-scheme">` 让明暗主题无需繁重状态库；
+- 原生 `<dialog closedby="any">` 内置顶层渲染、焦点管理与 `Esc` 退出；
+- `@view-transition { navigation: auto; }` 让纯静态多页站点也拥有丝滑转场。
+
+这意味着我们完全可以站在浏览器标准这棵常青树上，而不是绑在两年一换代的框架快艇上。
+
+## § 03 静态内核 × 可选边缘层
+
+在 *Tong's Information*，所有文章与资产都作为透明文件躺在 Git 仓库和 `site/` 目录里，随时可以复制到任何一台静态服务器或本地硬盘双击阅读。同时托管在 Cloudflare Workers Static Assets 上，意味着今天零运维成本，明天却能按需挂载内容协商与 MCP 边缘服务。
+
+**真正的长期主义，是在最稳固的地基上保持面向未来的开放性。**
+
+========================================================================
+ISSUE 01 [EN] — https://www.esoren.com/en/posts/agent-era-publishing/
+========================================================================
+---
+title: "Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML"
+publication: "Tong's Information"
+author: "Tong"
+issue: "01"
+tier: "essay"
+lang: "en"
+date: "2026-10-28"
+updated: "2026-11-24"
+concepts: ["agent-web", "static-architecture", "swiss-typography", "bilingual-i18n"]
+canonical_html: "https://www.esoren.com/en/posts/agent-era-publishing/"
+canonical_md: "https://www.esoren.com/en/posts/agent-era-publishing/index.md"
+counterpart_md: "https://www.esoren.com/posts/agent-era-publishing/index.md"
+---
+
+# Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML
+
+> Traditional static site generators were an ergonomic compromise for human hands tired of writing HTML. With an agent at the desk, we can discard brittle build pipelines and reclaim the native medium of the web.
+
+## § 01 Templates Began as Liberation and Ended as a Cage
+
+For the past fifteen years, starting a personal blog followed a nearly universal recipe: pick a static site generator (Hugo, Jekyll, Hexo, or Astro), write Markdown, choose a theme, wire up plugins, and hand the compilation pipeline to CI.
+
+In the era of hand-coded web maintenance, that architecture was completely sensible. Humans hated updating the same navigation bar across fifty HTML files, and nobody enjoyed assembling `rss.xml` or `sitemap.xml` by hand. Template engines traded expressive freedom for lower mechanical labor.
+
+Yet the hidden tax piled up quietly:
+
+1. **Every thought flattened into the same rectangle**: Whether you are publishing a three-hundred-word note or an interactive systems analysis, every piece gets squeezed into an identical Markdown column.
+2. **Chronic dependency rot**: Return to a blog after eighteen months to tweak one typographic rule, and you often spend an evening fighting breaking framework upgrades, Node versions, and stale bundler plugins.
+3. **The wall of bilingual publishing**: Maintaining a Chinese–English blog in traditional setups quickly becomes an ordeal of brittle i18n routing tables and manual translation fatigue, driving most personal sites back to a single language.
+
+## § 02 When an Agent Joins the Editorial Desk
+
+In the agent era, the marginal cost of authoring clean semantic HTML, tuning modular CSS grids, crafting zero-dependency interactive demonstrations, and localizing ideas thoughtfully across languages approaches zero.
+
+That inversion lets us ask a question that felt extravagant a decade ago: **What does personal publishing look like when every essay has an art director, a typesetter, and a bilingual editor standing by?**
+
+At *Tong's Information*, our answer rests on three architectural pillars:
+
+### 1. Keep Plain-Text Sources; Liberate the HTML Edition
+
+Raw thinking still lives as clean Markdown inside `sources/`. That preserves a durable, lossless Source of Truth that any future tool or redesign can read cleanly ten years from now.
+
+Between `sources/` and `site/`, however, sits an **agent editorial desk** rather than a rigid template compiler:
+
+- **Tier 1 — Essays & Notes**: Disciplined Swiss typography, structured section markers, and desktop margin sidenotes — ready to publish in minutes.
+- **Tier 2 — Features & Interactives**: Art-directed flagship spreads with bespoke diagrams, custom visual rhythms, and self-contained vanilla JS laboratories embedded directly in static HTML.
+
+### 2. Defeat Style Entropy with an Explicit Order Layer
+
+Letting an AI write arbitrary HTML from scratch session after session guarantees drift: after twenty posts, spacing, type scales, and DOM structure splinter apart. The answer is not retreating to a heavy framework, but encoding **taste and invariants as machine-readable specifications**:
+
+- `editorial/DESIGN.md` defines the modular grid, color tokens, bilingual typographic rhythm, and contrast rules.
+- `AGENTS.md` documents the publishing protocol and accessibility baseline.
+- A tiny, zero-dependency Python script (`tools/editorial_sync.py`) owns every **deterministic task**: syncing header/footer partials, mirroring clean `index.md` twins, generating `llms.txt`, RSS, JSON Feed, and the concept graph, and auditing links and metadata before deployment.
+
+**Give creative work to probabilistic intelligence; give invariants to deterministic scripts.** That is the true equilibrium of agent-native engineering.
+
+### 3. Bilingual by Default, Not an Afterthought
+
+Traditional i18n feels like a tax because humans pay every marginal translation hour. In an agent-native workflow, drafting in whichever language fits your thought yields a carefully edited counterpart edition in minutes — complete with bidirectional `hreflang` links, dual-language feeds, and script-aware typography (generous line height and open rhythm for Chinese; tight display tracking and hyphenation for English).
+
+## § 03 Static Longevity
+
+No `node_modules` required to render a sentence. No database to patch. No frontend framework churn.
+
+The web browser remains the most backwards-compatible runtime ever built. Clean HTML5 paired with modern CSS (`@layer`, `light-dark()`, native `<dialog>`, and cross-document View Transitions) delivers instant performance today and remains effortlessly legible ten years from now — both to human eyes and to the next generation of AI agents.
+
+This is Issue 01 of *Tong's Information*, and the foundation of the desk.
+
+========================================================================
+ISSUE 01 [ZH] — https://www.esoren.com/posts/agent-era-publishing/
+========================================================================
+---
+title: "后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML"
+publication: "Tong's Information"
+author: "Tong"
+issue: "01"
+tier: "essay"
+lang: "zh-Hans"
+date: "2026-10-28"
+updated: "2026-11-24"
+concepts: ["agent-web", "static-architecture", "swiss-typography", "bilingual-i18n"]
+canonical_html: "https://www.esoren.com/posts/agent-era-publishing/"
+canonical_md: "https://www.esoren.com/posts/agent-era-publishing/index.md"
+counterpart_md: "https://www.esoren.com/en/posts/agent-era-publishing/index.md"
+---
+
+# 后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML
+
+> 传统静态博客框架是为了弥补人类写 HTML 的体力极限而生的妥协。当编写者变成 Agent，我们可以扔掉沉重的构建管线，拿回网页原本的表达自由。
+
+## § 01 模板曾是解放，如今却成了牢笼
+
+过去十五年里，如果你想做一个个人博客，标准答案几乎没有悬念：选一个静态站点生成器（Hugo、Jekyll、Hexo 或 Astro），写 Markdown，挑一套主题，装上一堆插件，再把构建流程交给 CI。
+
+这套范式在「纯手工 Web 时代」无比合理。人类厌倦在五十个 HTML 文件里反复修改同一个导航栏，也不想手拼 `rss.xml` 和 `sitemap.xml`。于是我们发明了模板引擎，用「统一结构」换取「低维护成本」。
+
+但代价同样显而易见：
+
+1. **表达被压扁成一个矩形**：无论你想写的是一则三百字的灵感笔记，还是一篇需要交互式图解与对比实验的深度论文，最终都只能被塞进同一个 Markdown 模子里。
+2. **依赖链的慢性腐烂**：两年没更新博客，回来想改一行 CSS，往往要先和过期的主版本框架、Node 版本、打包器插件搏斗半天。
+3. **翻译与跨语种传播的高墙**：在传统博客里维护中英双语几乎是一场灾难——繁琐的 i18n 路由配置、僵硬的翻译键、加上人工双语校对的心理负担，让绝大多数个人站最终退回单语。
+
+## § 02 当编辑部里多了一位 Agent
+
+在 Agent 时代，写 HTML、编排 CSS 网格、编写零依赖交互脚本、以及将思想精准转译为另一种语言的边际成本，已经逼近于零。
+
+这意味着我们可以重新提出一个在十年前显得奢侈的问题：**如果每一篇文章都有一位美术指导、一位排印师和一位双语译者随时待命，个人出版物应该长什么样？**
+
+在 *Tong's Information*，我们的回答由三条原则构成：
+
+### 1. 保留纯文本原稿，释放 HTML 的编排权
+
+我依然在 `sources/` 里用最朴素的纯文本和 Markdown 沉淀思考——这是内容的单一事实来源（Source of Truth），确保十年后的任何系统都能无损读取我的文字。
+
+但从 `sources/` 到 `site/` 之间，不再是死板的正则替换，而是 **Agent 的编辑与编排过程**：
+
+- **Tier 1 专栏与随笔（Essay）**：遵循严谨的瑞士网格与排印比例，配备桌面端右侧边注与清晰节号，一分钟内极速成刊。
+- **Tier 2 封面特稿（Feature）**：允许破格的版面编排、定制图解、以及直接内嵌在静态 HTML 中的交互实验装置，无需安装任何前端框架。
+
+### 2. 用“秩序层”对抗风格熵增
+
+放任模型毫无约束地每次从零写页面，二十篇之后站点就会变成风格混乱的拼装怪。解决办法不是退回重型框架，而是把**审美秩序显式写成机器可读的宪法**：
+
+- `editorial/DESIGN.md` 定义网格比例、色彩 Token、字号约束与中英混排节奏；
+- `AGENTS.md` 固化编辑部发布流程与无障碍底线；
+- 极简的零依赖脚本 `tools/editorial_sync.py` 负责所有**确定性机械工作**：同步页眉页脚、派生纯净 `index.md`、生成 `llms.txt` / RSS / JSON Feed / 知识图谱，并在发布前执行死链与结构体检。
+
+**把创造力交给概率模型，把不变式交给确定性脚本。** 这才是 Agent-Native 工程的平衡点。
+
+### 3. 双语不是“翻译插件”，而是默认出版形态
+
+传统网站把 i18n 视作昂贵的工程负担；但在 Agent 时代，当你用母语写完一篇思考，Agent 可以在理解上下文、术语体系和语体气质的基础上，同步打磨出同样自然克制的英文版本，并完成 `hreflang` 互链、双语 RSS 与中英排印微调（例如中文更大的行高与更从容的段间距，英文更紧凑的字距与连字符断行）。
+
+## § 03 纯静态的长期主义
+
+没有 `node_modules` 参与页面渲染，没有数据库需要运维，没有前端框架需要迁移。
+
+浏览器本身就是世界上兼容性最惊人的运行时。一份写得干净的 HTML5 + 现代 CSS（`@layer`、`light-dark()`、原生 `<dialog>`、跨文档 View Transitions）文件，在今天可以跑出满分的加载速度，在十年后依然可以被直接双击打开，被人类优雅阅读，也被下一代 AI Agent 毫无障碍地理解。
+
+这便是 *Tong's Information* 的第一期，也是这座编辑部的起点。
+

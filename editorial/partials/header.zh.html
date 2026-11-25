@@ -1,0 +1,38 @@
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="{{SITE_NAME_ATTR}}" data-site-author="{{SITE_AUTHOR_ATTR}}" data-issue-order="{{ISSUE_ORDER_ATTR}}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">{{SITE_NAME_HTML}}</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/"{{CURRENT_HOME}}>封面</a></li>
+        <li><a href="/archive/"{{CURRENT_ARCHIVE}}>归档</a></li>
+        <li><a href="/graph/"{{CURRENT_GRAPH}}>图谱</a></li>
+        <li><a href="/about/"{{CURRENT_ABOUT}}>关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="{{LANG_SWITCH_HREF}}" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>

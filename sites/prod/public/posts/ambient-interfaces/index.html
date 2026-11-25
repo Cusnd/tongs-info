@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>宁静界面：当交互从点击转向意图 | Tong's Information</title>
+  <meta name="description" content="剖析界面过度装饰的根源，并内置界面信噪比校准器交互装置，实时对比控件堆砌与克制意图界面之间的视觉熵值。">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://www.esoren.com/posts/ambient-interfaces/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/ambient-interfaces/">
+  <link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/ambient-interfaces/">
+  <link rel="alternate" hreflang="x-default" href="https://www.esoren.com/posts/ambient-interfaces/">
+  <link rel="alternate" type="text/markdown" title="Agent Markdown Twin" href="./index.md">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="preload" as="image" href="/assets/images/issue-04-ambient-interfaces.jpg" fetchpriority="high">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <style>
+    @layer components {
+      .quiet-stage {
+        background-color: var(--bg-subtle);
+        padding: var(--space-5);
+        display: grid;
+        gap: var(--space-3);
+        border: 2px solid color-mix(in srgb, var(--rule-strong) calc(var(--noise-level, 0) * 100%), transparent);
+      }
+
+      .quiet-ribbon {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        color: var(--ink-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: calc(var(--noise-level, 0) * 0.5rem) calc(var(--noise-level, 0) * 0.75rem);
+        background-color: var(--bg-surface);
+        border: 1px solid var(--rule);
+        opacity: calc(var(--noise-level, 0));
+        max-block-size: calc(var(--noise-level, 0) * 3rem);
+        overflow: hidden;
+      }
+
+      .quiet-dot {
+        display: inline-block;
+        inline-size: 0.45rem;
+        block-size: 0.45rem;
+        background-color: var(--signal);
+        margin-inline-end: 0.4rem;
+      }
+
+      .quiet-mock-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .quiet-mock-btn {
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        padding: 0.3rem calc(0.2rem + var(--noise-level, 0) * 0.65rem);
+        border: 1px solid color-mix(in srgb, var(--rule-strong) calc(var(--noise-level, 0) * 100%), transparent);
+        background-color: color-mix(in srgb, var(--bg-surface) calc(var(--noise-level, 0) * 100%), transparent);
+        color: var(--ink-secondary);
+      }
+
+      .quiet-mock-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        opacity: calc(var(--noise-level, 0));
+        max-block-size: calc(var(--noise-level, 0) * 2.5rem);
+        overflow: hidden;
+      }
+
+      .quiet-mock-badge {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        padding: 0.12rem 0.45rem;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+      }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "宁静界面：当交互从点击转向意图",
+    "description": "剖析界面过度装饰的根源，并内置界面信噪比校准器交互装置。",
+    "datePublished": "2026-11-18",
+    "dateModified": "2026-11-18",
+    "inLanguage": "zh-Hans",
+    "url": "https://www.esoren.com/posts/ambient-interfaces/",
+    "author": { "@type": "Person", "name": "Tong" },
+    "publisher": { "@type": "Organization", "name": "Tong's Information" }
+  }
+  </script>
+</head>
+<body data-page-type="article" data-post-slug="ambient-interfaces">
+  <div class="reading-progress" aria-hidden="true"><div class="reading-progress-fill"></div></div>
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">Tong's Information</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/">封面</a></li>
+        <li><a href="/archive/">归档</a></li>
+        <li><a href="/graph/">图谱</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="/en/posts/ambient-interfaces/" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span class="tier-label">特稿 · No. 04</span>
+          <time datetime="2026-11-18">2026.11.18</time>
+          <span>6 分钟 · 含交互校准器</span>
+        </div>
+        <h1 class="article-h1">宁静界面：当交互从点击转向意图</h1>
+        <p class="article-deck">
+          软件工业花了二十年往屏幕上堆砌按钮、红点与带框卡片。当 Agent 接管繁琐操作，真正高级的界面终于可以学会闭嘴。
+        </p>
+        <div class="article-tools" role="region" aria-label="文章工具">
+          <button type="button" class="btn subtle" data-copy-md="./index.md">复制 Markdown</button>
+          <a href="./index.md">index.md</a>
+          <button type="button" class="btn subtle" data-copy-cite data-cite-title="宁静界面：当交互从点击转向意图" data-cite-date="2026-11-18" data-cite-issue="04">复制引用</button>
+          <a href="/en/posts/ambient-interfaces/" hreflang="en" lang="en">English ↗</a>
+        </div>
+      </div>
+      <figure class="shell article-cover-plate editorial-plate">
+        <img
+          src="/assets/images/issue-04-ambient-interfaces.jpg"
+          alt="瑞士现代主义平版版画：左侧密集的墨黑细框碎片在网格间逐渐消融，向右化为宁静留白中的钴蓝垂直色块与一笔朱红横线"
+          width="1200"
+          height="896"
+          fetchpriority="high"
+        >
+      </figure>
+    </header>
+
+    <div class="shell article-body-wrap">
+      <div class="essay-grid">
+        <aside class="essay-rail" aria-label="文章目录">
+          <ul class="toc-list">
+            <li><a href="#s01">§ 01 为什么界面越来越吵</a></li>
+            <li><a href="#lab-quiet">实验 · 界面信噪比校准器</a></li>
+            <li><a href="#s02">§ 02 装饰过度 vs. 视觉表达</a></li>
+            <li><a href="#s03">§ 03 意图优先的三条准绳</a></li>
+          </ul>
+        </aside>
+
+        <article class="prose">
+          <h2 id="s01"><span class="section-index">§ 01</span>为什么今天的界面越来越吵</h2>
+          <div class="sidenote-anchor">
+            <p>
+              打开绝大多数现代软件或内容站点，你的视线往往还没碰到正文，就已经被五层“镀铬装饰（Chrome）”包围：顶部状态横幅、带框工具按钮、红点提示、悬浮徽章、嵌套两层的灰色卡片。<span class="sidenote-ref" aria-hidden="true">01</span>
+            </p>
+            <aside class="sidenote" aria-label="边注 01">
+              <span class="sidenote-num">01</span>
+              设计界用 Chrome 指代内容之外的一切边框、标题栏与工具条；当 Chrome 面积超过内容本身，界面就进入了视觉过载。
+            </aside>
+          </div>
+          <p>
+            这种“恐惧留白”的设计习惯，来自<strong>纯手动点击时代</strong>的遗产——因为每项功能都必须把开关裸露在屏幕上等待人类寻找，于是界面不可避免地膨胀成一座精密却焦躁的仪表盘。
+          </p>
+
+          <section id="lab-quiet" class="feature-lab" aria-labelledby="quiet-lab-title" data-quiet-lab>
+            <div class="lab-header">
+              <div>
+                <div class="lab-kicker">交互实验 · 界面信噪比校准器</div>
+                <h3 id="quiet-lab-title" style="font-size: var(--text-lg); margin-block-start: 0.25rem;">拖动滑块，实时对比“宁静排印”与“过度装饰”</h3>
+              </div>
+            </div>
+            <div class="lab-grid-2">
+              <div class="quiet-stage" id="quiet-specimen-stage" style="--noise-level: 0.1;">
+                <div class="quiet-ribbon">
+                  <span><span class="quiet-dot" aria-hidden="true"></span>LIVE STATUS · V2.4.1</span>
+                  <span>API READY · 99.9%</span>
+                </div>
+                <div class="quiet-mock-badges">
+                  <span class="quiet-mock-badge">NEW</span>
+                  <span class="quiet-mock-badge">BILINGUAL</span>
+                  <span class="quiet-mock-badge">AGENT-READY</span>
+                </div>
+                <p style="font-size: var(--text-xl); font-weight: 700; line-height: 1.3;">让屏幕重新安静下来。</p>
+                <p style="font-size: var(--text-sm); color: var(--ink-secondary);">
+                  当你逐层剥离方框、状态条和系统贴纸，剩下的不是贫瘠，而是让观点一眼穿透的秩序。
+                </p>
+                <div class="quiet-mock-actions" aria-hidden="true">
+                  <span class="quiet-mock-btn">阅读全文 →</span>
+                  <span class="quiet-mock-btn">检索 ⌘K</span>
+                  <span class="quiet-mock-btn">EN</span>
+                  <span class="quiet-mock-btn">暗色</span>
+                </div>
+              </div>
+
+              <div class="control-grid">
+                <div class="control-field">
+                  <label for="chrome-noise-slider">
+                    <span>界面装饰噪音强度</span>
+                    <output id="chrome-noise-out" class="tabular">10%（宁静排印）</output>
+                  </label>
+                  <input id="chrome-noise-slider" type="range" min="0" max="100" step="5" value="10">
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">非内容镀铬元素</div>
+                  <div class="metric-value" id="quiet-entropy-val">1 个装饰性元素</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-label">核心阅读注意力留存</div>
+                  <div class="metric-value" id="quiet-focus-val">88%</div>
+                  <div class="meter-track"><div class="meter-bar" id="quiet-meter-bar" style="inline-size: 88%;"></div></div>
+                  <p id="quiet-note" style="font-size: var(--text-xs); color: var(--ink-secondary); margin-block-start: 0.45rem;"></p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <h2 id="s02"><span class="section-index">§ 02</span>装饰过度 vs. 视觉表达</h2>
+          <p>去掉噪音，并不意味着把网站退化成干瘪的纯文本清单。</p>
+          <ul>
+            <li><strong>坏的装饰</strong>：给每个次级按钮套矩形框、把技术实现细节（接口路径、版本号、状态灯）当成卖点贴在人类眼前、用无意义的嵌套边框替代真正的排版层级。</li>
+            <li><strong>好的视觉设计</strong>：克制的单一纸面、精准的字号与字重对比、有艺术指导的专属插画或可把玩的动态几何模型、以及让眼睛得以喘息的四周留白。</li>
+          </ul>
+          <blockquote>
+            <p>真正的宁静界面不是“什么都没有”，而是屏幕上的每一像素都在为人的理解或愉悦服务，没有一像素是在自我炫耀。</p>
+          </blockquote>
+
+          <h2 id="s03"><span class="section-index">§ 03</span>意图优先的三条设计准绳</h2>
+          <ol>
+            <li><strong>把机械选项折叠进按需触发的入口</strong>：全局检索与快捷动作安静地待在 <code>⌘K</code> 命令面板里，平时只占两个轻盈的字，不抢走任何视觉重心。</li>
+            <li><strong>让动效服从物理直觉，而非吸引注意力</strong>：一个可拖拽、带阻尼弹簧回弹的几何焦点，比十个闪烁的 CTA 按钮更有生命力，却从不打扰阅读。</li>
+            <li><strong>为人类留白，为机器留协议</strong>：当你不再需要把机器可读信息硬塞给人类看，界面立刻就能恢复如纸质杂志般的安静与气场。</li>
+          </ol>
+
+          <section class="article-footer-band" aria-label="关联概念与延伸阅读">
+            <div>
+              <h3 class="footer-heading">关联概念</h3>
+              <ul class="concept-list">
+                <li><a class="concept-tag" href="/archive/?concept=interface-craft">界面克制与意图设计</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=agent-web">Agent 万维网</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=swiss-typography">瑞士排印与网格</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">延伸阅读</h3>
+              <ul class="footer-list">
+                <li><a href="/posts/dual-audience-web/">No. 05 双面万维网：同时写给人类眼睛与 AI Agent 的出版架构 →</a></li>
+                <li><a href="/posts/bilingual-thought/">No. 03 双语即思考：Agent 时代的写作不再被单一语言围困 →</a></li>
+              </ul>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information</span>
+    <ul class="footer-links" aria-label="订阅与语言">
+      <li><a href="/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/en/posts/ambient-interfaces/" hreflang="en" lang="en">English</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/posts/ambient-interfaces/lab.js"></script>
+</body>
+</html>

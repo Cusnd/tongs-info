@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>404 Not Found | Tong's Information</title>
+  <meta name="description" content="The requested path does not exist in Tong's Information.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+</head>
+<body data-page-type="404">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">Tong's Information</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/">Cover</a></li>
+        <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/graph/">Graph</a></li>
+        <li><a href="/en/about/">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="/404.html" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <section id="hero-fold" class="shell cover-hero" style="border-block-end: 0;">
+      <div class="cover-story">
+        <div class="meta-line"><span>404</span></div>
+        <h1 class="cover-title">Page Not Found</h1>
+        <p class="cover-deck">
+          The requested path does not exist in Tong's Information, or has moved. Return to the English cover, browse the archive, or switch to the Chinese 404 page.
+        </p>
+        <div class="action-row">
+          <a class="btn primary" href="/en/">Return to Cover →</a>
+          <a class="btn subtle" href="/en/archive/">Archive</a>
+          <a class="btn subtle" href="/en/graph/">Knowledge Graph</a>
+          <a class="btn subtle" href="/404.html" hreflang="zh-Hans" lang="zh-Hans">中文 404</a>
+          <a class="btn subtle mono" href="/llms.txt">llms.txt</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information</span>
+    <ul class="footer-links" aria-label="Feeds and language">
+      <li><a href="/en/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/404.html" hreflang="zh-Hans" lang="zh-Hans">中文</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

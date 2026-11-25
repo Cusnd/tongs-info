@@ -1,0 +1,38 @@
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="{{SITE_NAME_ATTR}}" data-site-author="{{SITE_AUTHOR_ATTR}}" data-issue-order="{{ISSUE_ORDER_ATTR}}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">{{SITE_NAME_HTML}}</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/"{{CURRENT_HOME}}>Cover</a></li>
+        <li><a href="/en/archive/"{{CURRENT_ARCHIVE}}>Archive</a></li>
+        <li><a href="/en/graph/"{{CURRENT_GRAPH}}>Graph</a></li>
+        <li><a href="/en/about/"{{CURRENT_ABOUT}}>About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="{{LANG_SWITCH_HREF}}" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>Knowledge Graph | Tong's Information</title>
+  <meta name="description" content="Interactive geometric network mapping essays and core concepts across Tong's Information, backed by static /api/graph.json.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://www.esoren.com/en/graph/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/graph/">
+  <link rel="alternate" hreflang="en" href="https://www.esoren.com/en/graph/">
+  <link rel="alternate" hreflang="x-default" href="https://www.esoren.com/graph/">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Knowledge Graph | Tong's Information",
+    "url": "https://www.esoren.com/en/graph/",
+    "inLanguage": "en"
+  }
+  </script>
+</head>
+<body data-page-type="graph">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">Tong's Information</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/">Cover</a></li>
+        <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/graph/" aria-current="page">Graph</a></li>
+        <li><a href="/en/about/">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="/graph/" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span>Topology</span>
+          <a href="/api/graph.json">/api/graph.json</a>
+        </div>
+        <h1 class="article-h1">Knowledge Graph</h1>
+        <p class="article-deck">
+          Circles represent published issues; squares represent recurring concepts. Select any node on the canvas or in the table below to trace connections.
+        </p>
+      </div>
+    </header>
+
+    <section class="shell section-band" aria-label="Interactive Knowledge Graph">
+      <div class="graph-workspace">
+        <div class="graph-stage">
+          <canvas id="knowledge-graph-canvas" aria-label="Conceptual network linking published essays and topics; use the structured table below for keyboard navigation"></canvas>
+        </div>
+        <aside class="graph-inspector" aria-label="Node inspector">
+          <div id="graph-inspector-body" class="stack-sm">
+            <span class="badge">Topology Overview</span>
+            <h2 style="font-size: var(--text-xl);">5 Issues × 7 Core Concepts</h2>
+            <p style="font-size: var(--text-sm); color: var(--ink-secondary);">
+              Enable JavaScript to explore interactive canvas highlights, or follow any issue and concept link directly in the structured table below or via <a href="/api/graph.json">/api/graph.json</a>.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="shell section-band" aria-labelledby="graph-table-heading-en">
+      <div class="section-head">
+        <h2 id="graph-table-heading-en" class="section-title">Structured Node Index</h2>
+        <span class="section-meta">Accessible Table</span>
+      </div>
+      <div class="table-scroll" role="region" aria-label="Published issues and core concept relationships" tabindex="0">
+      <table class="swiss-table">
+        <caption>Published issues and core concept relationships</caption>
+        <thead>
+          <tr>
+            <th scope="col">Node</th>
+            <th scope="col">Kind</th>
+            <th scope="col">Summary / Links</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="/en/posts/dual-audience-web/">No. 05 The Dual-Audience Web</a></strong></td>
+            <td class="mono">Feature</td>
+            <td>Linked: Agent Web, Knowledge Graph, Edge Architecture, Swiss Typography</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:dual-audience-web" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/posts/dual-audience-web/">Open →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/posts/ambient-interfaces/">No. 04 Quiet Interfaces</a></strong></td>
+            <td class="mono">Feature</td>
+            <td>Linked: Interface Craft, Agent Web, Swiss Typography</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:ambient-interfaces" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/posts/ambient-interfaces/">Open →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/posts/bilingual-thought/">No. 03 Thinking in Stereo</a></strong></td>
+            <td class="mono">Essay</td>
+            <td>Linked: Agent-Native i18n, Agent Web, Knowledge Graph</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:bilingual-thought" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/posts/bilingual-thought/">Open →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/posts/software-longevity/">No. 02 Readable in Ten Years</a></strong></td>
+            <td class="mono">Essay</td>
+            <td>Linked: Static Architecture, Edge Architecture, Interface Craft</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:software-longevity" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/posts/software-longevity/">Open →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/posts/agent-era-publishing/">No. 01 Beyond Templates</a></strong></td>
+            <td class="mono">Essay</td>
+            <td>Linked: Agent Web, Static Architecture, Swiss Typography, Agent-Native i18n</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:agent-era-publishing" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/posts/agent-era-publishing/">Open →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/archive/?concept=agent-web">Agent Web</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>Designing websites simultaneously as human reading surfaces and machine-consumable knowledge protocols.</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:agent-web" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/archive/?concept=agent-web">Archive →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/archive/?concept=interface-craft">Interface Craft</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>Stripping away decorative chrome and control clutter so interfaces serve human intent quietly.</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:interface-craft" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/archive/?concept=interface-craft">Archive →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/archive/?concept=static-architecture">Static Architecture</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>Leaving heavy build chains and dependency rot behind in favor of durable, native web standards.</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:static-architecture" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/archive/?concept=static-architecture">Archive →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/archive/?concept=swiss-typography">Swiss Typography</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>Building rational reading order through modular grids, hairlines, and negative space.</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:swiss-typography" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/archive/?concept=swiss-typography">Archive →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/archive/?concept=bilingual-i18n">Agent-Native i18n</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>Writing from a single source of thought while an agent editorial desk crafts idiomatic bilingual editions.</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:bilingual-i18n" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/archive/?concept=bilingual-i18n">Archive →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/archive/?concept=knowledge-graph">Knowledge Graph</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>Replacing flat chronological feeds with conceptual topology and bidirectional links.</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:knowledge-graph" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/archive/?concept=knowledge-graph">Archive →</a></noscript></td>
+          </tr>
+          <tr>
+            <td><strong><a href="/en/archive/?concept=edge-architecture">Edge Architecture</a></strong></td>
+            <td class="mono">Concept</td>
+            <td>Hosting on Cloudflare Workers Static Assets for zero-ops static delivery today with seamless upgrades to content negotiation and MCP tomorrow.</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:edge-architecture" hidden>Inspect</button><noscript><a class="btn subtle" href="/en/archive/?concept=edge-architecture">Archive →</a></noscript></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information</span>
+    <ul class="footer-links" aria-label="Feeds and language">
+      <li><a href="/en/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/graph/" hreflang="zh-Hans" lang="zh-Hans">中文</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/graph.js"></script>
+</body>
+</html>

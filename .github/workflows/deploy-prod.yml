@@ -1,0 +1,39 @@
+name: Deploy Production (www.esoren.com)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "sites/sites.json"
+      - "sites/prod/**"
+      - "engine/**"
+      - "editorial/**"
+      - "tools/**"
+      - "cloudflare.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/deploy-prod.yml"
+      - ".github/workflows/reusable-cf-deploy.yml"
+  workflow_dispatch:
+    inputs:
+      skip_live_smoke:
+        description: "Skip post-deploy live URL smoke test (use before binding Custom Domain)"
+        required: false
+        type: boolean
+        default: false
+
+# One active release per site; rapid merges coalesce cleanly to the latest pending commit.
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy-prod:
+    uses: ./.github/workflows/reusable-cf-deploy.yml
+    with:
+      site: prod
+      environment: production
+      skip_live_smoke: ${{ inputs.skip_live_smoke || false }}
+    # Required by GitHub Actions so job-level `environment: production` exposes environment-scoped secrets
+    secrets: inherit

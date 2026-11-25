@@ -1,0 +1,18 @@
+{
+  "sites": {
+    "demo": {
+      "worker_name": "tongs-info-demo",
+      "preview_worker_name": "tongs-info-demo-preview",
+      "base_url": "https://info-demo.esoren.com",
+      "environment": "demo",
+      "preview_environment": "preview-demo"
+    },
+    "prod": {
+      "worker_name": "tongs-info-prod",
+      "preview_worker_name": "tongs-info-prod-preview",
+      "base_url": "https://www.esoren.com",
+      "environment": "production",
+      "preview_environment": "preview-prod"
+    }
+  }
+}

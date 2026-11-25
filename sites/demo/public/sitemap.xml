@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://info-demo.esoren.com/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/archive/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/archive/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/archive/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/archive/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/archive/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/archive/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/graph/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/graph/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/graph/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/graph/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/graph/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/graph/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/about/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/about/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/about/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/about/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/about/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/about/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/posts/dual-audience-web/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/dual-audience-web/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/dual-audience-web/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/posts/dual-audience-web/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/dual-audience-web/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/dual-audience-web/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/posts/ambient-interfaces/</loc>
+    <lastmod>2026-11-18</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/ambient-interfaces/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/ambient-interfaces/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/posts/ambient-interfaces/</loc>
+    <lastmod>2026-11-18</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/ambient-interfaces/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/ambient-interfaces/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/posts/bilingual-thought/</loc>
+    <lastmod>2026-11-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/bilingual-thought/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/bilingual-thought/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/posts/bilingual-thought/</loc>
+    <lastmod>2026-11-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/bilingual-thought/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/bilingual-thought/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/posts/software-longevity/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/software-longevity/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/software-longevity/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/posts/software-longevity/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/software-longevity/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/software-longevity/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/posts/agent-era-publishing/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/agent-era-publishing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/agent-era-publishing/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/posts/agent-era-publishing/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/posts/agent-era-publishing/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/posts/agent-era-publishing/" />
+  </url>
+</urlset>

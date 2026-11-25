@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>关于 | Tong's Information</title>
+  <meta name="description" content="关于 Tong's Information：一份面向 Agent 时代的瑞士现代主义双语全静态数字刊物。">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://www.esoren.com/about/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/about/">
+  <link rel="alternate" hreflang="en" href="https://www.esoren.com/en/about/">
+  <link rel="alternate" hreflang="x-default" href="https://www.esoren.com/about/">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "关于 | Tong's Information",
+    "url": "https://www.esoren.com/about/",
+    "inLanguage": "zh-Hans"
+  }
+  </script>
+</head>
+<body data-page-type="about">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">Tong's Information</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/">封面</a></li>
+        <li><a href="/archive/">归档</a></li>
+        <li><a href="/graph/">图谱</a></li>
+        <li><a href="/about/" aria-current="page">关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="/en/about/" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span>发刊词与版式说明</span>
+          <span>2026</span>
+        </div>
+        <h1 class="article-h1">关于 Tong's Information</h1>
+        <p class="article-deck">
+          一份完全跳出传统静态博客框架、由作者与 AI Agent 协同编排的双语个人数字刊物。全静态 HTML5、零构建链、托管于 Cloudflare Workers Static Assets。
+        </p>
+      </div>
+    </header>
+
+    <div class="shell article-body-wrap">
+      <div class="essay-grid">
+        <aside class="essay-rail" aria-label="页面章节">
+          <ul class="toc-list">
+            <li><a href="#why">§ 01 出版理念</a></li>
+            <li><a href="#workflow">§ 02 编辑部工作流</a></li>
+            <li><a href="#endpoints">§ 03 机器可读接口</a></li>
+          </ul>
+        </aside>
+
+        <article class="prose">
+          <h2 id="why"><span class="section-index">§ 01</span>出版理念</h2>
+          <p>
+            <strong>Tong's Information</strong> 拒绝将每篇思考强行塞进同一套博客模板。普通随笔（<strong>Essay</strong>）追求克制的瑞士排印与右侧边注节奏；重点专题（<strong>Feature</strong>）则允许 Agent 依据主题直接内嵌零依赖的交互实验装置。
+          </p>
+          <p>
+            全站默认实行中英双语出版：只需在灵感最自然的那种语言中写下原稿，Agent 编辑部负责地道本地化、排印节奏微调以及双语互链。
+          </p>
+
+          <h2 id="workflow"><span class="section-index">§ 02</span>编辑部工作流</h2>
+          <ol>
+            <li><strong>纯文本沉淀</strong>：所有原始思想保存在 <code>sources/</code> 目录，确保内容与呈现长期解耦。</li>
+            <li><strong>Agent 编排 HTML</strong>：依据 <code>editorial/DESIGN.md</code> 与 <code>AGENTS.md</code> 产出语义清晰的静态 HTML5。</li>
+            <li><strong>确定性脚本护航</strong>：零依赖的 <code>tools/editorial_sync.py</code> 统一同步页眉页脚、派生 <code>index.md</code> 孪生原稿、生成机器协议文件并执行全站死链体检。</li>
+            <li><strong>边缘演进跑道</strong>：通过 <code>cf deploy ./site</code> 部署至 Cloudflare Workers Static Assets，随时可按需叠加 <code>Accept: text/markdown</code> 内容协商与 Remote MCP 能力。</li>
+          </ol>
+
+          <h2 id="endpoints"><span class="section-index">§ 03</span>机器可读接口清单</h2>
+          <div class="table-scroll" role="region" aria-label="面向外部 AI Agent 与订阅器的公开端点" tabindex="0">
+          <table class="swiss-table">
+            <caption>面向外部 AI Agent 与订阅器的公开端点</caption>
+            <thead>
+              <tr>
+                <th scope="col">端点路径</th>
+                <th scope="col">格式</th>
+                <th scope="col">用途</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono"><a href="/llms.txt">/llms.txt</a></td>
+                <td class="mono">text/plain</td>
+                <td>全站 Agent 发现索引与双语文章入口</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/llms-full.txt">/llms-full.txt</a></td>
+                <td class="mono">text/plain</td>
+                <td>全站洁净文本合集，适合一次性注入长上下文</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/api/posts.json">/api/posts.json</a></td>
+                <td class="mono">application/json</td>
+                <td>全部文章元数据、分级与 <code>index.md</code> 路径</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/api/graph.json">/api/graph.json</a></td>
+                <td class="mono">application/json</td>
+                <td>文章与概念双向拓扑图谱数据</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/rss.xml">/rss.xml</a> · <a href="/en/rss.xml">/en/rss.xml</a></td>
+                <td class="mono">application/rss+xml</td>
+                <td>中英双语独立 RSS 2.0 订阅源</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information</span>
+    <ul class="footer-links" aria-label="订阅与语言">
+      <li><a href="/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/en/about/" hreflang="en" lang="en">English</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

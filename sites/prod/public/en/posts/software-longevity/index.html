@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>Readable in Ten Years: Static HTML and the Half-Life of Digital Work | Tong's Information</title>
+  <meta name="description" content="Measuring the half-life of personal publishing stacks across a ten-year horizon, from dynamic CMS databases to zero-dependency static HTML on the edge.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://www.esoren.com/en/posts/software-longevity/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/software-longevity/">
+  <link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/software-longevity/">
+  <link rel="alternate" hreflang="x-default" href="https://www.esoren.com/posts/software-longevity/">
+  <link rel="alternate" type="text/markdown" title="Agent Markdown Twin" href="./index.md">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="preload" as="image" href="/assets/images/issue-02-software-longevity.jpg" fetchpriority="high">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Readable in Ten Years: Static HTML and the Half-Life of Digital Work",
+    "description": "Measuring the half-life of personal publishing stacks across a ten-year horizon, from dynamic CMS databases to zero-dependency static HTML on the edge.",
+    "datePublished": "2026-11-04",
+    "dateModified": "2026-11-04",
+    "inLanguage": "en",
+    "url": "https://www.esoren.com/en/posts/software-longevity/",
+    "author": { "@type": "Person", "name": "Tong" },
+    "publisher": { "@type": "Organization", "name": "Tong's Information" }
+  }
+  </script>
+</head>
+<body data-page-type="article" data-post-slug="software-longevity">
+  <div class="reading-progress" aria-hidden="true"><div class="reading-progress-fill"></div></div>
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">Tong's Information</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/">Cover</a></li>
+        <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/graph/">Graph</a></li>
+        <li><a href="/en/about/">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="/posts/software-longevity/" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span>No. 02 · Essay</span>
+          <time datetime="2026-11-04">2026.11.04</time>
+          <span>5 min read</span>
+        </div>
+        <h1 class="article-h1">Readable in Ten Years: Static HTML and the Half-Life of Digital Work</h1>
+        <p class="article-deck">
+          Most personal sites do not die from a lack of ideas — they die from a broken dependency tree. Crystallizing writing and craft as plain standard HTML is the surest hedge against link rot and tooling churn.
+        </p>
+        <div class="article-tools" role="region" aria-label="Article tools">
+          <button type="button" class="btn subtle" data-copy-md="./index.md">Copy Markdown</button>
+          <a href="./index.md">index.md</a>
+          <button type="button" class="btn subtle" data-copy-cite data-cite-title="Readable in Ten Years: Static HTML and the Half-Life of Digital Work" data-cite-date="2026-11-04" data-cite-issue="02">Copy Citation</button>
+          <a href="/posts/software-longevity/" hreflang="zh-Hans" lang="zh-Hans">中文版 ↗</a>
+        </div>
+      </div>
+      <figure class="shell article-cover-plate editorial-plate">
+        <img
+          src="/assets/images/issue-02-software-longevity.jpg"
+          alt="Swiss modernist lithograph of alternating obsidian and cobalt horizontal strata bisected by a slender vertical meridian and a single vermilion square"
+          width="1200"
+          height="896"
+          fetchpriority="high"
+        >
+      </figure>
+    </header>
+
+    <div class="shell article-body-wrap">
+      <div class="essay-grid">
+        <aside class="essay-rail" aria-label="Table of contents">
+          <ul class="toc-list">
+            <li><a href="#s01">§ 01 Hidden Half-Life</a></li>
+            <li><a href="#s02">§ 02 Modern Web Primitives</a></li>
+            <li><a href="#s03">§ 03 Static Core × Edge</a></li>
+          </ul>
+        </aside>
+
+        <article class="prose">
+          <h2 id="s01"><span class="section-index">§ 01</span>The Hidden Half-Life of Digital Publishing</h2>
+          <div class="sidenote-anchor">
+            <p>
+              Lay out everything you have written and built over the past decade by storage medium, and a quiet law emerges: <strong>the thicker the abstraction stack, the shorter the half-life.</strong><span class="sidenote-ref" aria-hidden="true">01</span>
+            </p>
+            <aside class="sidenote" aria-label="Sidenote 01">
+              <span class="sidenote-num">01</span>
+              Static HTML pages published in 1996 open instantaneously today, while countless three-year-old JavaScript build pipelines already fail to install.
+            </aside>
+          </div>
+
+          <div class="table-scroll" role="region" aria-label="Ten-year durability across personal publishing stacks" tabindex="0">
+          <table class="swiss-table">
+            <caption>Ten-year durability across personal publishing stacks</caption>
+            <thead>
+              <tr>
+                <th scope="col">Publishing Stack</th>
+                <th scope="col">Typical Half-Life</th>
+                <th scope="col">Primary Failure Mode</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Hosted SaaS Newsletter / Platform</td>
+                <td class="mono">2 – 5 yrs</td>
+                <td>Business pivots, paywalls, link rot</td>
+              </tr>
+              <tr>
+                <td>Database-Backed Dynamic CMS</td>
+                <td class="mono">3 – 6 yrs</td>
+                <td>Hosting lapses, plugin security churn</td>
+              </tr>
+              <tr>
+                <td>Heavy Frontend SSG Pipeline</td>
+                <td class="mono">2 – 4 yrs</td>
+                <td>Dependency rot, breaking bundler upgrades</td>
+              </tr>
+              <tr>
+                <td><strong>Plain Sources + Standard HTML5</strong></td>
+                <td class="mono"><strong>20+ yrs</strong></td>
+                <td>Evergreen browser compatibility, zero runtime</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+
+          <h2 id="s02"><span class="section-index">§ 02</span>Zero Dependencies No Longer Means Low Craft</h2>
+          <p>
+            Developers once tolerated heavy frontend stacks because the raw web platform lacked ergonomic primitives. By 2026, browsers ship native <code>@layer</code> cascade zones, <code>light-dark()</code>, native <code>&lt;dialog closedby="any"&gt;</code>, and cross-document <code>@view-transition</code>. Standing directly on web standards delivers both longevity and contemporary polish.
+          </p>
+
+          <h2 id="s03"><span class="section-index">§ 03</span>Static Core, Modular Edge</h2>
+          <p>
+            Inside <em>Tong's Information</em>, every essay, image plate, and machine manifest lives transparently inside Git and <code>site/</code>, while deploying on Cloudflare Workers Static Assets keeps an effortless door open for HTTP content negotiation and Remote MCP later. <strong>True longevity pairs an unbreakable static core with a modular doorway to the future.</strong>
+          </p>
+
+          <section class="article-footer-band" aria-label="Concepts and related reading">
+            <div>
+              <h3 class="footer-heading">Concepts</h3>
+              <ul class="concept-list">
+                <li><a class="concept-tag" href="/en/archive/?concept=static-architecture">Static Architecture</a></li>
+                <li><a class="concept-tag" href="/en/archive/?concept=edge-architecture">Edge Architecture</a></li>
+                <li><a class="concept-tag" href="/en/archive/?concept=interface-craft">Interface Craft</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">Related</h3>
+              <ul class="footer-list">
+                <li><a href="/en/posts/agent-era-publishing/">No. 01 Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML →</a></li>
+                <li><a href="/en/posts/dual-audience-web/">No. 05 The Dual-Audience Web: Publishing for Human Eyes and AI Agents →</a></li>
+              </ul>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information</span>
+    <ul class="footer-links" aria-label="Feeds and language">
+      <li><a href="/en/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/posts/software-longevity/" hreflang="zh-Hans" lang="zh-Hans">中文</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>About | Tong's Information - Demo</title>
+  <meta name="description" content="About Tong's Information - Demo: a Swiss modernist, agent-authored bilingual static publication deployed on Cloudflare Workers Static Assets.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://info-demo.esoren.com/en/about/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/about/">
+  <link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/about/">
+  <link rel="alternate" hreflang="x-default" href="https://info-demo.esoren.com/about/">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About | Tong's Information - Demo",
+    "url": "https://info-demo.esoren.com/en/about/",
+    "inLanguage": "en"
+  }
+  </script>
+</head>
+<body data-page-type="about">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="Tong's Information - Demo" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">Tong's Information - Demo</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/">Cover</a></li>
+        <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/graph/">Graph</a></li>
+        <li><a href="/en/about/" aria-current="page">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="/about/" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span>Colophon</span>
+          <span>2026</span>
+        </div>
+        <h1 class="article-h1">About Tong's Information - Demo</h1>
+        <p class="article-deck">
+          An independent, fully static bilingual publication co-produced by its author and an AI agent editorial desk. Zero frameworks, deployed on Cloudflare Workers Static Assets.
+        </p>
+      </div>
+    </header>
+
+    <div class="shell article-body-wrap">
+      <div class="essay-grid">
+        <aside class="essay-rail" aria-label="Page sections">
+          <ul class="toc-list">
+            <li><a href="#why">§ 01 Editorial Thesis</a></li>
+            <li><a href="#workflow">§ 02 Desk Workflow</a></li>
+            <li><a href="#endpoints">§ 03 Machine Endpoints</a></li>
+          </ul>
+        </aside>
+
+        <article class="prose">
+          <h2 id="why"><span class="section-index">§ 01</span>Editorial Thesis</h2>
+          <p>
+            <strong>Tong's Information - Demo</strong> is the live open-source showcase of <strong>Tong's Information</strong>, rejecting forcing every idea into the same monotonous blog template. Standard pieces (<strong>Essays</strong>) follow quiet Swiss print typography with margin sidenotes; flagship investigations (<strong>Features</strong>) embed zero-dependency interactive laboratories directly inside static HTML.
+          </p>
+          <p>
+            Bilingual publication is built into the core: drafts begin in whichever language fits the thought, and the agent editorial desk produces idiomatic Chinese and English editions with language-tuned typography and symmetric links.
+          </p>
+
+          <h2 id="workflow"><span class="section-index">§ 02</span>Desk Workflow</h2>
+          <ol>
+            <li><strong>Plain-Text Truth</strong>: Every manuscript starts in <code>sources/</code>, keeping raw ideas decoupled from layout forever.</li>
+            <li><strong>Agent-Crafted HTML</strong>: Guided by <code>editorial/DESIGN.md</code> and <code>AGENTS.md</code>, the agent authors semantic HTML5 directly inside <code>site/</code>.</li>
+            <li><strong>Deterministic Guardrails</strong>: A zero-dependency Python script (<code>tools/editorial_sync.py</code>) syncs shared chrome, emits clean Markdown twins and discovery manifests, and validates links and metadata.</li>
+            <li><strong>Edge Evolution</strong>: Deployed via <code>cf deploy ./site</code> to Cloudflare Workers Static Assets — zero runtime today, ready for HTTP content negotiation and Remote MCP tomorrow.</li>
+          </ol>
+
+          <h2 id="endpoints"><span class="section-index">§ 03</span>Machine Endpoints</h2>
+          <div class="table-scroll" role="region" aria-label="Public endpoints for external AI agents and feed readers" tabindex="0">
+          <table class="swiss-table">
+            <caption>Public endpoints for external AI agents and feed readers</caption>
+            <thead>
+              <tr>
+                <th scope="col">Endpoint</th>
+                <th scope="col">Media Type</th>
+                <th scope="col">Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="mono"><a href="/llms.txt">/llms.txt</a></td>
+                <td class="mono">text/plain</td>
+                <td>Concise agent discovery map across both language editions</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/llms-full.txt">/llms-full.txt</a></td>
+                <td class="mono">text/plain</td>
+                <td>Complete bilingual corpus bundle for one-shot context loading</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/api/posts.json">/api/posts.json</a></td>
+                <td class="mono">application/json</td>
+                <td>Structured issue catalog with tiers, concepts, and twin paths</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/api/graph.json">/api/graph.json</a></td>
+                <td class="mono">application/json</td>
+                <td>Post-to-concept bidirectional topology graph</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/en/rss.xml">/en/rss.xml</a> · <a href="/rss.xml">/rss.xml</a></td>
+                <td class="mono">application/rss+xml</td>
+                <td>Dedicated English and Chinese RSS 2.0 feeds</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information - Demo</span>
+    <ul class="footer-links" aria-label="Feeds and language">
+      <li><a href="/en/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/about/" hreflang="zh-Hans" lang="zh-Hans">中文</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

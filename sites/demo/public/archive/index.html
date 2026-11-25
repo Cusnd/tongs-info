@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>归档 | Tong's Information - Demo</title>
+  <meta name="description" content="Tong's Information - Demo 全部 5 期双语刊物目录，支持按特稿/专栏分级与核心概念筛选。">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://info-demo.esoren.com/archive/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/archive/">
+  <link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/archive/">
+  <link rel="alternate" hreflang="x-default" href="https://info-demo.esoren.com/archive/">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "归档 | Tong's Information - Demo",
+    "url": "https://info-demo.esoren.com/archive/",
+    "inLanguage": "zh-Hans"
+  }
+  </script>
+</head>
+<body data-page-type="archive">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="Tong's Information - Demo" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">Tong's Information - Demo</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/">封面</a></li>
+        <li><a href="/archive/" aria-current="page">归档</a></li>
+        <li><a href="/graph/">图谱</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="/en/archive/" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span>索引</span>
+          <span id="archive-count">显示 5 / 5 期</span>
+        </div>
+        <h1 class="article-h1">归档</h1>
+        <p class="article-deck">
+          全部 5 期专栏随笔与交互特稿按期号逆序收录，每篇均同时提供网页版与洁净 Markdown 孪生原稿。
+        </p>
+      </div>
+    </header>
+
+    <section class="shell section-band" aria-label="归档筛选与列表">
+      <div class="filter-bar">
+        <div class="filter-group" data-filter-group="tier" role="group" aria-label="按内容分级筛选">
+          <button type="button" class="btn subtle" data-filter-tier="all" aria-pressed="true">全部</button>
+          <button type="button" class="btn subtle" data-filter-tier="feature" aria-pressed="false">特稿</button>
+          <button type="button" class="btn subtle" data-filter-tier="essay" aria-pressed="false">专栏</button>
+        </div>
+        <div class="filter-group" data-filter-group="concept" role="group" aria-label="按核心概念筛选">
+          <button type="button" class="btn subtle" data-filter-concept="all" aria-pressed="true">全部概念</button>
+          <button type="button" class="btn subtle" data-filter-concept="agent-web" aria-pressed="false">Agent 万维网</button>
+          <button type="button" class="btn subtle" data-filter-concept="interface-craft" aria-pressed="false">界面克制与意图设计</button>
+          <button type="button" class="btn subtle" data-filter-concept="static-architecture" aria-pressed="false">纯静态架构</button>
+          <button type="button" class="btn subtle" data-filter-concept="swiss-typography" aria-pressed="false">瑞士排印与网格</button>
+          <button type="button" class="btn subtle" data-filter-concept="bilingual-i18n" aria-pressed="false">Agent 原生双语</button>
+          <button type="button" class="btn subtle" data-filter-concept="knowledge-graph" aria-pressed="false">思想图谱</button>
+          <button type="button" class="btn subtle" data-filter-concept="edge-architecture" aria-pressed="false">边缘演进架构</button>
+        </div>
+      </div>
+
+      <ol class="dispatch-list" data-archive-list>
+        <li class="dispatch-row" data-post-slug="dual-audience-web" data-tier="feature" data-concepts="agent-web,knowledge-graph,edge-architecture,swiss-typography">
+          <div class="issue-num">05</div>
+          <div>
+            <div class="meta-line"><span class="tier-label">特稿</span><span>交互实验</span></div>
+            <h2 class="dispatch-title"><a href="/posts/dual-audience-web/">双面万维网：同时写给人类眼睛与 AI Agent 的出版架构</a></h2>
+            <p class="dispatch-summary">拆解“一文双面”的静态出版范式，内置「人类/Agent 透视实验室」与「瑞士网格字阶实验台」。</p>
+          </div>
+          <div class="dispatch-aside">
+            <time datetime="2026-11-24">2026.11.24</time>
+            <a href="/posts/dual-audience-web/index.md">index.md</a>
+          </div>
+        </li>
+
+        <li class="dispatch-row" data-post-slug="ambient-interfaces" data-tier="feature" data-concepts="interface-craft,agent-web,swiss-typography">
+          <div class="issue-num">04</div>
+          <div>
+            <div class="meta-line"><span class="tier-label">特稿</span><span>界面设计</span></div>
+            <h2 class="dispatch-title"><a href="/posts/ambient-interfaces/">宁静界面：当交互从点击转向意图</a></h2>
+            <p class="dispatch-summary">剖析界面过度装饰的根源，并内置「界面信噪比校准器」交互装置，实时对比控件堆砌与克制意图界面。</p>
+          </div>
+          <div class="dispatch-aside">
+            <time datetime="2026-11-18">2026.11.18</time>
+            <a href="/posts/ambient-interfaces/index.md">index.md</a>
+          </div>
+        </li>
+
+        <li class="dispatch-row" data-post-slug="bilingual-thought" data-tier="essay" data-concepts="bilingual-i18n,agent-web,knowledge-graph">
+          <div class="issue-num">03</div>
+          <div>
+            <div class="meta-line"><span>专栏</span><span>语言与媒介</span></div>
+            <h2 class="dispatch-title"><a href="/posts/bilingual-thought/">双语即思考：Agent 时代的写作不再被单一语言围困</a></h2>
+            <p class="dispatch-summary">讨论中英双语写作如何反哺逻辑清晰度，以及如何用纯静态结构优雅实现排印各自独立的双语刊物。</p>
+          </div>
+          <div class="dispatch-aside">
+            <time datetime="2026-11-11">2026.11.11</time>
+            <a href="/posts/bilingual-thought/index.md">index.md</a>
+          </div>
+        </li>
+
+        <li class="dispatch-row" data-post-slug="software-longevity" data-tier="essay" data-concepts="static-architecture,edge-architecture,interface-craft">
+          <div class="issue-num">02</div>
+          <div>
+            <div class="meta-line"><span>专栏</span><span>系统长期主义</span></div>
+            <h2 class="dispatch-title"><a href="/posts/software-longevity/">十年之后依然可读：静态网页与数字资产的半衰期</a></h2>
+            <p class="dispatch-summary">以数字出版物的半衰期为线索，对比动态栈、重型构建链与零依赖纯静态 HTML 的十年维护成本。</p>
+          </div>
+          <div class="dispatch-aside">
+            <time datetime="2026-11-04">2026.11.04</time>
+            <a href="/posts/software-longevity/index.md">index.md</a>
+          </div>
+        </li>
+
+        <li class="dispatch-row" data-post-slug="agent-era-publishing" data-tier="essay" data-concepts="agent-web,static-architecture,swiss-typography,bilingual-i18n">
+          <div class="issue-num">01</div>
+          <div>
+            <div class="meta-line"><span>专栏</span><span>创刊方法论</span></div>
+            <h2 class="dispatch-title"><a href="/posts/agent-era-publishing/">后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML</a></h2>
+            <p class="dispatch-summary">阐述 Tong's Information 的发刊哲学：如何通过秩序层与创意层分离，实现零框架、抗熵增、原生双语的静态出版工作流。</p>
+          </div>
+          <div class="dispatch-aside">
+            <time datetime="2026-10-28">2026.10.28</time>
+            <a href="/posts/agent-era-publishing/index.md">index.md</a>
+          </div>
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information - Demo</span>
+    <ul class="footer-links" aria-label="订阅与语言">
+      <li><a href="/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/en/archive/" hreflang="en" lang="en">English</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+</body>
+</html>

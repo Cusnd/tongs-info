@@ -1,0 +1,1583 @@
+/* =====================================================================
+   Tong's Information — Swiss Modernist Motion System (motion.css)
+   Governs every visual state transition across the publication:
+     1. Cross-Document View Transitions & Header/Masthead/Article Morphs
+     2. Light ↔ Dark Theme Ink-Wash & Surface Continuity
+     3. Top-Layer Dialog Entry/Exit (@starting-style + allow-discrete)
+     4. Archive Group Transitions, Sliding Indicators & Scroll-Driven Motion
+     5. Micro-Interactions & Reduced-Motion Accessibility Discipline
+   Note: Cross-document `@view-transition { navigation: auto; }` is inlined
+   inside every page's `<head>` under `@media (prefers-reduced-motion: no-preference)`
+   so MPA transitions never miss their opt-in window on slow stylesheets.
+   ===================================================================== */
+
+/* =====================================================================
+   LAYER 1: CROSS-DOCUMENT & SAME-DOCUMENT VIEW TRANSITIONS (TOP-LEVEL)
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+::view-transition,
+::view-transition-group(*),
+::view-transition-image-pair(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  pointer-events: none;
+}
+
+/* Suppress sub-element snapshots when header is scrolled out of view */
+html[data-vt-header-offscreen] .site-header,
+html[data-vt-header-offscreen] .brand-wordmark,
+html[data-vt-header-offscreen] .primary-nav > ul,
+html[data-vt-header-offscreen] .header-controls,
+html[data-vt-header-offscreen] .primary-nav a[aria-current="page"]::after {
+  view-transition-name: none !important;
+}
+
+/* Suppress Cover masthead morph if scrolled past the cover nameplate */
+html[data-vt-masthead-offscreen] .cover-masthead {
+  view-transition-name: none !important;
+}
+
+/* During Theme Switch: capture unified root only & freeze surface CSS transitions
+   so paper, chrome, images, toggle labels, and Canvas all land on the new theme
+   simultaneously before `ready` and only the `root` group animates. */
+html[data-vt-mode="theme-switch"] *,
+html[data-vt-mode="theme-switch"] *::before,
+html[data-vt-mode="theme-switch"] *::after {
+  view-transition-name: none !important;
+  transition: none !important;
+}
+
+html[data-vt-mode="theme-switch"] {
+  view-transition-name: root !important;
+}
+
+/* During Archive Filtering: isolate row + footer rearrangement so the page stays interactive */
+html[data-vt-mode="archive-filter"],
+html[data-vt-mode="archive-filter"] .site-header,
+html[data-vt-mode="archive-filter"] .brand-wordmark,
+html[data-vt-mode="archive-filter"] .primary-nav > ul,
+html[data-vt-mode="archive-filter"] .header-controls,
+html[data-vt-mode="archive-filter"] .primary-nav a[aria-current="page"]::after {
+  view-transition-name: none !important;
+}
+
+html[data-vt-mode="archive-filter"] .dispatch-row[data-post-slug] {
+  view-transition-class: archive-row;
+}
+
+html[data-vt-mode="archive-filter"] .site-footer {
+  view-transition-name: archive-footer;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Layer ordering of View Transition groups */
+  ::view-transition-group(root) {
+    z-index: 1;
+    animation-duration: var(--duration-moderate);
+    animation-timing-function: var(--ease-swiss);
+  }
+
+  ::view-transition-group(article-plate),
+  ::view-transition-group(article-title),
+  ::view-transition-group(article-meta) {
+    z-index: 15;
+    animation-duration: var(--duration-deliberate);
+    animation-timing-function: var(--ease-swiss);
+  }
+
+  ::view-transition-group(site-header) {
+    z-index: 25;
+    animation-duration: var(--duration-deliberate);
+    animation-timing-function: var(--ease-swiss);
+  }
+
+  ::view-transition-group(site-brand) {
+    z-index: 32;
+    animation-duration: var(--duration-deliberate);
+    animation-timing-function: var(--ease-swiss);
+  }
+
+  ::view-transition-group(site-nav),
+  ::view-transition-group(site-controls),
+  ::view-transition-group(nav-indicator) {
+    z-index: 30;
+    animation-duration: var(--duration-deliberate);
+    animation-timing-function: var(--ease-swiss);
+  }
+
+  ::view-transition-group(reading-progress) {
+    z-index: 40;
+    animation-duration: var(--duration-base);
+    animation-timing-function: var(--ease-swiss);
+  }
+
+  /* Viewport-bounded root page transitions (never interpolate full-document scroll offsets) */
+  ::view-transition-old(root) {
+    animation: ti-vt-fade-out var(--duration-base) var(--ease-exit) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: ti-vt-fade-in var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  /* Header & Brand smooth geometry morphs */
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header) {
+    block-size: 100%;
+    inline-size: 100%;
+  }
+
+  ::view-transition-new(site-header):only-child {
+    animation: ti-vt-header-enter var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  ::view-transition-old(site-header):only-child {
+    animation: ti-vt-header-exit var(--duration-base) var(--ease-exit) both;
+  }
+
+  /* Sequential typographic handoff prevents double-glyph ghosting across uppercase/mixed brand morphs */
+  ::view-transition-image-pair(site-brand) {
+    isolation: isolate;
+  }
+
+  ::view-transition-old(site-brand),
+  ::view-transition-new(site-brand) {
+    block-size: 100%;
+    inline-size: auto;
+    max-inline-size: none;
+    object-fit: contain;
+    object-position: left center;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(site-brand) {
+    animation: ti-vt-text-out var(--duration-deliberate) var(--ease-exit) both;
+  }
+
+  ::view-transition-new(site-brand) {
+    animation: ti-vt-text-in var(--duration-deliberate) var(--ease-enter) both;
+  }
+
+  ::view-transition-new(site-brand):only-child {
+    animation: ti-vt-brand-enter var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  ::view-transition-old(site-brand):only-child {
+    animation: ti-vt-brand-exit var(--duration-base) var(--ease-exit) both;
+  }
+
+  /* Active navigation indicator enter/exit when moving to/from Articles */
+  ::view-transition-old(nav-indicator):only-child {
+    transform-origin: center;
+    animation: ti-vt-indicator-out var(--duration-base) var(--ease-exit) both;
+  }
+
+  ::view-transition-new(nav-indicator):only-child {
+    transform-origin: center;
+    animation: ti-vt-indicator-in var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  /* Reading progress bar entry/exit */
+  ::view-transition-new(reading-progress):only-child {
+    animation: ti-vt-fade-in var(--duration-base) var(--ease-enter) both;
+  }
+
+  ::view-transition-old(reading-progress):only-child {
+    animation: ti-vt-fade-out var(--duration-fast) var(--ease-exit) both;
+  }
+
+  /* Shared Article Plate: preserve clean framing without aspect-ratio squashing */
+  ::view-transition-old(article-plate),
+  ::view-transition-new(article-plate) {
+    block-size: 100%;
+    inline-size: 100%;
+    object-fit: cover;
+    overflow: clip;
+  }
+
+  ::view-transition-new(article-plate):only-child {
+    animation: ti-vt-fade-in var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  ::view-transition-old(article-plate):only-child {
+    animation: ti-vt-fade-out var(--duration-base) var(--ease-exit) both;
+  }
+
+  /* Shared Article Title & Meta: anchor top-left & sequentially cross-fade to avoid double-wrapped ghosting */
+  ::view-transition-image-pair(article-title),
+  ::view-transition-image-pair(article-meta) {
+    isolation: isolate;
+    overflow: clip;
+  }
+
+  ::view-transition-old(article-title),
+  ::view-transition-new(article-title),
+  ::view-transition-old(article-meta),
+  ::view-transition-new(article-meta) {
+    inline-size: 100%;
+    block-size: auto;
+    object-fit: none;
+    object-position: left top;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(article-title),
+  ::view-transition-old(article-meta) {
+    animation: ti-vt-text-out var(--duration-deliberate) var(--ease-exit) both;
+  }
+
+  ::view-transition-new(article-title),
+  ::view-transition-new(article-meta) {
+    animation: ti-vt-text-in var(--duration-deliberate) var(--ease-enter) both;
+  }
+
+  ::view-transition-new(article-title):only-child,
+  ::view-transition-new(article-meta):only-child {
+    animation: ti-vt-fade-in var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  ::view-transition-old(article-title):only-child,
+  ::view-transition-old(article-meta):only-child {
+    animation: ti-vt-fade-out var(--duration-base) var(--ease-exit) both;
+  }
+
+  /* Directional Top-Level Navigation (Cover ↔ Archive ↔ Graph ↔ About) on viewport root */
+  html:active-view-transition-type(nav-forward)::view-transition-old(root) {
+    animation: ti-vt-slide-out-left var(--duration-base) var(--ease-exit) both;
+  }
+  html:active-view-transition-type(nav-forward)::view-transition-new(root) {
+    animation: ti-vt-slide-in-right var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  html:active-view-transition-type(nav-backward)::view-transition-old(root) {
+    animation: ti-vt-slide-out-right var(--duration-base) var(--ease-exit) both;
+  }
+  html:active-view-transition-type(nav-backward)::view-transition-new(root) {
+    animation: ti-vt-slide-in-left var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  /* Entering / Leaving an Article on viewport root */
+  html:active-view-transition-type(to-article)::view-transition-old(root) {
+    animation: ti-vt-recede-out var(--duration-base) var(--ease-exit) both;
+  }
+  html:active-view-transition-type(to-article)::view-transition-new(root) {
+    animation: ti-vt-rise-in var(--duration-deliberate) var(--ease-enter) both;
+  }
+
+  html:active-view-transition-type(from-article)::view-transition-old(root) {
+    animation: ti-vt-drop-out var(--duration-base) var(--ease-exit) both;
+  }
+  html:active-view-transition-type(from-article)::view-transition-new(root) {
+    animation: ti-vt-settle-in var(--duration-deliberate) var(--ease-enter) both;
+  }
+
+  /* Article-to-Article editorial flow on viewport root */
+  html:active-view-transition-type(article-next)::view-transition-old(root),
+  html:active-view-transition-type(article-switch)::view-transition-old(root) {
+    animation: ti-vt-slide-out-left var(--duration-base) var(--ease-exit) both;
+  }
+  html:active-view-transition-type(article-next)::view-transition-new(root),
+  html:active-view-transition-type(article-switch)::view-transition-new(root) {
+    animation: ti-vt-slide-in-right var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  html:active-view-transition-type(article-prev)::view-transition-old(root) {
+    animation: ti-vt-slide-out-right var(--duration-base) var(--ease-exit) both;
+  }
+  html:active-view-transition-type(article-prev)::view-transition-new(root) {
+    animation: ti-vt-slide-in-left var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  /* Bilingual Edition Switch (ZH ↔ EN) */
+  html:active-view-transition-type(lang-switch)::view-transition-old(root) {
+    animation: ti-vt-lang-out var(--duration-fast) var(--ease-exit) both;
+  }
+  html:active-view-transition-type(lang-switch)::view-transition-new(root) {
+    animation: ti-vt-lang-in var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  /* Layer 2: Light ↔ Dark Ink-Wash Clip-Path Reveal (declared after directional root rules) */
+  html:active-view-transition-type(theme-switch)::view-transition-old(root) {
+    animation: none;
+    z-index: 1;
+    mix-blend-mode: normal;
+  }
+
+  html:active-view-transition-type(theme-switch)::view-transition-new(root) {
+    z-index: 2;
+    mix-blend-mode: normal;
+    animation: ti-vt-theme-wash 380ms var(--ease-swiss) both;
+  }
+
+  /* Layer 4: Archive Group & Footer Rearrangement */
+  ::view-transition-group(.archive-row),
+  ::view-transition-group(archive-footer) {
+    animation-duration: var(--duration-moderate);
+    animation-timing-function: var(--ease-standard);
+  }
+
+  ::view-transition-new(.archive-row):only-child {
+    animation: ti-vt-row-in var(--duration-moderate) var(--ease-enter) both;
+  }
+
+  ::view-transition-old(.archive-row):only-child {
+    animation: ti-vt-row-out var(--duration-base) var(--ease-exit) both;
+  }
+}
+
+/* View Transition Keyframes */
+@keyframes ti-vt-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes ti-vt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ti-vt-text-out {
+  0% { opacity: 1; }
+  34% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes ti-vt-text-in {
+  0%, 34% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes ti-vt-rise-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--motion-shift-md);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-settle-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(var(--motion-shift-sm) * -1);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-recede-out {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 calc(var(--motion-shift-sm) * -1);
+  }
+}
+
+@keyframes ti-vt-drop-out {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 var(--motion-shift-sm);
+  }
+}
+
+@keyframes ti-vt-slide-out-left {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: calc(var(--motion-shift-lg) * -1) 0;
+  }
+}
+
+@keyframes ti-vt-slide-in-right {
+  from {
+    opacity: 0;
+    translate: var(--motion-shift-lg) 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-slide-out-right {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: var(--motion-shift-lg) 0;
+  }
+}
+
+@keyframes ti-vt-slide-in-left {
+  from {
+    opacity: 0;
+    translate: calc(var(--motion-shift-lg) * -1) 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-lang-out {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 calc(var(--motion-shift-sm) * -0.5);
+  }
+}
+
+@keyframes ti-vt-lang-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--motion-shift-sm);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-header-enter {
+  from {
+    opacity: 0;
+    translate: 0 -10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-header-exit {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 -10px;
+  }
+}
+
+@keyframes ti-vt-brand-enter {
+  from {
+    opacity: 0;
+    translate: -10px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-brand-exit {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: -10px 0;
+  }
+}
+
+@keyframes ti-vt-indicator-out {
+  from {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  to {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+}
+
+@keyframes ti-vt-indicator-in {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ti-vt-theme-wash {
+  from {
+    clip-path: circle(0px at var(--theme-origin-x, 90vw) var(--theme-origin-y, 24px));
+  }
+  to {
+    clip-path: circle(var(--theme-radius, 150vmax) at var(--theme-origin-x, 90vw) var(--theme-origin-y, 24px));
+  }
+}
+
+@keyframes ti-vt-row-in {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes ti-vt-row-out {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+
+/* =====================================================================
+   LAYER 3: TOP-LAYER DIALOG TRANSITIONS (@starting-style TOP-LEVEL)
+   ===================================================================== */
+dialog.command-dialog {
+  opacity: 0;
+  transition-property: opacity, translate, scale, display, overlay;
+  transition-duration: var(--duration-moderate);
+  transition-timing-function: var(--ease-swiss);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    translate: 0 -10px;
+    scale: 0.985;
+  }
+}
+
+dialog.command-dialog::backdrop {
+  background-color: rgba(13, 15, 19, 0);
+  backdrop-filter: blur(0px);
+  transition-property: background-color, backdrop-filter, display, overlay;
+  transition-duration: var(--duration-moderate);
+  transition-timing-function: var(--ease-swiss);
+  transition-behavior: allow-discrete;
+}
+
+:is(dialog.command-dialog[open]):where(:not([data-closing])) {
+  opacity: 1;
+
+  @starting-style {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    translate: 0 0;
+    scale: 1;
+
+    @starting-style {
+      translate: 0 -10px;
+      scale: 0.985;
+    }
+  }
+}
+
+:is(dialog.command-dialog[open]):where(:not([data-closing]))::backdrop {
+  background-color: rgba(13, 15, 19, 0.45);
+  backdrop-filter: blur(3px);
+
+  @starting-style {
+    background-color: rgba(13, 15, 19, 0);
+    backdrop-filter: blur(0px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.command-dialog,
+  dialog.command-dialog::backdrop {
+    transition-duration: 120ms;
+  }
+}
+
+/* Dynamic DOM Entry (@starting-style) for Inspector, Specimen Panel & Archive Fallback */
+.ti-panel-swap {
+  opacity: 1;
+  transition-property: opacity, translate;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-enter);
+
+  @media (prefers-reduced-motion: no-preference) {
+    translate: 0 0;
+  }
+}
+
+@starting-style {
+  .ti-panel-swap {
+    opacity: 0;
+    translate: 0 var(--motion-shift-sm);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ti-panel-swap {
+    translate: none;
+    transition-duration: 120ms;
+  }
+
+  @starting-style {
+    .ti-panel-swap {
+      translate: none;
+    }
+  }
+}
+
+/* Archive row entry/exit fallback when View Transitions are unavailable */
+html[data-archive-fallback] .dispatch-row {
+  opacity: 1;
+  transition-property: opacity, translate, display;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-swiss);
+  transition-behavior: allow-discrete;
+
+  @media (prefers-reduced-motion: no-preference) {
+    translate: 0 0;
+  }
+}
+
+@starting-style {
+  html[data-archive-fallback] .dispatch-row {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+html[data-archive-fallback] .dispatch-row:where([hidden], [data-closing]) {
+  opacity: 0;
+
+  @media (prefers-reduced-motion: no-preference) {
+    translate: 0 -8px;
+  }
+}
+
+html[data-archive-fallback] .dispatch-row[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-archive-fallback] .dispatch-row {
+    translate: none;
+    transition-duration: 100ms;
+  }
+  @starting-style {
+    html[data-archive-fallback] .dispatch-row {
+      translate: none;
+    }
+  }
+}
+
+/* =====================================================================
+   CASCADE LAYER: @layer motion
+   ===================================================================== */
+@layer motion {
+  /* Smooth anchor scrolling */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* -------------------------------------------------------------------
+     1. NAMED VIEW TRANSITION ANCHORS FOR HEADER / MASTHEAD / PLATE HANDOFF
+     ------------------------------------------------------------------- */
+  .site-header {
+    view-transition-name: site-header;
+  }
+
+  .reading-progress {
+    view-transition-name: reading-progress;
+  }
+
+  /* Cover: big nameplate morphs into inner header wordmark */
+  body.is-cover .cover-masthead {
+    inline-size: fit-content;
+    view-transition-name: site-brand;
+  }
+
+  body.is-cover .brand-wordmark {
+    view-transition-name: none;
+  }
+
+  body:not(.is-cover) .brand-wordmark {
+    display: inline-block;
+    inline-size: fit-content;
+    view-transition-name: site-brand;
+  }
+
+  /* Keep nav list and controls tightly sized so horizontal glide never distorts glyphs */
+  .primary-nav > ul {
+    inline-size: fit-content;
+    view-transition-name: site-nav;
+  }
+
+  .header-controls {
+    inline-size: fit-content;
+    view-transition-name: site-controls;
+  }
+
+  /* Active Navigation Cobalt Hairline Indicator (glides across MPA routes) */
+  .primary-nav a {
+    position: relative;
+  }
+
+  .primary-nav a::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0.25rem;
+    border-block-end: 1.5px solid transparent;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition:
+      border-color var(--duration-fast) var(--ease-swiss),
+      transform var(--duration-base) var(--ease-swiss);
+  }
+
+  .primary-nav a:hover:not([aria-current="page"])::after {
+    border-block-end-color: var(--rule-strong);
+    transform: scaleX(1);
+  }
+
+  .primary-nav a[aria-current="page"]::after {
+    border-block-end: 1.5px solid var(--accent);
+    transform: scaleX(1);
+    view-transition-name: nav-indicator;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .primary-nav a::after {
+      transform: none;
+      opacity: 0;
+      transition: border-color var(--duration-fast) var(--ease-swiss), opacity var(--duration-fast) var(--ease-swiss);
+    }
+
+    .primary-nav a:hover:not([aria-current="page"])::after,
+    .primary-nav a[aria-current="page"]::after {
+      opacity: 1;
+    }
+  }
+
+  /* Fit-content headings for crisp shared-element title morphs */
+  .cover-story-title a,
+  .dispatch-title a,
+  .plate-title-sm a {
+    display: inline-block;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+  }
+
+  .article-h1 {
+    inline-size: fit-content;
+    max-inline-size: 100%;
+  }
+
+  /* Cover Kinetic Canvas ↔ Print Plate Seamless Handoff (A07) */
+  .cover-stage[data-cover-model] > [data-cover-canvas-stage] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .cover-stage[data-cover-model][data-canvas-live="true"] > [data-cover-canvas-stage] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .cover-stage[data-cover-model][data-canvas-live="true"] > img[data-cover-fallback] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cover-stage[data-cover-model] > [data-cover-canvas-stage] {
+      transition: opacity 220ms var(--ease-swiss);
+    }
+
+    .cover-stage[data-cover-model] > img[data-cover-fallback] {
+      transition:
+        opacity 220ms var(--ease-swiss),
+        visibility 0s linear 220ms,
+        filter var(--duration-base) var(--ease-swiss);
+    }
+
+    .cover-stage[data-cover-model]:not([data-canvas-live="true"]) > img[data-cover-fallback] {
+      transition-delay: 0s;
+    }
+  }
+
+  .cover-stage[data-vt-plate-handoff="true"] > [data-cover-canvas-stage] {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+  }
+
+  .cover-stage[data-vt-plate-handoff="true"] > img[data-cover-fallback] {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: none !important;
+  }
+
+  /* -------------------------------------------------------------------
+     2. SURFACE, INK & THEME CONTINUITY
+     ------------------------------------------------------------------- */
+  body,
+  .site-header,
+  .site-footer,
+  .cover-sheet,
+  pre,
+  code,
+  .specimen-box,
+  .grid-poster,
+  .article-cover-plate,
+  .cover-artwork-link {
+    transition:
+      background-color var(--duration-base) var(--ease-swiss),
+      color var(--duration-base) var(--ease-swiss),
+      border-color var(--duration-base) var(--ease-swiss);
+  }
+
+  .editorial-plate img,
+  .cover-stage > img[data-cover-fallback] {
+    transition: filter var(--duration-base) var(--ease-swiss);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .editorial-plate img {
+      transition:
+        transform 420ms var(--ease-swiss),
+        filter var(--duration-base) var(--ease-swiss);
+    }
+  }
+
+  /* Theme Toggle: smooth cross-fade + vertical micro-shift instead of display:none snap */
+  .theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .theme-toggle .label-to-dark,
+  .theme-toggle .label-to-light {
+    grid-area: 1 / 1;
+    display: inline-block;
+    transition:
+      opacity var(--duration-base) var(--ease-swiss),
+      translate var(--duration-base) var(--ease-swiss),
+      visibility var(--duration-base) var(--ease-swiss);
+  }
+
+  /* Default Light mode: show "暗色 / Dark", hide "浅色 / Light" */
+  .theme-toggle .label-to-dark {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+  }
+
+  .theme-toggle .label-to-light {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    translate: 0 6px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .theme-toggle .label-to-light {
+      display: inline-block;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      translate: 0 0;
+    }
+    :root:not(:has(> head > meta[name="color-scheme"][content="light"])) .theme-toggle .label-to-dark {
+      display: inline-block;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      translate: 0 -6px;
+    }
+  }
+
+  :root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-toggle .label-to-light {
+    display: inline-block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    translate: 0 0;
+  }
+
+  :root:has(> head > meta[name="color-scheme"][content="dark"]) .theme-toggle .label-to-dark {
+    display: inline-block;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    translate: 0 -6px;
+  }
+
+  @container style(--color-scheme: dark) {
+    .theme-toggle .label-to-light {
+      display: inline-block;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      translate: 0 0;
+    }
+    .theme-toggle .label-to-dark {
+      display: inline-block;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      translate: 0 -6px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-toggle .label-to-dark,
+    .theme-toggle .label-to-light {
+      translate: 0 0 !important;
+    }
+  }
+
+  /* -------------------------------------------------------------------
+     3. COMMAND PALETTE RESULTS STAGGER & HOVER RAIL
+     ------------------------------------------------------------------- */
+  .dialog-result-link {
+    position: relative;
+    transition:
+      background-color var(--duration-fast) var(--ease-swiss),
+      color var(--duration-fast) var(--ease-swiss),
+      padding-inline-start var(--duration-fast) var(--ease-swiss);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .dialog-result-link {
+      outline-offset: 0;
+      transition:
+        background-color var(--duration-fast) var(--ease-swiss),
+        color var(--duration-fast) var(--ease-swiss),
+        padding-inline-start var(--duration-fast) var(--ease-swiss),
+        outline-offset var(--duration-fast) var(--ease-swiss);
+    }
+  }
+
+  .dialog-result-link::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block: 0.45rem;
+    inline-size: 2px;
+    background-color: var(--accent);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-swiss);
+  }
+
+  .dialog-result-link:is(:hover, :focus-visible)::before {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .dialog-result-link::before {
+      transform: scaleY(0);
+      transition:
+        transform var(--duration-fast) var(--ease-swiss),
+        opacity var(--duration-fast) var(--ease-swiss);
+    }
+
+    .dialog-result-link:is(:hover, :focus-visible)::before {
+      transform: scaleY(1);
+    }
+
+    /* Stagger full list ONLY on initial palette open, never while typing */
+    #palette-results[data-stagger="open"] > li {
+      --stagger-time: 26ms;
+      animation: ti-list-stagger var(--duration-base) var(--ease-enter) both;
+      animation-delay: calc(var(--sibling-index, 1) * var(--stagger-time));
+    }
+
+    @supports (animation-delay: calc(sibling-index() * 0.1s)) {
+      #palette-results[data-stagger="open"] > li {
+        animation-delay: calc(min(sibling-index(), 10) * var(--stagger-time));
+      }
+    }
+
+    #palette-results[data-stagger="filter"] > li.ti-result-enter {
+      animation: ti-result-fade 120ms var(--ease-enter) both;
+    }
+  }
+
+  @keyframes ti-list-stagger {
+    from {
+      opacity: 0;
+      translate: 0 6px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @keyframes ti-result-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* -------------------------------------------------------------------
+     4. SLIDING INDICATORS (CROSS-ENGINE GEOMETRY + ANCHOR NO-JS FALLBACK)
+     ------------------------------------------------------------------- */
+  .filter-group[data-filter-group],
+  .lab-tabs,
+  .toc-list {
+    position: relative;
+  }
+
+  /* JS-enhanced cross-engine sliding indicator (smooth across Chrome, Edge, Firefox & WebKit) */
+  :is(.filter-group[data-filter-group], .lab-tabs)[data-indicator-ready="true"] .btn:is([aria-pressed="true"], [aria-selected="true"]) {
+    border-block-end-color: transparent;
+  }
+
+  :is(.filter-group[data-filter-group], .lab-tabs)[data-indicator-ready="true"]::before {
+    content: "";
+    position: absolute;
+    position-anchor: auto;
+    inset-inline-start: var(--ind-x, 0px);
+    inset-block-start: var(--ind-y, 0px);
+    inline-size: var(--ind-w, 0px);
+    block-size: 0;
+    border-block-end: 1.5px solid var(--accent);
+    pointer-events: none;
+    opacity: var(--ind-visible, 0);
+  }
+
+  .toc-list[data-indicator-ready="true"]::before {
+    content: "";
+    position: absolute;
+    position-anchor: auto;
+    inset-inline-start: -1px;
+    inset-block-start: var(--ind-y, 0px);
+    inline-size: 0;
+    block-size: var(--ind-h, 0px);
+    border-inline-start: 2px solid var(--accent);
+    pointer-events: none;
+    opacity: var(--ind-visible, 0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :is(.filter-group[data-filter-group], .lab-tabs)[data-indicator-ready="true"][data-indicator-animated="true"]::before {
+      transition:
+        inset-inline-start var(--duration-base) var(--ease-standard),
+        inset-block-start var(--duration-base) var(--ease-standard),
+        inline-size var(--duration-base) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-swiss);
+    }
+
+    .toc-list[data-indicator-ready="true"][data-indicator-animated="true"]::before {
+      transition:
+        inset-block-start var(--duration-base) var(--ease-standard),
+        block-size var(--duration-base) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-swiss);
+    }
+  }
+
+  /* Pure-CSS Anchor Positioning fallback when JS has not mounted */
+  @supports (position-anchor: --ti-active) {
+    .filter-group[data-filter-group="tier"]:not([data-indicator-ready="true"]) .btn[aria-pressed="true"] {
+      anchor-name: --ti-tier-active;
+      border-block-end-color: transparent;
+    }
+    .filter-group[data-filter-group="tier"]:not([data-indicator-ready="true"])::before {
+      content: "";
+      position: absolute;
+      position-anchor: --ti-tier-active;
+      inset-block-start: calc(anchor(self-end) - 1.5px);
+      inset-inline-start: anchor(self-start);
+      inset-inline-end: anchor(self-end);
+      border-block-end: 1.5px solid var(--accent);
+      pointer-events: none;
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: inset var(--duration-base) var(--ease-standard);
+      }
+    }
+
+    .filter-group[data-filter-group="concept"]:not([data-indicator-ready="true"]) .btn[aria-pressed="true"] {
+      anchor-name: --ti-concept-active;
+      border-block-end-color: transparent;
+    }
+    .filter-group[data-filter-group="concept"]:not([data-indicator-ready="true"])::before {
+      content: "";
+      position: absolute;
+      position-anchor: --ti-concept-active;
+      inset-block-start: calc(anchor(self-end) - 1.5px);
+      inset-inline-start: anchor(self-start);
+      inset-inline-end: anchor(self-end);
+      border-block-end: 1.5px solid var(--accent);
+      pointer-events: none;
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: inset var(--duration-base) var(--ease-standard);
+      }
+    }
+
+    .lab-tabs:not([data-indicator-ready="true"]) .btn[aria-selected="true"] {
+      anchor-name: --ti-lab-tab-active;
+      border-block-end-color: transparent;
+    }
+    .lab-tabs:not([data-indicator-ready="true"])::before {
+      content: "";
+      position: absolute;
+      position-anchor: --ti-lab-tab-active;
+      inset-block-start: calc(anchor(self-end) - 1.5px);
+      inset-inline-start: anchor(self-start);
+      inset-inline-end: anchor(self-end);
+      border-block-end: 1.5px solid var(--accent);
+      pointer-events: none;
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: inset var(--duration-base) var(--ease-standard);
+      }
+    }
+
+    .toc-list:not([data-indicator-ready="true"]):has(a[aria-current="location"]) a[aria-current="location"] {
+      anchor-name: --ti-toc-active;
+    }
+
+    .toc-list:not([data-indicator-ready="true"]):has(a[aria-current="location"])::before {
+      content: "";
+      position: absolute;
+      position-anchor: --ti-toc-active;
+      inset-inline-start: -1px;
+      inset-block-start: anchor(self-start);
+      inset-block-end: anchor(self-end);
+      border-inline-start: 2px solid var(--accent);
+      pointer-events: none;
+
+      @media (prefers-reduced-motion: no-preference) {
+        transition: inset var(--duration-base) var(--ease-standard);
+      }
+    }
+  }
+
+  /* TOC Structural Hairline & Active State */
+  .toc-list {
+    padding-inline-start: 0.75rem;
+    border-inline-start: 1px solid var(--rule);
+  }
+
+  .toc-list a {
+    position: relative;
+    transition: color var(--duration-fast) var(--ease-swiss);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .toc-list a {
+      outline-offset: 0;
+      transition:
+        color var(--duration-fast) var(--ease-swiss),
+        translate var(--duration-fast) var(--ease-swiss),
+        outline-offset var(--duration-fast) var(--ease-swiss);
+    }
+  }
+
+  .toc-list a[aria-current="location"] {
+    color: var(--ink-primary);
+    font-weight: 600;
+  }
+
+  @supports not (position-anchor: --ti-active) {
+    .toc-list:not([data-indicator-ready="true"]) a[aria-current="location"]::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: calc(-0.75rem - 1px);
+      inset-block: 0;
+      border-inline-start: 2px solid var(--accent);
+    }
+  }
+
+  /* -------------------------------------------------------------------
+     5. SCROLL-DRIVEN READING PROGRESS & EDITORIAL VIEW REVEALS
+     ------------------------------------------------------------------- */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .reading-progress-fill {
+        transform: none;
+        scale: 0 1;
+        transform-origin: left center;
+        animation: ti-reading-progress auto linear both;
+        animation-timeline: scroll(root block);
+      }
+    }
+  }
+
+  @keyframes ti-reading-progress {
+    from { scale: 0 1; }
+    to { scale: 1 1; }
+  }
+
+  /* Scroll-Driven Below-the-Fold Editorial Reveals */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports ((animation-timeline: view()) and (animation-range: entry)) {
+      .inside-band .feature-plate-card,
+      .inside-band .editor-note-col,
+      .prose .feature-lab,
+      .prose figure,
+      .prose blockquote,
+      .article-footer-band {
+        animation: ti-scroll-reveal auto linear both;
+        animation-timeline: view(block);
+        animation-range: entry 0% entry 26%;
+      }
+    }
+
+    /* IntersectionObserver Fallback strictly scoped to no-preference so dynamic reduce restores visibility immediately */
+    [data-scroll-reveal="pending"] {
+      opacity: 0.01;
+      translate: 0 var(--motion-shift-md);
+    }
+
+    [data-scroll-reveal="visible"] {
+      opacity: 1;
+      translate: 0 0;
+      transition:
+        opacity var(--duration-moderate) var(--ease-enter),
+        translate var(--duration-moderate) var(--ease-enter);
+    }
+  }
+
+  @keyframes ti-scroll-reveal {
+    from {
+      opacity: 0.01;
+      translate: 0 var(--motion-shift-md);
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* Target Section Jump Editorial Pulse (supports both h2 and section.feature-lab without clobbering view timeline) */
+  .prose h2:target,
+  .prose section:target {
+    scroll-margin-top: var(--space-6);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .prose h2:target {
+      animation: ti-target-pulse 900ms var(--ease-swiss);
+    }
+
+    .prose section:target > .lab-header .lab-kicker,
+    .prose section:target > .lab-header :is(h2, h3) {
+      animation: ti-lab-target-pulse 900ms var(--ease-swiss);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .prose section:target > .lab-header .lab-kicker {
+      color: var(--accent);
+    }
+  }
+
+  @keyframes ti-target-pulse {
+    0% {
+      border-block-start-color: var(--accent);
+      color: var(--accent);
+    }
+    100% {
+      border-block-start-color: var(--rule);
+      color: var(--ink-primary);
+    }
+  }
+
+  @keyframes ti-lab-target-pulse {
+    0% {
+      color: var(--accent);
+    }
+    100% {
+      color: inherit;
+    }
+  }
+
+  /* -------------------------------------------------------------------
+     6. SIDENOTE AFFINITY, COPY FEEDBACK, GRAPH & LAB MICRO-TRANSITIONS
+     ------------------------------------------------------------------- */
+  .sidenote {
+    transition:
+      color var(--duration-base) var(--ease-swiss),
+      border-color var(--duration-base) var(--ease-swiss);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sidenote {
+      transition:
+        color var(--duration-base) var(--ease-swiss),
+        border-color var(--duration-base) var(--ease-swiss),
+        translate var(--duration-base) var(--ease-swiss);
+    }
+  }
+
+  .sidenote-ref {
+    transition: color var(--duration-fast) var(--ease-swiss);
+  }
+
+  .sidenote-anchor:is(:hover, :focus-within) .sidenote {
+    color: var(--ink-primary);
+    border-inline-start-color: var(--accent);
+  }
+
+  @media (min-width: 1180px) and (prefers-reduced-motion: no-preference) {
+    .sidenote-anchor:is(:hover, :focus-within) .sidenote {
+      translate: 3px 0;
+    }
+  }
+
+  /* Copy Button Confirmation State */
+  .btn[data-copied="true"] {
+    color: var(--accent);
+    border-block-end-color: var(--accent);
+  }
+
+  /* Archive Count Subtle Update Tick */
+  #archive-count[data-updated="true"] {
+    animation: ti-count-tick var(--duration-base) var(--ease-enter);
+  }
+
+  @keyframes ti-count-tick {
+    from {
+      opacity: 0.35;
+      color: var(--accent);
+    }
+    to {
+      opacity: 1;
+      color: var(--ink-muted);
+    }
+  }
+
+  /* Graph Accessible Table Row Sync Highlight */
+  .swiss-table tbody tr {
+    transition: background-color var(--duration-fast) var(--ease-swiss);
+  }
+
+  .swiss-table tbody tr:hover {
+    background-color: var(--bg-subtle);
+  }
+
+  .swiss-table tbody tr[data-graph-active="true"] {
+    background-color: var(--accent-soft);
+  }
+
+  .swiss-table tbody tr[data-graph-active="true"] td:first-child {
+    color: var(--accent);
+  }
+
+  /* Lab 02 Grid Workbench Smooth Interpolation */
+  .grid-poster .grid-overlay span {
+    transition: opacity var(--duration-fast) var(--ease-swiss);
+  }
+
+  /* Issue 04 Quiet Calibrator Smooth Continuity (color/opacity always; geometric sizing under no-preference) */
+  .quiet-stage {
+    transition:
+      border-color var(--duration-base) var(--ease-swiss),
+      background-color var(--duration-base) var(--ease-swiss);
+  }
+
+  .quiet-ribbon {
+    transition:
+      opacity var(--duration-fast) var(--ease-swiss),
+      background-color var(--duration-base) var(--ease-swiss),
+      border-color var(--duration-base) var(--ease-swiss);
+  }
+
+  .quiet-mock-btn {
+    transition:
+      border-color var(--duration-fast) var(--ease-swiss),
+      background-color var(--duration-fast) var(--ease-swiss);
+  }
+
+  .quiet-mock-badges {
+    transition: opacity var(--duration-fast) var(--ease-swiss);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .grid-poster .poster-headline {
+      transition: font-size var(--duration-fast) var(--ease-swiss);
+    }
+
+    .quiet-ribbon {
+      transition:
+        opacity var(--duration-fast) var(--ease-swiss),
+        max-block-size var(--duration-fast) var(--ease-swiss),
+        padding var(--duration-fast) var(--ease-swiss),
+        background-color var(--duration-base) var(--ease-swiss),
+        border-color var(--duration-base) var(--ease-swiss);
+    }
+
+    .quiet-mock-btn {
+      transition:
+        padding var(--duration-fast) var(--ease-swiss),
+        border-color var(--duration-fast) var(--ease-swiss),
+        background-color var(--duration-fast) var(--ease-swiss);
+    }
+
+    .quiet-mock-badges {
+      transition:
+        opacity var(--duration-fast) var(--ease-swiss),
+        max-block-size var(--duration-fast) var(--ease-swiss);
+    }
+
+    .meter-bar {
+      transition: inline-size var(--duration-moderate) var(--ease-swiss);
+    }
+
+    .metric-value[data-tick="true"] {
+      animation: ti-metric-tick var(--duration-base) var(--ease-enter);
+    }
+  }
+
+  @keyframes ti-metric-tick {
+    from {
+      opacity: 0.45;
+      translate: 0 3px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* -------------------------------------------------------------------
+     7. UNIVERSAL SWISS MICRO-INTERACTIONS
+     ------------------------------------------------------------------- */
+  :where(a:any-link, button, summary, input, select, [tabindex="0"]) {
+    transition-property: color, background-color, border-color, opacity;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-swiss);
+  }
+
+  .btn {
+    transition:
+      color var(--duration-fast) var(--ease-swiss),
+      border-color var(--duration-fast) var(--ease-swiss),
+      opacity var(--duration-fast) var(--ease-swiss);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(a:any-link, button, summary, input, select, [tabindex="0"]) {
+      outline-offset: 0;
+      transition-property: color, background-color, border-color, outline-offset, opacity;
+    }
+
+    .btn {
+      outline-offset: 0;
+      transition:
+        color var(--duration-fast) var(--ease-swiss),
+        border-color var(--duration-fast) var(--ease-swiss),
+        transform var(--duration-instant) var(--ease-swiss),
+        outline-offset var(--duration-fast) var(--ease-swiss),
+        opacity var(--duration-fast) var(--ease-swiss);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.975);
+    }
+
+    .cover-inside-list a {
+      outline-offset: 0;
+      transition:
+        color var(--duration-fast) var(--ease-swiss),
+        translate var(--duration-fast) var(--ease-swiss),
+        outline-offset var(--duration-fast) var(--ease-swiss);
+    }
+
+    .cover-inside-list a:hover {
+      translate: 4px 0;
+    }
+
+    .cover-inside-list a:hover .cover-inside-num {
+      color: var(--accent);
+    }
+
+    .editor-links a {
+      outline-offset: 0;
+      transition:
+        color var(--duration-fast) var(--ease-swiss),
+        translate var(--duration-fast) var(--ease-swiss),
+        outline-offset var(--duration-fast) var(--ease-swiss);
+    }
+
+    .editor-links a:hover {
+      translate: 4px 0;
+    }
+
+    .footer-list a,
+    .section-meta {
+      display: inline-block;
+      outline-offset: 0;
+      transition:
+        color var(--duration-fast) var(--ease-swiss),
+        translate var(--duration-fast) var(--ease-swiss),
+        outline-offset var(--duration-fast) var(--ease-swiss);
+    }
+
+    .footer-list a:hover,
+    a.section-meta:hover {
+      translate: 3px 0;
+    }
+
+    .feature-plate-card:has(.cover-artwork-link:hover) .dispatch-title a,
+    .feature-plate-card:has(.cover-artwork-link:hover) .plate-title-sm a {
+      color: var(--accent);
+    }
+
+    .feature-plate-card:has(.dispatch-title a:hover) .cover-artwork-link img,
+    .feature-plate-card:has(.plate-title-sm a:hover) .cover-artwork-link img {
+      transform: scale(1.018);
+    }
+
+    .dispatch-row {
+      transition: background-color var(--duration-fast) var(--ease-swiss);
+    }
+
+    .dispatch-row .issue-num {
+      transition:
+        color var(--duration-fast) var(--ease-swiss),
+        translate var(--duration-fast) var(--ease-swiss);
+    }
+
+    .dispatch-row:hover .issue-num {
+      color: var(--accent);
+      translate: 2px 0;
+    }
+  }
+}

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>Tong's Information - Demo</title>
+  <meta name="description" content="An independent bilingual Swiss modernist journal on interfaces, systems, information design, and digital publishing.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://info-demo.esoren.com/en/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/">
+  <link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/">
+  <link rel="alternate" hreflang="x-default" href="https://info-demo.esoren.com/">
+  <link rel="alternate" type="application/rss+xml" title="Tong's Information - Demo (English RSS)" href="/en/rss.xml">
+  <link rel="alternate" type="application/feed+json" title="Tong's Information - Demo (JSON Feed)" href="/en/feed.json">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="preload" as="image" href="/assets/images/issue-02-dual-audience-web.jpg" fetchpriority="high">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Tong's Information - Demo",
+    "url": "https://info-demo.esoren.com/en/",
+    "inLanguage": ["en", "zh-Hans"],
+    "description": "An independent bilingual Swiss modernist journal on interfaces, systems, information design, and digital publishing.",
+    "author": { "@type": "Person", "name": "Tong" }
+  }
+  </script>
+</head>
+<body class="is-cover" data-page-type="cover">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="Tong's Information - Demo" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">Tong's Information - Demo</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/" aria-current="page">Cover</a></li>
+        <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/graph/">Graph</a></li>
+        <li><a href="/en/about/">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="/" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <section id="hero-fold" class="cover-sheet" data-lead-slug="dual-audience-web" aria-label="Magazine Cover">
+      <div class="cover-frame">
+        <div class="cover-nameplate-inner">
+          <h1 class="cover-masthead">Tong's Information - Demo</h1>
+          <div class="cover-folio">
+            <span class="cover-folio-issue">ISSUE 05</span>
+            <span>NOVEMBER 2026 · BILINGUAL JOURNAL</span>
+          </div>
+        </div>
+      </div>
+
+      <figure class="cover-stage" data-cover-model>
+        <img
+          data-cover-fallback
+          src="/assets/images/issue-02-dual-audience-web.jpg"
+          alt="Interactive Swiss modernist 2D kinetic cover model featuring interlocking cobalt and ink optical arcs, folded prism planes, and a draggable vermilion focal disc extending across the full viewport via modular construction lines"
+          width="1376"
+          height="768"
+          fetchpriority="high"
+        >
+      </figure>
+
+      <div class="cover-frame">
+        <div class="cover-floor-inner">
+          <div class="cover-lead-story">
+            <div class="meta-line">
+              <span class="tier-label">Cover Feature · No. 05</span>
+              <span>2 interactive labs</span>
+            </div>
+            <h2 class="cover-story-title">
+              <a href="/en/posts/dual-audience-web/">The Dual-Audience Web: Publishing for Human Eyes and AI Agents</a>
+            </h2>
+            <p class="cover-story-deck">
+              Once machine readers receive their own clean text channel, the web page humans visit no longer needs to flatten into plain text — it is free to become a tactile visual work again.
+            </p>
+            <div class="action-row">
+              <a class="btn primary" href="/en/posts/dual-audience-web/">Read Cover Feature →</a>
+              <a class="btn subtle" href="#inside">Turn Page ↓</a>
+            </div>
+          </div>
+
+          <aside class="cover-inside" aria-label="Inside this issue">
+            <div class="section-title">Inside This Issue</div>
+            <ul class="cover-inside-list">
+              <li>
+                <a href="/en/posts/ambient-interfaces/" data-post-slug="ambient-interfaces">
+                  <span class="cover-inside-num">04</span>
+                  <span>Quiet Interfaces: Designing Beyond the Click</span>
+                </a>
+              </li>
+              <li>
+                <a href="/en/posts/bilingual-thought/" data-post-slug="bilingual-thought">
+                  <span class="cover-inside-num">03</span>
+                  <span>Thinking in Stereo: Writing Beyond Monolingual Boundaries</span>
+                </a>
+              </li>
+              <li>
+                <a href="/en/posts/software-longevity/" data-post-slug="software-longevity">
+                  <span class="cover-inside-num">02</span>
+                  <span>Readable in Ten Years: Static HTML and the Half-Life of Digital Work</span>
+                </a>
+              </li>
+              <li>
+                <a href="/en/posts/agent-era-publishing/" data-post-slug="agent-era-publishing">
+                  <span class="cover-inside-num">01</span>
+                  <span>Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML</span>
+                </a>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="inside" class="shell inside-band" aria-labelledby="recent-spread-heading-en">
+      <div class="inside-band-head">
+        <h2 id="recent-spread-heading-en" class="section-title">Recent Dispatches</h2>
+        <a class="section-meta" href="/en/archive/">All 05 Issues →</a>
+      </div>
+
+      <div class="magazine-spread-lead">
+        <article class="feature-plate-card" data-post-slug="ambient-interfaces">
+          <figure class="editorial-plate">
+            <a class="cover-artwork-link" href="/en/posts/ambient-interfaces/" aria-label="Read Feature: Quiet Interfaces">
+              <img
+                src="/assets/images/issue-04-ambient-interfaces.jpg"
+                alt="Swiss modernist lithograph showing dense obsidian rectangles dissolving across a fine grid into open silence anchored by a cobalt monolith and a vermilion bar"
+                width="1200"
+                height="896"
+                loading="lazy"
+              >
+            </a>
+          </figure>
+          <div class="feature-plate-meta">
+            <div class="meta-line">
+              <span class="tier-label">Feature · No. 04</span>
+              <time datetime="2026-11-18">2026.11.18</time>
+            </div>
+            <span class="mono" style="font-size: var(--text-xs); color: var(--ink-muted);">Interactive Calibrator</span>
+          </div>
+          <h3 class="dispatch-title">
+            <a href="/en/posts/ambient-interfaces/">Quiet Interfaces: Designing Beyond the Click</a>
+          </h3>
+          <p class="dispatch-summary">
+            Software spent twenty years piling badges, borders, and status ribbons onto every screen. As agents absorb mechanical clicks, interfaces can finally learn the art of silence.
+          </p>
+          <div class="action-row">
+            <a class="btn primary" href="/en/posts/ambient-interfaces/">Read Feature →</a>
+            <ul class="concept-list" aria-label="Concepts">
+              <li><a class="concept-tag" href="/en/archive/?concept=interface-craft">Interface Craft</a></li>
+              <li><a class="concept-tag" href="/en/archive/?concept=swiss-typography">Swiss Typography</a></li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="feature-plate-card" data-post-slug="bilingual-thought">
+          <figure class="editorial-plate">
+            <a class="cover-artwork-link" href="/en/posts/bilingual-thought/" aria-label="Read Essay: Thinking in Stereo">
+              <img
+                src="/assets/images/issue-03-bilingual-thought.jpg"
+                alt="Swiss modernist geometric diptych pairing interlocking cobalt arcs and obsidian rectilinear forms across a central axis with a single vermilion circle at their intersection"
+                width="1200"
+                height="896"
+                loading="lazy"
+              >
+            </a>
+          </figure>
+          <div class="feature-plate-meta">
+            <div class="meta-line">
+              <span class="mono">No. 03</span>
+              <span>Essay</span>
+              <time datetime="2026-11-11">2026.11.11</time>
+            </div>
+            <span class="mono" style="font-size: var(--text-xs); color: var(--ink-muted);">5 min read</span>
+          </div>
+          <h3 class="dispatch-title">
+            <a href="/en/posts/bilingual-thought/">Thinking in Stereo: Writing Beyond Monolingual Boundaries</a>
+          </h3>
+          <p class="dispatch-summary">
+            Legacy i18n reduced language to brittle lookup tables. Agent-native bilingual publishing lets an idea resonate simultaneously in Chinese compression and English precision.
+          </p>
+          <div class="action-row">
+            <a class="btn primary" href="/en/posts/bilingual-thought/">Read Essay →</a>
+            <ul class="concept-list" aria-label="Concepts">
+              <li><a class="concept-tag" href="/en/archive/?concept=bilingual-i18n">Bilingual</a></li>
+              <li><a class="concept-tag" href="/en/archive/?concept=knowledge-graph">Knowledge Graph</a></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell inside-band" aria-labelledby="archive-spread-heading-en">
+      <div class="inside-band-head">
+        <h2 id="archive-spread-heading-en" class="section-title">Foundations &amp; Editor's Note</h2>
+        <a class="section-meta" href="/en/graph/">Open Knowledge Graph →</a>
+      </div>
+
+      <div class="magazine-spread-triple">
+        <article class="feature-plate-card" data-post-slug="software-longevity">
+          <figure class="editorial-plate">
+            <a class="cover-artwork-link" href="/en/posts/software-longevity/" aria-label="Read Essay: Readable in Ten Years">
+              <img
+                src="/assets/images/issue-02-software-longevity.jpg"
+                alt="Swiss modernist lithograph of alternating obsidian and cobalt horizontal strata bisected by a slender vertical meridian and a single vermilion square"
+                width="1200"
+                height="896"
+                loading="lazy"
+              >
+            </a>
+          </figure>
+          <div class="meta-line">
+            <span class="mono">No. 02</span>
+            <span>Longevity</span>
+            <time datetime="2026-11-04">2026.11.04</time>
+          </div>
+          <h3 class="plate-title-sm">
+            <a href="/en/posts/software-longevity/">Readable in Ten Years: Static HTML and the Half-Life of Digital Work</a>
+          </h3>
+          <p class="dispatch-summary">
+            Most personal sites do not die from a lack of ideas — they die from a broken dependency tree. Plain standard HTML is the surest hedge against churn.
+          </p>
+        </article>
+
+        <article class="feature-plate-card" data-post-slug="agent-era-publishing">
+          <figure class="editorial-plate">
+            <a class="cover-artwork-link" href="/en/posts/agent-era-publishing/" aria-label="Read Essay: Beyond Templates">
+              <img
+                src="/assets/images/issue-01-agent-era-publishing.jpg"
+                alt="Swiss modernist lithograph showing an orthogonal grid breaking free into overlapping translucent cobalt and obsidian diagonal paper planes with a single vermilion square"
+                width="1200"
+                height="896"
+                loading="lazy"
+              >
+            </a>
+          </figure>
+          <div class="meta-line">
+            <span class="mono">No. 01</span>
+            <span>Inaugural</span>
+            <time datetime="2026-10-28">2026.10.28</time>
+          </div>
+          <h3 class="plate-title-sm">
+            <a href="/en/posts/agent-era-publishing/">Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML</a>
+          </h3>
+          <p class="dispatch-summary">
+            Traditional static site generators were an ergonomic compromise for human hands. With an agent at the desk, we reclaim the native craft of the web.
+          </p>
+        </article>
+
+        <aside class="editor-note-col" aria-labelledby="editors-note-heading-en">
+          <h3 id="editors-note-heading-en" class="section-title">Editor's Note</h3>
+          <p class="editor-quote">
+            “Reserve pure signal density for machine protocols; return breathing room, visual craft, and curiosity to human readers.”
+          </p>
+          <p class="editor-copy">
+            <strong>Tong's Information</strong> publishes without frontend build frameworks. Every issue begins as plain-text notes, then receives bespoke typography, lithograph plates, and interactive demonstrations tailored to its thesis.
+          </p>
+          <nav class="editor-links" aria-label="Publication links">
+            <a href="/en/graph/">
+              <span>Explore Knowledge Graph</span>
+              <span class="mono">05 × 07 →</span>
+            </a>
+            <a href="/en/archive/">
+              <span>Browse Complete Archive</span>
+              <span class="mono">05 Issues →</span>
+            </a>
+            <a href="/en/about/">
+              <span>How This Publication Is Made</span>
+              <span class="mono">Colophon →</span>
+            </a>
+          </nav>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information - Demo</span>
+    <ul class="footer-links" aria-label="Feeds and language">
+      <li><a href="/en/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/" hreflang="zh-Hans" lang="zh-Hans">中文</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/cover-model.js"></script>
+</body>
+</html>

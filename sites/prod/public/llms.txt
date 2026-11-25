@@ -1,0 +1,34 @@
+# Tong's Information
+
+> A Swiss modernist digital publication authored for human eyes and AI agents
+> 一份写给人类眼睛与 AI Agent 的瑞士现代主义数字刊物
+
+## Agent Discovery & Machine Endpoints
+- Full bilingual corpus: https://www.esoren.com/llms-full.txt
+- Structured catalog JSON: https://www.esoren.com/api/posts.json
+- Concept topology graph JSON: https://www.esoren.com/api/graph.json
+- English RSS / JSON Feed: https://www.esoren.com/en/rss.xml | https://www.esoren.com/en/feed.json
+- Chinese RSS / JSON Feed: https://www.esoren.com/rss.xml | https://www.esoren.com/feed.json
+
+## Issues (English Markdown Twins)
+- [Issue 05 (FEATURE): The Dual-Audience Web: Publishing for Human Eyes and AI Agents](https://www.esoren.com/en/posts/dual-audience-web/index.md): An architectural blueprint for dual-surface static publishing, complete with a live Human/Agent Representation Inspector and a Swiss Modular Grid Workbench.
+- [Issue 04 (FEATURE): Quiet Interfaces: Designing Beyond the Click](https://www.esoren.com/en/posts/ambient-interfaces/index.md): An inquiry into chrome fatigue and intent-driven surfaces, complete with a live Interface Noise-to-Signal Calibrator.
+- [Issue 03 (ESSAY): Thinking in Stereo: Writing Beyond Monolingual Boundaries](https://www.esoren.com/en/posts/bilingual-thought/index.md): Why maintaining idiomatic Chinese and English editions sharpens thought itself — featuring a margin double-click gesture that unfolds each paragraph's counterpart language in place.
+- [Issue 02 (ESSAY): Readable in Ten Years: Static HTML and the Half-Life of Digital Work](https://www.esoren.com/en/posts/software-longevity/index.md): Measuring the half-life of personal publishing stacks across a ten-year horizon, from dynamic CMS databases to zero-dependency static HTML on the edge.
+- [Issue 01 (ESSAY): Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML](https://www.esoren.com/en/posts/agent-era-publishing/index.md): The founding thesis of Tong's Information: separating structural order from creative layout to achieve a zero-framework, entropy-resistant, agent-bilingual static publication.
+
+## 刊物目录（中文 Markdown 孪生原稿）
+- [第 05 期（FEATURE）：双面万维网：同时写给人类眼睛与 AI Agent 的出版架构](https://www.esoren.com/posts/dual-audience-web/index.md): 拆解“一文双面”的静态出版范式，内置「人类/Agent 透视实验室」与「瑞士网格字阶实验台」两套零依赖交互装置。
+- [第 04 期（FEATURE）：宁静界面：当交互从点击转向意图](https://www.esoren.com/posts/ambient-interfaces/index.md): 剖析界面过度装饰的根源，并内置「界面信噪比校准器」交互装置，实时对比控件堆砌与克制意图界面之间的视觉熵值。
+- [第 03 期（ESSAY）：双语即思考：Agent 时代的写作不再被单一语言围困](https://www.esoren.com/posts/bilingual-thought/index.md): 讨论中英双语写作如何反哺逻辑清晰度，并支持在段落左右留白处双击唤醒当前段落的英文对照版本。
+- [第 02 期（ESSAY）：十年之后依然可读：静态网页与数字资产的半衰期](https://www.esoren.com/posts/software-longevity/index.md): 以数字出版物的半衰期为线索，对比动态栈、重型构建链与零依赖纯静态 HTML 在十年尺度下的维护成本与可迁移性。
+- [第 01 期（ESSAY）：后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML](https://www.esoren.com/posts/agent-era-publishing/index.md): 阐述 Tong's Information 的发刊哲学：如何通过秩序层与创意层分离，实现零框架、抗熵增、原生双语的静态出版工作流。
+
+## Core Concepts
+- **Agent Web / Agent 万维网** (`agent-web`): Designing websites simultaneously as human reading surfaces and machine-consumable knowledge protocols.
+- **Interface Craft / 界面克制与意图设计** (`interface-craft`): Stripping away decorative chrome and control clutter so interfaces serve human intent quietly.
+- **Static Architecture / 纯静态架构** (`static-architecture`): Leaving heavy build chains and dependency rot behind in favor of durable, native web standards.
+- **Swiss Typography / 瑞士排印与网格** (`swiss-typography`): Building rational reading order through modular grids, typographic hierarchy, hairlines, and negative space.
+- **Agent-Native i18n / Agent 原生双语** (`bilingual-i18n`): Writing from a single source of thought while an agent editorial desk crafts idiomatic bilingual editions.
+- **Knowledge Graph / 思想图谱** (`knowledge-graph`): Replacing flat chronological feeds with conceptual topology and bidirectional links.
+- **Edge Architecture / 边缘演进架构** (`edge-architecture`): Hosting on Cloudflare Workers Static Assets for zero-ops static delivery today with seamless upgrades to content negotiation and MCP tomorrow.
