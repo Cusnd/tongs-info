@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import socket
 import subprocess
 import sys
@@ -37,6 +38,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITES_DIR = ROOT / "sites"
+CF_BEACON_RE = re.compile(
+    rb'<script\b[^>]*\bsrc="https://static\.cloudflareinsights\.com/beacon\.min\.js[^"]*"[^>]*></script>\s*',
+    re.IGNORECASE,
+)
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -288,8 +293,13 @@ def run_suite(
                 if staged_html.is_file():
                     if loc["url"] not in fetched_bodies:
                         errors.append(f"GET {loc['url']}: missing live HTML response for byte parity check")
-                    elif fetched_bodies[loc["url"]] != staged_html.read_bytes():
-                        errors.append(f"GET {loc['url']}: live HTML bytes differ from staged bundle")
+                    else:
+                        live_html = fetched_bodies[loc["url"]]
+                        if not local:
+                            # Strip Cloudflare Web Analytics beacon injected by the zone CDN before byte comparison
+                            live_html = CF_BEACON_RE.sub(b"", live_html)
+                        if live_html != staged_html.read_bytes():
+                            errors.append(f"GET {loc['url']}: live HTML bytes differ from staged bundle")
                 staged_md = expect_dist / loc["md_url"].lstrip("/")
                 if staged_md.is_file():
                     if loc["md_url"] not in fetched_bodies:
@@ -298,10 +308,21 @@ def run_suite(
                         errors.append(f"GET {loc['md_url']}: live Markdown bytes differ from staged bundle")
 
     # 7. Security & localized 404 behavior
-    for forbidden in ("/_headers", "/%5fheaders"):
-        status, _, _ = fetch(base_url, forbidden, local=local)
-        if status != 404:
-            errors.append(f"GET {forbidden}: expected 404 (never exposed publicly), got {status}")
+    status, _, _ = fetch(base_url, "/_headers", local=local)
+    if status != 404:
+        errors.append(f"GET /_headers: expected 404 (never exposed publicly), got {status}")
+
+    status, hdrs, _ = fetch(base_url, "/%5fheaders", local=local)
+    if status in (301, 307, 308):
+        loc_hdr = hdrs.get("location", "")
+        if not loc_hdr.endswith("/_headers"):
+            errors.append(f"GET /%5fheaders: unexpected redirect target {loc_hdr!r}")
+        else:
+            final_status, _, _ = fetch(base_url, "/_headers", local=local)
+            if final_status != 404:
+                errors.append(f"GET /%5fheaders -> /_headers: expected final 404, got {final_status}")
+    elif status != 404:
+        errors.append(f"GET /%5fheaders: expected 404 or redirect to /_headers (404), got {status}")
 
     status, _, body = fetch(base_url, "/__smoke-nonexistent-zh__", local=local)
     if status != 404:
