@@ -4,6 +4,7 @@ const COLOR_SCHEME_KEY = "color-scheme";
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const isEnglish = document.documentElement.lang.toLowerCase().startsWith("en");
 let cachedCatalog = null;
+let cachedStream = null;
 
 function getSiteMeta() {
   const header = document.querySelector(".site-header");
@@ -350,6 +351,20 @@ let catalogLoadFailed = false;
 let paletteLoadSeq = 0;
 let paletteNavPending = false;
 
+async function loadStream(forceRetry = false) {
+  if (cachedStream && !forceRetry) return cachedStream;
+  try {
+    const res = await fetch("/api/stream.json");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data || !Array.isArray(data.entries)) throw new Error("Invalid stream payload");
+    cachedStream = data;
+    return cachedStream;
+  } catch {
+    return null;
+  }
+}
+
 async function loadCatalog(forceRetry = false) {
   if (cachedCatalog && !forceRetry) return cachedCatalog;
   catalogLoadFailed = false;
@@ -391,7 +406,7 @@ function buildResultNode(item, index, animateMode) {
     retryBtn.textContent = isEnglish ? "Retry" : "重试";
     retryBtn.addEventListener("click", async () => {
       const seq = ++paletteLoadSeq;
-      await loadCatalog(true);
+      await Promise.all([loadCatalog(true), loadStream(true)]);
       if (seq === paletteLoadSeq && paletteDialog?.open && !paletteDialog.hasAttribute("data-closing")) {
         renderPaletteResults(paletteInput ? paletteInput.value : "", "filter");
       }
@@ -460,23 +475,64 @@ function renderPaletteResults(query = "", animateMode = "filter") {
     }
   }
 
+  if (cachedStream && Array.isArray(cachedStream.entries)) {
+    const kindLabels = cachedStream.kinds || {};
+    const conceptLookup = new Map();
+    for (const c of cachedCatalog?.concepts || []) {
+      conceptLookup.set(c.id, `${c.id} ${c.zh || ""} ${c.en || ""}`);
+    }
+    const streamBase = isEnglish ? "/en/stream/" : "/stream/";
+
+    for (const entry of cachedStream.entries) {
+      const loc = entry[langKey] || entry.zh;
+      if (!loc) continue;
+      const bodyText = Array.isArray(loc.body) ? loc.body.join(" ") : "";
+      const quoteText = loc.quote?.text || "";
+      const quoteSource = loc.quote?.source || "";
+      const codeLang = loc.code?.lang || "";
+      const codeContent = loc.code?.content || "";
+      const updatesText = Array.isArray(loc.updates) ? loc.updates.map((u) => u.text || "").join(" ") : "";
+      const kindLabel = kindLabels[entry.kind]?.[langKey] || entry.kind;
+      const conceptTerms = (entry.concepts || [])
+        .map((cid) => conceptLookup.get(cid) || cid)
+        .join(" ");
+      const haystack = `#${entry.id} ${entry.date} ${entry.kind} ${kindLabel} ${loc.lead || ""} ${bodyText} ${quoteText} ${quoteSource} ${codeLang} ${codeContent} ${updatesText} ${conceptTerms}`.toLowerCase();
+
+      if (q && haystack.includes(q)) {
+        const rawSnippet = (loc.lead || bodyText || quoteText).replace(/\s+/g, " ").trim();
+        const snippet = rawSnippet.length > 56 ? `${rawSnippet.slice(0, 56).trim()}…` : rawSnippet;
+        items.push({
+          key: `link:${streamBase}#t-${entry.id}`,
+          kind: "link",
+          href: `${streamBase}#t-${entry.id}`,
+          title: snippet,
+          meta: `#${entry.id} · ${String(kindLabel).toUpperCase()}`,
+        });
+      }
+    }
+  }
+
   const siteName = getSiteMeta().name;
   const staticEntries = isEnglish
     ? [
         { href: "/en/", title: "Cover — Latest Issue", meta: "COVER" },
         { href: "/en/archive/", title: "Complete Issue Archive", meta: "INDEX" },
+        { href: "/en/stream/", title: "Stream — Fragments & Field Notes", meta: "STREAM" },
         { href: "/en/graph/", title: "Knowledge Graph — Concept Network", meta: "VIEW" },
         { href: "/en/about/", title: `About ${siteName}`, meta: "INFO" },
         { href: "/llms.txt", title: "llms.txt — Agent Discovery Manifest", meta: "AGENT" },
         { href: "/api/posts.json", title: "api/posts.json — Structured Catalog", meta: "JSON" },
+        { href: "/api/stream.json", title: "api/stream.json — Stream Fragments", meta: "JSON" },
       ]
     : [
         { href: "/", title: "封面 — 最新一期", meta: "COVER" },
         { href: "/archive/", title: "完整刊物归档索引", meta: "INDEX" },
+        { href: "/stream/", title: "思维 — 碎片思考与公开手记", meta: "STREAM" },
         { href: "/graph/", title: "思想图谱 — 文章与概念拓扑网络", meta: "VIEW" },
         { href: "/about/", title: `关于 ${siteName}`, meta: "INFO" },
         { href: "/llms.txt", title: "llms.txt — Agent 站点导览协议", meta: "AGENT" },
         { href: "/api/posts.json", title: "api/posts.json — 结构化刊物目录", meta: "JSON" },
+        { href: "/api/stream.json", title: "api/stream.json — 思维碎片数据", meta: "JSON" },
       ];
 
   for (const entry of staticEntries) {
@@ -554,9 +610,12 @@ async function openPalette() {
     paletteInput.focus();
   }
 
-  if (!cachedCatalog) {
+  if (!cachedCatalog || !cachedStream) {
     const seq = ++paletteLoadSeq;
-    await loadCatalog(true);
+    await Promise.all([
+      cachedCatalog ? Promise.resolve(cachedCatalog) : loadCatalog(true),
+      cachedStream ? Promise.resolve(cachedStream) : loadStream(true),
+    ]);
     if (seq !== paletteLoadSeq) return;
     if (catalogLoadFailed) {
       announce(
@@ -565,7 +624,7 @@ async function openPalette() {
           : "文章检索索引加载失败，已显示静态导航入口。"
       );
     }
-    /* Hydrate articles in place without stealing focus from wherever the user navigated */
+    /* Hydrate articles & stream matches in place without stealing focus from wherever the user navigated */
     if (paletteDialog.open && !paletteDialog.hasAttribute("data-closing")) {
       renderPaletteResults(paletteInput ? paletteInput.value : "", "filter");
     }
@@ -591,6 +650,18 @@ if (paletteResults) {
     }
     const anchor = event.target?.closest?.("a[href]");
     if (!anchor || (anchor.target && anchor.target !== "_self") || anchor.hasAttribute("download")) return;
+    try {
+      const dest = new URL(anchor.href, window.location.href);
+      const normPath = (p) => p.replace(/\/index\.html$/i, "/");
+      if (dest.origin === window.location.origin && normPath(dest.pathname) === normPath(window.location.pathname) && dest.hash) {
+        if (paletteDialog?.open) {
+          closeTopLayer(paletteDialog);
+        }
+        return;
+      }
+    } catch {
+      /* fall through to standard navigation */
+    }
     paletteNavPending = true;
   });
 }
@@ -890,8 +961,8 @@ function mapCounterpartHash(rawHash) {
   if (Object.hasOwn(COUNTERPART_HASH_MAP, id)) {
     return `#${COUNTERPART_HASH_MAP[id]}`;
   }
-  /* Shared section/lab/inside IDs (no language-specific suffix) carry directly across ZH ↔ EN */
-  if (/^(?:s\d+|lab-[a-z0-9-]+|inside|dual-lab|hero-fold)$/i.test(id)) {
+  /* Shared section/lab/stream/inside IDs (no language-specific suffix) carry directly across ZH ↔ EN */
+  if (/^(?:s\d+|lab-[a-z0-9-]+|t-[a-z0-9-]+|m-\d{4}-\d{2}|comments|inside|dual-lab|hero-fold)$/i.test(id)) {
     return `#${id}`;
   }
   return "";
@@ -1391,4 +1462,11 @@ if (archiveList) {
   if (hasInitialFilter) {
     applyFilter(true);
   }
+}
+
+/* =====================================================================
+   LAZY WEB COMPONENT HYDRATION: <ti-comments>
+   ===================================================================== */
+if (document.querySelector("ti-comments")) {
+  import("/assets/js/comments.js").catch(() => {});
 }

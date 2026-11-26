@@ -21,6 +21,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/archive/" />
   </url>
   <url>
+    <loc>https://info-demo.esoren.com/stream/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/stream/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/stream/" />
+  </url>
+  <url>
+    <loc>https://info-demo.esoren.com/en/stream/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/stream/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/stream/" />
+  </url>
+  <url>
     <loc>https://info-demo.esoren.com/graph/</loc>
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/graph/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/graph/" />

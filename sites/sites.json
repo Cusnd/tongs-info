@@ -5,14 +5,37 @@
       "preview_worker_name": "tongs-info-demo-preview",
       "base_url": "https://info-demo.esoren.com",
       "environment": "demo",
-      "preview_environment": "preview-demo"
+      "preview_environment": "preview-demo",
+      "comments": {
+        "enabled": true,
+        "d1_database_name": "tongs-info-demo-comments",
+        "d1_database_id": "d7b1bd3c-5396-4d89-adf3-f49d8695062f",
+        "r2_bucket_name": "tongs-info-demo-comments-images",
+        "turnstile_sitekey": "0x4AAAAAAGTyHccCvUR-eNKY",
+        "allowed_hostnames": [
+          "info-demo.esoren.com",
+          "tongs-info-demo.sorenliu.workers.dev"
+        ]
+      }
     },
     "prod": {
       "worker_name": "tongs-info-prod",
       "preview_worker_name": "tongs-info-prod-preview",
       "base_url": "https://www.esoren.com",
       "environment": "production",
-      "preview_environment": "preview-prod"
+      "preview_environment": "preview-prod",
+      "comments": {
+        "enabled": true,
+        "d1_database_name": "tongs-info-prod-comments",
+        "d1_database_id": "fc42591d-8745-4f20-9a49-1dbd3cc55bc3",
+        "r2_bucket_name": "tongs-info-prod-comments-images",
+        "turnstile_sitekey": "0x4AAAAAAGTyHNz53ajMXdVG",
+        "allowed_hostnames": [
+          "www.esoren.com",
+          "esoren.com",
+          "tongs-info-prod.sorenliu.workers.dev"
+        ]
+      }
     }
   }
 }

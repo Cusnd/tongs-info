@@ -9,12 +9,14 @@ There is **no** static site generator framework (no Hugo, Astro, Next.js, or Rea
 ## 1. Core Architectural Principles
 
 1. **Shared Engine, Dual-Site Layout (Zero Code Duplication)**
-   - **`engine/`** holds the single shared static runtime: `engine/_headers`, `engine/assets/favicon.svg`, `engine/assets/css/{tokens,editorial,motion}.css`, and `engine/assets/js/{site,transitions,graph,cover-model}.js`. Never duplicate shared CSS/JS into `sites/`.
+   - **`engine/`** holds the single shared static runtime: `engine/_headers`, `engine/assets/favicon.svg`, `engine/assets/css/{tokens,editorial,motion,comments}.css`, and `engine/assets/js/{site,transitions,graph,cover-model,comments}.js`. Never duplicate shared CSS/JS into `sites/`.
+   - **`worker/` & `migrations/`** hold the zero-dependency Cloudflare Worker comments API (`worker/index.mjs`, routed exclusively on `/api/comments*` via `runWorkerFirst`), D1 SQLite schemas (`migrations/0001_comments.sql`, `migrations/0002_comment_images.sql`, `migrations/0003_comment_image_hardening.sql`), and R2-backed comment image attachments (`COMMENTS_IMAGES`, served via `/api/comments/images/:id`). Static publication routes remain 100% edge-cached Static Assets.
+   - **`<ti-comments>` Drop-In Component**: Any standalone HTML page can embed reader comments with a single `<ti-comments id="comments"></ti-comments>` tag (auto-hydrated by `site.js`, or standalone with `<script type="module" src="/assets/js/comments.js"></script>`). Collapsed as a four-edge Swiss button by default (zero network requests until clicked). Default Swiss styles live in `@layer components` (`comments.css`); individual pages can override `--comments-*` tokens, write unlayered rules targeting `ti-comments [data-part="..."]`, or pass `unstyled` for full bespoke styling. Optional attributes: `slug`, `lang`, `heading`, `placeholder`, `endpoint`, `data-theme`, `open`, `unstyled`.
    - **`editorial/`** holds the shared design & motion constitutions (`DESIGN.md`, `MOTION.md`) and shared header/footer partials (`editorial/partials/{header,footer}.{zh,en}.html`), hydrated per site from `catalog.json`.
    - **`sites/sites.json`** is the version-controlled site registry mapping each site (`demo`, `prod`) to its canonical `base_url`, release Worker (`worker_name`), preview Worker (`preview_worker_name`), and GitHub Environment names.
    - **`sites/prod/`** is the author's live production publication (**Tong's Information**, `https://www.esoren.com`). This is the default publishing target unless specified otherwise.
    - **`sites/demo/`** is the live open-source showcase (**Tong's Information - Demo**, `https://info-demo.esoren.com`).
-   - **`.dist/<site>/`** is an ephemeral, gitignored flat staging directory assembled by `tools/editorial_sync.py --site <site> --stage` (overlaying `engine/` + `sites/<site>/public/` + deterministic `api/release.json`) for `cf deploy`.
+   - **`.dist/<site>/`** is an ephemeral, gitignored flat staging directory assembled by `tools/editorial_sync.py --site <site> --stage` (overlaying `engine/` + `sites/<site>/public/` + deterministic `api/release.json`). For comments-enabled releases, `tools/deploy.py` packages `worker/index.mjs`, staged static assets, and the site's D1/R2 bindings into `.cloudflare/output/v1/` and invokes `cf deploy --prebuilt`.
 
 2. **Source-First, Agent-Compiled HTML**
    - Raw ideas, drafts, and bilingual Markdown live in `sites/<site>/sources/<slug>/` (`source.zh.md`, `source.en.md`).
@@ -40,7 +42,7 @@ There is **no** static site generator framework (no Hugo, Astro, Next.js, or Rea
    - Every page MUST remain readable and functional with JavaScript disabled.
 
 6. **Cloudflare Workers Static Assets (`cf` CLI) & Dual CI/CD**
-   - Deploy via `python tools/deploy.py --site demo` / `python tools/deploy.py --site prod` (which wraps `editorial_sync.py --check --stage` and `cf deploy .dist/<site>`). Do **not** introduce Wrangler config files unless explicitly requested.
+   - Deploy via `python tools/deploy.py --site demo` / `python tools/deploy.py --site prod` (which wraps `editorial_sync.py --check --stage`, assembles the `.cloudflare/output/v1/` Worker + Static Assets + D1/R2 bundle, and runs `cf deploy --prebuilt`; apply `migrations/` via `cf d1 migrations apply <database-id> --dir migrations` before releasing schema updates). Preview deploys (`--preview`) strictly isolate or omit storage bindings and never bind release D1/R2 resources. Do **not** introduce Wrangler config files unless explicitly requested.
    - Configuration lives in `cloudflare.config.ts` and `engine/_headers`.
    - GitHub Actions maintains two isolated deployment pipelines (`.github/workflows/deploy-demo.yml` and `.github/workflows/deploy-prod.yml`) plus a fork-safe PR gate (`.github/workflows/ci.yml`).
 

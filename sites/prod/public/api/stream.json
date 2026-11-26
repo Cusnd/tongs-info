@@ -1,0 +1,136 @@
+{
+  "site": "Tong's Information",
+  "generated_at": "2026-11-26T00:00:00Z",
+  "count": 4,
+  "kinds": {
+    "musing": {
+      "zh": "随想",
+      "en": "Musing"
+    },
+    "quote": {
+      "zh": "摘录",
+      "en": "Quote"
+    },
+    "question": {
+      "zh": "待解",
+      "en": "Question"
+    },
+    "snippet": {
+      "zh": "切片",
+      "en": "Snippet"
+    }
+  },
+  "entries": [
+    {
+      "id": "004",
+      "date": "2026-11-26",
+      "time": "01:48",
+      "kind": "snippet",
+      "concepts": [
+        "frameworkless-web",
+        "personal-aesthetics"
+      ],
+      "zh": {
+        "body": [
+          "这更是一个没完没了的占位示例。既然刚刚给刊物铺好「思维」这页新白纸，顺手塞进一段极简 CSS 切片，检验一下等宽序号、代码块和深浅模式下的钴蓝光晕够不够灵动。"
+        ],
+        "code": {
+          "lang": "css",
+          "content": ".stream-entry:is(:hover, :target)::before {\n  background-color: var(--accent);\n  transform: scaleY(1);\n}"
+        }
+      },
+      "en": {
+        "body": [
+          "And this is an even more endless placeholder example. Since we just rolled out this fresh sheet of paper for Stream, might as well slip in a tiny CSS snippet to check whether tabular numerals, code blocks, and cobalt highlights feel nimble in both light and dark ink."
+        ],
+        "code": {
+          "lang": "css",
+          "content": ".stream-entry:is(:hover, :target)::before {\n  background-color: var(--accent);\n  transform: scaleY(1);\n}"
+        }
+      }
+    },
+    {
+      "id": "003",
+      "date": "2026-11-25",
+      "time": "23:20",
+      "kind": "question",
+      "concepts": [
+        "indie-blog",
+        "llm-creation"
+      ],
+      "promoted_to": "let-blogs-be-blogs-again",
+      "zh": {
+        "body": [
+          "这还是一个占位示例。有时候脑子里刚冒出一个半成品念头，还撑不起一整期 `No. XX` 正式刊号，但丢进私密备忘录又容易吃灰——也许「思维」正是长文破土之前的那块苗圃？"
+        ],
+        "updates": [
+          {
+            "date": "2026-11-26",
+            "text": "后记验证：给碎片加上日期追记和正式刊号回链之后，想法从发芽到长成文章的轨迹一目了然。"
+          }
+        ]
+      },
+      "en": {
+        "body": [
+          "This is yet another placeholder example. Sometimes a half-baked idea is too small for a numbered `No. XX` issue, yet too good to gather dust in a private notes app — maybe the Stream is simply the seedbed before an essay breaks ground?"
+        ],
+        "updates": [
+          {
+            "date": "2026-11-26",
+            "text": "Follow-up check: pairing fragments with dated updates and issue backlinks makes the whole arc from stray spark to finished essay visible."
+          }
+        ]
+      }
+    },
+    {
+      "id": "002",
+      "date": "2026-11-23",
+      "time": "19:05",
+      "kind": "quote",
+      "concepts": [
+        "personal-aesthetics",
+        "open-source-chronicle"
+      ],
+      "zh": {
+        "quote": {
+          "text": "样式不再是为了好看而好看的形式，而是变成了个人独特审美的传递。",
+          "source": "《让博客重新成为博客》 · No. 01",
+          "url": "/posts/let-blogs-be-blogs-again/#s03"
+        },
+        "body": [
+          "这也是一条示例。用来示范「摘录与旁白」的排印节奏：上面用衬线体安静托住原句，下面留给此刻随口补上的一两句碎碎念。"
+        ]
+      },
+      "en": {
+        "quote": {
+          "text": "Style is no longer mere ornament dressed up to look pretty; it has become a direct conduit for personal sensibility.",
+          "source": "Let Blogs Be Blogs Again · No. 01",
+          "url": "/en/posts/let-blogs-be-blogs-again/#s03"
+        },
+        "body": [
+          "This is also an example — demonstrating the typographic cadence of a clipping with margin commentary: editorial serif holding the excerpt aloft, crisp sans below for whatever stray note follows."
+        ]
+      }
+    },
+    {
+      "id": "001",
+      "date": "2026-11-20",
+      "time": "14:30",
+      "kind": "musing",
+      "concepts": [
+        "indie-blog",
+        "frameworkless-web"
+      ],
+      "zh": {
+        "body": [
+          "这是一条示例。没有卡片边框、没有红点角标、也不必非得凑足两千字才配发出来——一页白纸，几行碎碎念，先让这块地方自由呼吸起来。"
+        ]
+      },
+      "en": {
+        "body": [
+          "This is an example. No boxed cards, no notification badges, and no obligation to stretch a passing thought into two thousand words — just a quiet sheet of paper, a few lines of musing, and room to breathe."
+        ]
+      }
+    }
+  ]
+}

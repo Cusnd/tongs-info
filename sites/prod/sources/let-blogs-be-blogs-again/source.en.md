@@ -1,0 +1,63 @@
+# Let Blogs Be Blogs Again
+
+> From middle-school Hexo builds, Baota panels, and Sakurairo themes to a blank sheet of native HTML — when style stops being mere decoration, a blog breathes, grows, and evolves with thought again.
+
+## § 01 Early Rigs and Quiet Obsessions
+
+Counting back to middle school, I have been tinkering with personal blogs for quite a few years now.
+
+It began with Hexo on GitHub Pages. Then came a sketchy bargain shared host bought off Xianyu — a tiny reseller chopping up an Alibaba Cloud lightweight server behind a Baota control panel, with bandwidth so tight every megabyte hurt. Later, when Tencent Cloud Lighthouse launched, I finally owned a VPS of my own. I built WordPress on it by hand and tweaked themes tirelessly — to this day, the Sakurairo theme in my memory still feels breathtakingly beautiful.
+
+I even sulked over being under eighteen — too young to pass ICP filing, which meant I couldn't host the site on a Mainland China VPS or accelerate it through Alibaba Cloud DCDN.
+
+I fretted endlessly over which image host could hold my photos and videos. Cloud object storage was too expensive, yet I still wanted a blog nobody visited to greet its very first reader in peak condition.
+
+After all that tinkering, entrance exams and school pressures caught up with me. The blog fell quiet. The server expired, and I didn't renew it. Yet if you asked me today to retrace how I deployed WordPress seven years ago, my hands would still move without hesitation — just as fluently as back then, only noticing far more of the craft in the details.
+
+## § 02 Putting Down the Crutch of Frameworks
+
+Then the wave of large language models swept in, and heavy CMS stacks began to feel redundant — even confining. I moved to lighter frameworks like Astro and VuePress, placing my writing out on the edge nodes of Cloudflare Workers.
+
+And arriving at today, it feels like we can finally set down the crutch of frameworks altogether. AI has collapsed the distance between an idea and its finished form, turning the browser back into a pure creator's canvas: inside a single HTML page, people now build luminous 3D worlds, stage dynamic interactive explainers, and even pack in an entire 3D shooter.
+
+Three years ago, if a thought like that had crossed my mind, I would have wondered whether I had eaten the wrong wild mushrooms.
+
+Yet today, with the vivid imagination of Gemini 4 Neon in my left hand and the disciplined execution of GPT 6.2 Astra in my right, a blank sheet of HTML can finally grow into whatever shape lives in my head.
+
+> Everything has changed, except the person behind the keyboard.
+
+## § 03 From Infrastructure to Spirit
+
+Beyond nostalgia, what I feel most is exhilaration. My blog no longer has to live inside cookie-cutter CSDN layouts — or the heirloom CSS snippets passed around in every theme group chat. Now it can breathe, grow, and evolve alongside my own train of thought.
+
+Style is no longer mere ornament dressed up to look pretty; it has become a direct conduit for personal sensibility. Moving from worrying about material plumbing to caring about the human spirit itself — that is a quiet leap forward.
+
+## § 04 Open Source, Witness, and a New Toy
+
+So I have open-sourced every single line of code behind this place. Perhaps ten years from now, "independent blogs" will be relics of an older web, and I will have grown into new ways of expressing myself. Even so, the commit history of this repository will preserve one clear record: how, in this era, LLMs changed the way I lived, thought, and created.
+
+A quiet witness to history, maybe?
+
+Truthfully, I am probably just a kid who has been handed a brand-new toy — unwrapping it with sheer delight, turning it over in my hands, unable to wait a second longer to hold up the best ideas in my head and show them to the world.
+
+And to you, whoever has wandered in here: may you never have to grow old inside, and may you always keep a young explorer's spark.
+
+---
+
+November 25, 2026  
+Chengdu  
+Liu Tong
+
+---
+
+### Notes & Cultural Context
+
+1. **Hexo & GitHub Pages**: A Node.js static blog generator paired with free GitHub static hosting — a rite of passage for a whole generation of Chinese teenage developers building their first home on the web.
+2. **Xianyu Bargain Host & Baota Panel**: On Xianyu (China's secondhand marketplace), micro-resellers sliced single budget cloud instances into dozens of cramped shared-hosting slots exposed only through Baota (BT Panel), a web-based server GUI with no root SSH and razor-thin monthly bandwidth caps.
+3. **Tencent Cloud Lighthouse & Sakurairo**: Lighthouse was Tencent Cloud's entry-level VPS bundle; *Sakurairo* (a beloved fork of Mashiro's *Sakura* theme) became an icon of Chinese indie WordPress culture, famed for its atmospheric cover art, delicate transitions, and obsessive visual polish.
+4. **Under-18 ICP Filing & Alibaba Cloud DCDN**: Hosting a website on a Mainland China server or accelerating it via domestic CDNs such as Alibaba Cloud DCDN legally requires an ICP filing — and individual applicants must be at least 18 years old, locking many teenage site owners out of low-latency domestic infrastructure.
+5. **Image Hosts (*Tuchuang*) & Object Storage**: Because cloud object storage (OSS/COS) and egress fees were steep for students, early indie bloggers hunted for free third-party image hosts — constantly balancing zero cost against hotlink blocks and sudden shutdowns.
+6. **Astro, VuePress & Cloudflare Workers**: Content-first static frameworks paired with Cloudflare's global edge network, freeing personal blogs from single-VPS maintenance and renewal anxiety.
+7. **"Eaten the Wrong Wild Mushrooms" (*Chi Cuo Le Junzi*)**: A warm Southwest Chinese idiom (especially common in Yunnan and Sichuan) referencing hallucinogenic wild mushrooms — used humorously to mean "wondering if I was hallucinating or losing my mind."
+8. **"Everything Has Changed, Except the Person" (*Wù Fēi Rén Shì*)**: A playful inversion of the classical Chinese idiom *wù shì rén fēi* ("the scenery remains while people have changed"). The servers, themes, and frameworks are unrecognizable, yet the curious tinkerer behind the screen is still the same kid.
+9. **CSDN Layouts & "Heirloom CSS"**: CSDN is one of China's oldest developer blog portals, notorious for uniform, cluttered templates; meanwhile, indie-blog theme group chats endlessly circulated the same recycled CSS tweaks, slowly making once-personal sites look strikingly alike.

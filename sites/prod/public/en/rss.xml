@@ -3,43 +3,15 @@
   <channel>
     <title>Tong's Information (English)</title>
     <link>https://www.esoren.com/en/</link>
-    <description>A fully static, zero-build, agent-authored bilingual publication exploring interfaces, system architecture, information design, and publishing in the agent era.</description>
+    <description>A fully static, frameworkless, open-source bilingual personal publication exploring independent blogging, craft, open source, and creation in the age of LLMs.</description>
     <language>en</language>
     <atom:link href="https://www.esoren.com/en/rss.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>The Dual-Audience Web: Publishing for Human Eyes and AI Agents</title>
-      <link>https://www.esoren.com/en/posts/dual-audience-web/</link>
-      <guid isPermaLink="true">https://www.esoren.com/en/posts/dual-audience-web/</guid>
-      <pubDate>Tue, 24 Nov 2026 00:00:00 +0000</pubDate>
-      <description>An architectural blueprint for dual-surface static publishing, complete with a live Human/Agent Representation Inspector and a Swiss Modular Grid Workbench.</description>
-    </item>
-    <item>
-      <title>Quiet Interfaces: Designing Beyond the Click</title>
-      <link>https://www.esoren.com/en/posts/ambient-interfaces/</link>
-      <guid isPermaLink="true">https://www.esoren.com/en/posts/ambient-interfaces/</guid>
-      <pubDate>Wed, 18 Nov 2026 00:00:00 +0000</pubDate>
-      <description>An inquiry into chrome fatigue and intent-driven surfaces, complete with a live Interface Noise-to-Signal Calibrator.</description>
-    </item>
-    <item>
-      <title>Thinking in Stereo: Writing Beyond Monolingual Boundaries</title>
-      <link>https://www.esoren.com/en/posts/bilingual-thought/</link>
-      <guid isPermaLink="true">https://www.esoren.com/en/posts/bilingual-thought/</guid>
-      <pubDate>Wed, 11 Nov 2026 00:00:00 +0000</pubDate>
-      <description>Why maintaining idiomatic Chinese and English editions sharpens thought itself — featuring a margin double-click gesture that unfolds each paragraph's counterpart language in place.</description>
-    </item>
-    <item>
-      <title>Readable in Ten Years: Static HTML and the Half-Life of Digital Work</title>
-      <link>https://www.esoren.com/en/posts/software-longevity/</link>
-      <guid isPermaLink="true">https://www.esoren.com/en/posts/software-longevity/</guid>
-      <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
-      <description>Measuring the half-life of personal publishing stacks across a ten-year horizon, from dynamic CMS databases to zero-dependency static HTML on the edge.</description>
-    </item>
-    <item>
-      <title>Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML</title>
-      <link>https://www.esoren.com/en/posts/agent-era-publishing/</link>
-      <guid isPermaLink="true">https://www.esoren.com/en/posts/agent-era-publishing/</guid>
-      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
-      <description>The founding thesis of Tong's Information: separating structural order from creative layout to achieve a zero-framework, entropy-resistant, agent-bilingual static publication.</description>
+      <title>Let Blogs Be Blogs Again</title>
+      <link>https://www.esoren.com/en/posts/let-blogs-be-blogs-again/</link>
+      <guid isPermaLink="true">https://www.esoren.com/en/posts/let-blogs-be-blogs-again/</guid>
+      <pubDate>Wed, 25 Nov 2026 00:00:00 +0000</pubDate>
+      <description>From middle-school Hexo builds, Baota panels, and Sakurairo themes to a blank sheet of native HTML — featuring an abstract interactive evolution piece and a blank sketching sheet.</description>
     </item>
   </channel>
 </rss>

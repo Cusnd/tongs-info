@@ -31,7 +31,7 @@
 <body data-page-type="about">
   <!-- @partial:header -->
 <a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
-<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Liu Tong" data-issue-order="{&quot;let-blogs-be-blogs-again&quot;:1}">
   <div class="shell masthead-bar">
     <a class="brand-mark" href="/en/">
       <span class="brand-wordmark">Tong's Information</span>
@@ -40,6 +40,7 @@
       <ul>
         <li><a href="/en/">Cover</a></li>
         <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/stream/">Stream</a></li>
         <li><a href="/en/graph/">Graph</a></li>
         <li><a href="/en/about/" aria-current="page">About</a></li>
       </ul>
@@ -142,6 +143,16 @@
                 <td class="mono"><a href="/api/graph.json">/api/graph.json</a></td>
                 <td class="mono">application/json</td>
                 <td>Post-to-concept bidirectional topology graph</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/api/stream.json">/api/stream.json</a></td>
+                <td class="mono">application/json</td>
+                <td>Bilingual Stream fragments and concept metadata</td>
+              </tr>
+              <tr>
+                <td class="mono"><a href="/en/stream/rss.xml">/en/stream/rss.xml</a> · <a href="/stream/rss.xml">/stream/rss.xml</a></td>
+                <td class="mono">application/rss+xml</td>
+                <td>Dedicated Stream RSS 2.0 feeds (separate from long-form issues)</td>
               </tr>
               <tr>
                 <td class="mono"><a href="/en/rss.xml">/en/rss.xml</a> · <a href="/rss.xml">/rss.xml</a></td>

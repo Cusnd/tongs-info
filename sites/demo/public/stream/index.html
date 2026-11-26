@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>思维 | Tong's Information - Demo</title>
+  <meta name="description" content="Tong's Information - Demo 思维页：双语碎片思考、摘录旁白、命题火花与技术切片的瑞士现代主义编年手记。">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://info-demo.esoren.com/stream/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://info-demo.esoren.com/stream/">
+  <link rel="alternate" hreflang="en" href="https://info-demo.esoren.com/en/stream/">
+  <link rel="alternate" hreflang="x-default" href="https://info-demo.esoren.com/stream/">
+  <link rel="alternate" type="text/markdown" href="./index.md">
+  <link rel="alternate" type="application/rss+xml" title="Tong's Information - Demo 思维切片 (RSS)" href="/stream/rss.xml">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="stylesheet" href="/assets/css/stream.css">
+  <link rel="stylesheet" href="/assets/css/comments.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "思维 | Tong's Information - Demo",
+    "url": "https://info-demo.esoren.com/stream/",
+    "inLanguage": "zh-Hans"
+  }
+  </script>
+</head>
+<body data-page-type="stream">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="Tong's Information - Demo" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">Tong's Information - Demo</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/">封面</a></li>
+        <li><a href="/archive/">归档</a></li>
+        <li><a href="/stream/" aria-current="page">思维</a></li>
+        <li><a href="/graph/">图谱</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="/en/stream/" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span id="stream-count" aria-live="polite"><!-- @partial:stream-count -->显示 5 / 5 条<!-- @endpartial:stream-count --></span>
+        </div>
+        <h1 class="article-h1">思维</h1>
+        <p class="article-deck">碎片思考与碎碎念。</p>
+      </div>
+    </header>
+
+    <!-- @partial:stream -->
+    <section class="shell stream-section" aria-label="思维筛选与编年记录">
+      <div class="stream-toolbar" data-stream-js hidden>
+        <div class="filter-bar stream-filter-bar">
+          <div class="filter-group" data-filter-group="kind" role="group" aria-label="按片段形态筛选">
+            <button type="button" class="btn subtle" data-stream-kind="all" aria-pressed="true">全部</button>
+            <button type="button" class="btn subtle" data-stream-kind="musing" aria-pressed="false">随想</button>
+            <button type="button" class="btn subtle" data-stream-kind="quote" aria-pressed="false">摘录</button>
+            <button type="button" class="btn subtle" data-stream-kind="question" aria-pressed="false">待解</button>
+            <button type="button" class="btn subtle" data-stream-kind="snippet" aria-pressed="false">切片</button>
+          </div>
+          <div class="stream-toolbar-actions">
+            <button type="button" class="btn subtle stream-random-btn" data-stream-random><span data-random-label>随机捞一条</span><span class="stream-random-glyph" aria-hidden="true">↻</span></button>
+          </div>
+        </div>
+        <div class="stream-active-filter" data-stream-active-bar hidden>
+          <span class="stream-active-label" data-stream-active-label></span>
+          <button type="button" class="btn subtle stream-clear-btn" data-stream-reset>清除筛选 ×</button>
+        </div>
+      </div>
+
+      <div class="stream-layout">
+        <aside class="stream-rail" aria-label="时间索引与概念导览">
+          <div class="stream-rail-block">
+            <div class="stream-rail-title mono">时间轴</div>
+            <ul class="toc-list stream-month-list">
+              <li><a href="#m-2026-11" data-rail-month="2026-11"><span>2026 / 11</span><span class="mono stream-rail-num">04</span></a></li>
+              <li><a href="#m-2026-10" data-rail-month="2026-10"><span>2026 / 10</span><span class="mono stream-rail-num">01</span></a></li>
+            </ul>
+          </div>
+          <div class="stream-rail-block stream-matrix-block">
+            <div class="stream-rail-head">
+              <span class="stream-rail-title mono">近 35 日节律</span>
+              <span class="stream-rail-sub mono">10.22–11.25</span>
+            </div>
+            <div class="stream-matrix" role="group" aria-label="近 35 日思维活跃点阵">
+              <span class="stream-cell" data-date="2026-10-22" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-23" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-24" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-25" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-26" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-27" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-28" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-29" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-001" data-matrix-date="2026-10-30" data-count="1" data-level="1" data-first-id="001" aria-label="2026.10.30：1 条思维，点击定位至 #001"></a>
+              <span class="stream-cell" data-date="2026-10-31" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-01" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-02" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-03" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-04" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-05" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-06" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-07" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-002" data-matrix-date="2026-11-08" data-count="1" data-level="1" data-first-id="002" aria-label="2026.11.08：1 条思维，点击定位至 #002"></a>
+              <span class="stream-cell" data-date="2026-11-09" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-10" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-11" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-12" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-13" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-14" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-15" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-003" data-matrix-date="2026-11-16" data-count="1" data-level="1" data-first-id="003" aria-label="2026.11.16：1 条思维，点击定位至 #003"></a>
+              <span class="stream-cell" data-date="2026-11-17" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-18" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-19" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-20" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-21" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-004" data-matrix-date="2026-11-22" data-count="1" data-level="1" data-first-id="004" aria-label="2026.11.22：1 条思维，点击定位至 #004"></a>
+              <span class="stream-cell" data-date="2026-11-23" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-24" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-005" data-matrix-date="2026-11-25" data-count="1" data-level="1" data-first-id="005" aria-label="2026.11.25：1 条思维，点击定位至 #005"></a>
+            </div>
+            <div class="stream-matrix-readout mono" data-matrix-readout data-default-label="点击高亮点定位当日记录">点击高亮点定位当日记录</div>
+          </div>
+          <div class="stream-rail-block">
+            <div class="stream-rail-title mono">关联概念</div>
+            <ul class="stream-rail-concepts">
+              <li><a class="stream-rail-concept-btn" href="/archive/?concept=agent-web" data-stream-concept="agent-web"><span>Agent 万维网</span><span class="mono stream-rail-num">02</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/archive/?concept=interface-craft" data-stream-concept="interface-craft"><span>界面克制与意图设计</span><span class="mono stream-rail-num">02</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/archive/?concept=static-architecture" data-stream-concept="static-architecture"><span>纯静态架构</span><span class="mono stream-rail-num">01</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/archive/?concept=swiss-typography" data-stream-concept="swiss-typography"><span>瑞士排印与网格</span><span class="mono stream-rail-num">02</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/archive/?concept=bilingual-i18n" data-stream-concept="bilingual-i18n"><span>Agent 原生双语</span><span class="mono stream-rail-num">01</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/archive/?concept=knowledge-graph" data-stream-concept="knowledge-graph"><span>思想图谱</span><span class="mono stream-rail-num">01</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/archive/?concept=edge-architecture" data-stream-concept="edge-architecture"><span>边缘演进架构</span><span class="mono stream-rail-num">01</span></a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <div class="stream-ledger" data-stream-ledger>
+          <section class="stream-month-group" id="m-2026-11" data-month="2026-11">
+            <header class="stream-month-head">
+              <h2 class="stream-month-title mono">2026 / 11</h2>
+              <span class="stream-month-count mono" data-month-count="2026-11">04 条</span>
+            </header>
+            <ol class="stream-list">
+              <li class="stream-item" data-stream-item data-stream-id="005" data-kind="snippet" data-date="2026-11-25" data-month="2026-11" data-concepts="swiss-typography,interface-craft">
+                <article class="stream-entry" id="t-005">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-005" data-stream-anchor="005" aria-label="思维碎片 #005 锚点链接">#005</a>
+                    <time class="stream-time mono" datetime="2026-11-25T21:15">11.25 · 21:15</time>
+                    <span class="stream-kind-cue">切片</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <div class="stream-prose">
+                      <p>给碎片流加上 <code>view-transition-class</code> 之后，筛选分类不再是生硬的显隐跳变，而是像活页纸片顺着导轨滑入新位置——核心 CSS 不到十行。</p>
+                    </div>
+                    <div class="stream-code">
+                      <div class="stream-code-head mono">CSS</div>
+                      <pre role="region" aria-label="CSS 代码片段" tabindex="0"><code>html[data-vt-mode="stream-filter"] .stream-item {
+  view-transition-class: stream-item;
+}
+::view-transition-group(.stream-item) {
+  animation-duration: var(--duration-moderate);
+}</code></pre>
+                    </div>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="关联概念">
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=swiss-typography" data-stream-concept="swiss-typography">瑞士排印与网格</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=interface-craft" data-stream-concept="interface-craft">界面克制与意图设计</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="005">复制链接</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="005">回应 #005</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+              <li class="stream-item" data-stream-item data-stream-id="004" data-kind="question" data-date="2026-11-22" data-month="2026-11" data-concepts="agent-web,edge-architecture">
+                <article class="stream-entry" id="t-004">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-004" data-stream-anchor="004" aria-label="思维碎片 #004 锚点链接">#004</a>
+                    <time class="stream-time mono" datetime="2026-11-22T16:40">11.22 · 16:40</time>
+                    <span class="stream-kind-cue">待解</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <div class="stream-prose">
+                      <p>既然 <code>llms.txt</code> 和 <code>index.md</code> 已经替 AI Agent 铺好了极致纯净的高信噪比管道，那人类访问的 HTML 网页是不是终于可以卸下“信息喂食槽”的包袱，重新做回一件值得凝视的视觉作品？</p>
+                    </div>
+                    <ol class="stream-updates">
+                      <li class="stream-update-item">
+                        <span class="stream-update-mark mono">↳ 2026.11.24 追记</span>
+                        <span class="stream-update-text">这个念头最终长成了 No. 05 封面特稿，顺手还做了一套双面透视实验室。</span>
+                      </li>
+                    </ol>
+                    <a class="stream-promoted" href="/posts/dual-audience-web/"><span class="stream-promoted-arrow" aria-hidden="true">↗</span><span>已展开为 No. 05 · 双面万维网：同时写给人类眼睛与 AI Agent 的出版架构</span></a>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="关联概念">
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=agent-web" data-stream-concept="agent-web">Agent 万维网</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=edge-architecture" data-stream-concept="edge-architecture">边缘演进架构</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="004">复制链接</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="004">回应 #004</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+              <li class="stream-item" data-stream-item data-stream-id="003" data-kind="quote" data-date="2026-11-16" data-month="2026-11" data-concepts="interface-craft,swiss-typography">
+                <article class="stream-entry" id="t-003">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-003" data-stream-anchor="003" aria-label="思维碎片 #003 锚点链接">#003</a>
+                    <time class="stream-time mono" datetime="2026-11-16T11:20">11.16 · 11:20</time>
+                    <span class="stream-kind-cue">摘录</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <blockquote class="stream-quote">
+                      <p>Weniger, aber besser — 少，却更好。</p>
+                      <footer>— Dieter Rams</footer>
+                    </blockquote>
+                    <div class="stream-prose">
+                      <p>每次忍不住想给按钮外再套一层边框或加个状态红点时，就把这句话贴在眼前。克制不是贫瘠，而是让真正重要的文字与留白自己说话。</p>
+                    </div>
+                    <a class="stream-promoted" href="/posts/ambient-interfaces/"><span class="stream-promoted-arrow" aria-hidden="true">↗</span><span>已展开为 No. 04 · 宁静界面：当交互从点击转向意图</span></a>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="关联概念">
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=interface-craft" data-stream-concept="interface-craft">界面克制与意图设计</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=swiss-typography" data-stream-concept="swiss-typography">瑞士排印与网格</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="003">复制链接</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="003">回应 #003</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+              <li class="stream-item" data-stream-item data-stream-id="002" data-kind="musing" data-date="2026-11-08" data-month="2026-11" data-concepts="bilingual-i18n,knowledge-graph">
+                <article class="stream-entry" id="t-002">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-002" data-stream-anchor="002" aria-label="思维碎片 #002 锚点链接">#002</a>
+                    <time class="stream-time mono" datetime="2026-11-08T23:05">11.08 · 23:05</time>
+                    <span class="stream-kind-cue">随想</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <div class="stream-prose">
+                      <p>同一个想法，用中文写出来往往凝练如金句，转成英文时却会立刻暴露隐含的前提和逻辑跳步。双语出版不只是多照顾一拨读者，更像自带一面逻辑校准镜。</p>
+                    </div>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="关联概念">
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=bilingual-i18n" data-stream-concept="bilingual-i18n">Agent 原生双语</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=knowledge-graph" data-stream-concept="knowledge-graph">思想图谱</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="002">复制链接</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="002">回应 #002</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+            </ol>
+          </section>
+          <section class="stream-month-group" id="m-2026-10" data-month="2026-10">
+            <header class="stream-month-head">
+              <h2 class="stream-month-title mono">2026 / 10</h2>
+              <span class="stream-month-count mono" data-month-count="2026-10">01 条</span>
+            </header>
+            <ol class="stream-list">
+              <li class="stream-item" data-stream-item data-stream-id="001" data-kind="musing" data-date="2026-10-30" data-month="2026-10" data-concepts="static-architecture,agent-web">
+                <article class="stream-entry" id="t-001">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-001" data-stream-anchor="001" aria-label="思维碎片 #001 锚点链接">#001</a>
+                    <time class="stream-time mono" datetime="2026-10-30T09:50">10.30 · 09:50</time>
+                    <span class="stream-kind-cue">随想</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <div class="stream-prose">
+                      <p>开卷第一条手记：不装任何构建器，不依赖运行时框架。十年后随便找一台还能打开浏览器的设备，双击这几个纯文本与 HTML 文件，它们应该依然读得清清楚楚。</p>
+                    </div>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="关联概念">
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=static-architecture" data-stream-concept="static-architecture">纯静态架构</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/archive/?concept=agent-web" data-stream-concept="agent-web">Agent 万维网</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="001">复制链接</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="001">回应 #001</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+            </ol>
+          </section>
+          <div class="stream-empty" data-stream-empty hidden>
+            <p>当前筛选条件下暂无匹配的思维碎片。</p>
+            <button type="button" class="btn subtle" data-stream-reset>重置筛选</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- @endpartial:stream -->
+
+    <section class="shell stream-comments-band" aria-label="思维页读者回响">
+      <div class="stream-comments-grid">
+        <div class="stream-comments-slot">
+          <ti-comments
+            id="comments"
+            slug="stream"
+            heading="思维回响"
+            placeholder="回应某一条思维碎片（例如 Re #005: ），或留下你的随想…"
+          ></ti-comments>
+          <noscript>
+            <p class="ti-comments-noscript">启用 JavaScript 后可加载并投递思维回响（无需登录）。</p>
+          </noscript>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information - Demo</span>
+    <ul class="footer-links" aria-label="订阅与语言">
+      <li><a href="/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/en/stream/" hreflang="en" lang="en">English</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/stream.js"></script>
+</body>
+</html>

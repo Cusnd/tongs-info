@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="stylesheet" href="/assets/css/comments.css">
   <link rel="preload" as="image" href="/assets/images/issue-02-software-longevity.jpg" fetchpriority="high">
   <link rel="expect" href="#hero-fold" blocking="render">
   <script async blocking="render" src="/assets/js/transitions.js"></script>
@@ -48,6 +49,7 @@
       <ul>
         <li><a href="/">封面</a></li>
         <li><a href="/archive/">归档</a></li>
+        <li><a href="/stream/">思维</a></li>
         <li><a href="/graph/">图谱</a></li>
         <li><a href="/about/">关于</a></li>
       </ul>
@@ -174,6 +176,10 @@
           <p>
             在 <em>Tong's Information</em>，所有文章与资产都作为透明文件保存在 Git 与 <code>site/</code> 目录里，同时托管在 Cloudflare Workers Static Assets 上——今天零运维成本，明天却能按需挂载内容协商与 MCP 边缘服务。<strong>真正的长期主义，是在最稳固的地基上保持面向未来的开放性。</strong>
           </p>
+
+          <ti-comments id="comments">
+            <noscript><p class="ti-comments-noscript">评论区需要启用 JavaScript 以完成后台无感防滥用核验与留言投递。</p></noscript>
+          </ti-comments>
 
           <section class="article-footer-band" aria-label="关联概念与延伸阅读">
             <div>

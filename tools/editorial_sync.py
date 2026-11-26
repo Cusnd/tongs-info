@@ -65,6 +65,14 @@ FOOTER_RE = re.compile(
     r"(<!-- @partial:footer -->)(.*?)(<!-- @endpartial:footer -->)",
     re.DOTALL,
 )
+STREAM_RE = re.compile(
+    r"(<!-- @partial:stream -->)(.*?)(<!-- @endpartial:stream -->)",
+    re.DOTALL,
+)
+STREAM_COUNT_RE = re.compile(
+    r"(<!-- @partial:stream-count -->)(.*?)(<!-- @endpartial:stream-count -->)",
+    re.DOTALL,
+)
 INLINE_VT_OPTIN_RE = re.compile(
     r"<head\b[^>]*>.*?<style[^>]*>[^<]*@media\s*\(\s*prefers-reduced-motion\s*:\s*no-preference\s*\)\s*\{\s*@view-transition\s*\{\s*navigation\s*:\s*auto\s*;?\s*\}\s*\}[^<]*</style>.*?</head>",
     re.DOTALL | re.IGNORECASE,
@@ -73,9 +81,20 @@ SITE_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 CONCEPT_ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+STREAM_ID_RE = re.compile(r"^[0-9]{3,4}$")
+HHMM_RE = re.compile(r"^(?:[01]\d|2[0-3]):[0-5]\d$")
+INLINE_CODE_RE = re.compile(r"`([^`\n]+)`")
+STREAM_KINDS: dict[str, dict[str, str]] = {
+    "musing": {"zh": "随想", "en": "Musing"},
+    "quote": {"zh": "摘录", "en": "Quote"},
+    "question": {"zh": "待解", "en": "Question"},
+    "snippet": {"zh": "切片", "en": "Snippet"},
+}
+STREAM_KIND_ORDER = ("musing", "quote", "question", "snippet")
 CSS_URL_RE = re.compile(r"""url\(\s*(?:(['"])(.*?)\1|([^)"'\s]+))\s*\)""")
 JS_FETCH_RE = re.compile(r"""\bfetch\(\s*(['"])(/[^'"?#]+)[^'"]*\1""")
 RESERVED_OUTPUT_NAMES = {"_headers", "_redirects"}
+DYNAMIC_WORKER_API_PREFIXES = ("/api/comments",)
 
 
 def is_link_or_junction(path: Path) -> bool:
@@ -233,6 +252,8 @@ def nav_section(url_path: str) -> str:
         return "home"
     if norm.startswith("/archive/"):
         return "archive"
+    if norm.startswith("/stream/"):
+        return "stream"
     if norm.startswith("/graph/"):
         return "graph"
     if norm.startswith("/about/"):
@@ -267,6 +288,7 @@ def render_partial(template: str, url_path: str, lang: str, catalog: dict) -> st
         "{{LANG_SWITCH_HREF}}": counterpart_url(url_path, lang),
         "{{CURRENT_HOME}}": ' aria-current="page"' if section == "home" else "",
         "{{CURRENT_ARCHIVE}}": ' aria-current="page"' if section == "archive" else "",
+        "{{CURRENT_STREAM}}": ' aria-current="page"' if section == "stream" else "",
         "{{CURRENT_GRAPH}}": ' aria-current="page"' if section == "graph" else "",
         "{{CURRENT_ABOUT}}": ' aria-current="page"' if section == "about" else "",
         "{{SITE_NAME_HTML}}": html_text_escape(site_name),
@@ -295,6 +317,7 @@ def apply_partials_to_html(
     url_path: str,
     partials: dict[tuple[str, str], str],
     catalog: dict,
+    stream_data: dict | None = None,
 ) -> str:
     lang = detect_lang(url_path, raw)
     header_html = render_partial(partials[("header", lang)], url_path, lang, catalog)
@@ -303,6 +326,19 @@ def apply_partials_to_html(
         lambda m: f"{m.group(1)}\n{header_html}\n  {m.group(3)}",
         raw,
     )
+    if stream_data is not None and STREAM_COUNT_RE.search(new_content):
+        total_stream = len(stream_data["entries"])
+        count_text = f"{total_stream} / {total_stream} notes" if lang == "en" else f"显示 {total_stream} / {total_stream} 条"
+        new_content = STREAM_COUNT_RE.sub(
+            lambda m: f"{m.group(1)}{count_text}{m.group(3)}",
+            new_content,
+        )
+    if stream_data is not None and STREAM_RE.search(new_content):
+        stream_html = render_stream_partial(stream_data, catalog, lang)
+        new_content = STREAM_RE.sub(
+            lambda m: f"{m.group(1)}\n{stream_html}\n    {m.group(3)}",
+            new_content,
+        )
     new_content = FOOTER_RE.sub(
         lambda m: f"{m.group(1)}\n{footer_html}\n  {m.group(3)}",
         new_content,
@@ -334,12 +370,80 @@ def validate_catalog(
     # Cross-check against sites/sites.json registry if present
     registry = load_site_registry()
     if site_name in registry:
-        reg_base = str(registry[site_name].get("base_url", "")).strip().rstrip("/")
+        reg_entry = registry[site_name]
+        reg_base = str(reg_entry.get("base_url", "")).strip().rstrip("/")
         if reg_base and base_url.rstrip("/") != reg_base:
             errors.append(
                 f"Registry mismatch: sites/sites.json declares base_url='{reg_base}' for '{site_name}', "
                 f"but catalog.json has '{base_url.rstrip('/')}'"
             )
+        all_rel_workers = {
+            str(other.get("worker_name", "")).strip()
+            for other in registry.values()
+            if isinstance(other, dict)
+        } - {""}
+        preview_worker = str(reg_entry.get("preview_worker_name", "")).strip()
+        if preview_worker and preview_worker in all_rel_workers:
+            errors.append(
+                f"sites/sites.json: site '{site_name}' preview_worker_name '{preview_worker}' "
+                "must not match any release worker_name"
+            )
+        comments_cfg = reg_entry.get("comments")
+        if isinstance(comments_cfg, dict) and comments_cfg.get("enabled"):
+            d1_id = comments_cfg.get("d1_database_id")
+            if not isinstance(d1_id, str) or not d1_id.strip():
+                errors.append(f"sites/sites.json: site '{site_name}' comments enabled but missing d1_database_id")
+            for bkey in ("r2_bucket_name", "preview_r2_bucket_name"):
+                r2_bucket = comments_cfg.get(bkey)
+                if r2_bucket is not None:
+                    if not isinstance(r2_bucket, str) or not re.match(r"^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$", r2_bucket.strip()):
+                        errors.append(
+                            f"sites/sites.json: site '{site_name}' comments.{bkey} {r2_bucket!r} must be a valid R2 bucket name string or null"
+                        )
+            all_rel_d1_ids = {
+                str((other.get("comments") or {}).get("d1_database_id") or "").strip()
+                for other in registry.values()
+                if isinstance(other.get("comments"), dict)
+            } - {""}
+            all_rel_d1_names = {
+                str((other.get("comments") or {}).get("d1_database_name") or "").strip()
+                for other in registry.values()
+                if isinstance(other.get("comments"), dict)
+            } - {""}
+            all_rel_r2 = {
+                str((other.get("comments") or {}).get("r2_bucket_name") or "").strip()
+                for other in registry.values()
+                if isinstance(other.get("comments"), dict)
+                and isinstance((other.get("comments") or {}).get("r2_bucket_name"), str)
+            } - {""}
+
+            p_d1_id = comments_cfg.get("preview_d1_database_id")
+            if p_d1_id is not None:
+                if not isinstance(p_d1_id, str) or not p_d1_id.strip():
+                    errors.append(f"sites/sites.json: site '{site_name}' comments.preview_d1_database_id must be a non-empty string or null")
+                elif p_d1_id.strip() in all_rel_d1_ids:
+                    errors.append(f"sites/sites.json: site '{site_name}' preview_d1_database_id must not match any release d1_database_id")
+            p_d1_name = comments_cfg.get("preview_d1_database_name")
+            if p_d1_name is not None:
+                if not isinstance(p_d1_name, str) or not p_d1_name.strip():
+                    errors.append(f"sites/sites.json: site '{site_name}' comments.preview_d1_database_name must be a non-empty string or null")
+                elif p_d1_name.strip() in all_rel_d1_names:
+                    errors.append(f"sites/sites.json: site '{site_name}' preview_d1_database_name must not match any release d1_database_name")
+            p_r2 = comments_cfg.get("preview_r2_bucket_name")
+            if isinstance(p_r2, str) and p_r2.strip() and p_r2.strip() in all_rel_r2:
+                errors.append(f"sites/sites.json: site '{site_name}' preview_r2_bucket_name must not match any release r2_bucket_name")
+            if not str(comments_cfg.get("turnstile_sitekey", "")).strip():
+                errors.append(f"sites/sites.json: site '{site_name}' comments enabled but missing turnstile_sitekey")
+            hosts = comments_cfg.get("allowed_hostnames")
+            if not isinstance(hosts, list) or not hosts:
+                errors.append(f"sites/sites.json: site '{site_name}' comments enabled but missing allowed_hostnames")
+            else:
+                for h in hosts:
+                    hl = str(h).strip().lower()
+                    if hl in ("localhost", "127.0.0.1", "::1"):
+                        errors.append(
+                            f"sites/sites.json: production allowed_hostnames for '{site_name}' must not include '{hl}'"
+                        )
 
     if expect_base_url is not None:
         expected_norm = expect_base_url.strip().rstrip("/")
@@ -565,10 +669,735 @@ def build_markdown_twins(
     return twins, outputs
 
 
+STREAM_STALE_PATHS = (
+    "stream/index.html",
+    "en/stream/index.html",
+    "stream/index.md",
+    "en/stream/index.md",
+    "stream/rss.xml",
+    "en/stream/rss.xml",
+    "api/stream.json",
+)
+
+
+def load_stream_data(site_root: Path, public_dir: Path | None = None) -> tuple[dict | None, list[str]]:
+    stream_path = site_root / "stream.json"
+    if not stream_path.exists():
+        if public_dir is not None:
+            stale = [rel for rel in STREAM_STALE_PATHS if (public_dir / rel).exists()]
+            if stale:
+                return None, [
+                    f"stream.json is missing while Stream pages/artifacts still exist under public/: {', '.join(stale)}"
+                ]
+        return None, []
+    try:
+        resolved = assert_contained_no_links(stream_path, site_root, label="stream.json")
+        data = json.loads(resolved.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return None, [f"stream.json: failed to load ({exc})"]
+    if not isinstance(data, dict):
+        return None, ["stream.json: root must be a JSON object"]
+    return data, []
+
+
+def _is_safe_stream_url(raw: str) -> bool:
+    val = str(raw or "").strip()
+    return val.startswith(("/", "https://", "http://")) and not val.startswith("//")
+
+
+def _markdown_fence_for(code_text: str) -> str:
+    longest = max((len(m.group(0)) for m in re.finditer(r"`+", code_text)), default=0)
+    return "`" * max(3, longest + 1)
+
+
+def _escape_md_label(text: str) -> str:
+    return text.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]")
+
+
+def _format_md_dest(url: str) -> str:
+    cleaned = url.replace("\\", "%5C").replace("<", "%3C").replace(">", "%3E").replace(" ", "%20")
+    return f"<{cleaned}>"
+
+
+def validate_stream(stream_data: dict, catalog: dict) -> list[str]:
+    errors: list[str] = []
+    concept_ids = {str(c.get("id", "")) for c in catalog.get("concepts", [])}
+    post_slugs = {str(p.get("slug", "")) for p in catalog.get("posts", [])}
+
+    now_block = stream_data.get("now")
+    if now_block is not None:
+        if not isinstance(now_block, dict):
+            errors.append("stream.json: 'now' must be an object")
+        else:
+            upd = now_block.get("updated")
+            if not isinstance(upd, str) or not ISO_DATE_RE.match(upd):
+                errors.append(f"stream.json: now.updated {upd!r} must be a YYYY-MM-DD string")
+            else:
+                try:
+                    dt.date.fromisoformat(upd)
+                except ValueError:
+                    errors.append(f"stream.json: now.updated '{upd}' is not a valid calendar date")
+            for lang in ("zh", "en"):
+                items = now_block.get(lang)
+                if not isinstance(items, list) or not items:
+                    errors.append(f"stream.json: now.{lang} must be a non-empty list")
+                else:
+                    for idx, item in enumerate(items):
+                        if (
+                            not isinstance(item, dict)
+                            or not isinstance(item.get("label"), str)
+                            or not item["label"].strip()
+                            or not isinstance(item.get("value"), str)
+                            or not item["value"].strip()
+                        ):
+                            errors.append(f"stream.json: now.{lang}[{idx}] requires non-empty string label and value")
+
+    entries = stream_data.get("entries")
+    if not isinstance(entries, list) or not entries:
+        errors.append("stream.json: 'entries' must be a non-empty list")
+        return errors
+
+    seen_ids: set[str] = set()
+    for idx, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            errors.append(f"stream.json: entries[{idx}] must be an object")
+            continue
+        raw_id = entry.get("id")
+        eid = raw_id if isinstance(raw_id, str) else f"#{idx}"
+        if not isinstance(raw_id, str) or not STREAM_ID_RE.match(raw_id):
+            errors.append(f"stream.json: entries[{idx}].id {raw_id!r} must be a string matching {STREAM_ID_RE.pattern}")
+        elif raw_id in seen_ids:
+            errors.append(f"stream.json: duplicate entry id '{raw_id}'")
+        else:
+            seen_ids.add(raw_id)
+
+        date_str = entry.get("date")
+        if not isinstance(date_str, str) or not ISO_DATE_RE.match(date_str):
+            errors.append(f"stream.json: entry '{eid}' invalid date {date_str!r} (expected YYYY-MM-DD string)")
+        else:
+            try:
+                dt.date.fromisoformat(date_str)
+            except ValueError:
+                errors.append(f"stream.json: entry '{eid}' non-existent calendar date '{date_str}'")
+
+        time_str = entry.get("time")
+        if time_str is not None and (not isinstance(time_str, str) or not HHMM_RE.match(time_str)):
+            errors.append(f"stream.json: entry '{eid}' invalid HH:MM string time {time_str!r}")
+
+        kind = entry.get("kind")
+        if not isinstance(kind, str) or kind not in STREAM_KINDS:
+            errors.append(f"stream.json: entry '{eid}' invalid kind {kind!r}")
+
+        e_concepts = entry.get("concepts", [])
+        if not isinstance(e_concepts, list):
+            errors.append(f"stream.json: entry '{eid}'.concepts must be a list")
+        else:
+            for cid in e_concepts:
+                if not isinstance(cid, str) or cid not in concept_ids:
+                    errors.append(f"stream.json: entry '{eid}' references undeclared concept '{cid}'")
+
+        promoted = entry.get("promoted_to")
+        if promoted is not None and (not isinstance(promoted, str) or promoted not in post_slugs):
+            errors.append(f"stream.json: entry '{eid}'.promoted_to '{promoted}' is not a catalog post slug")
+
+        for lang in ("zh", "en"):
+            loc = entry.get(lang)
+            if not isinstance(loc, dict):
+                errors.append(f"stream.json: entry '{eid}' missing '{lang}' object")
+                continue
+            lead = loc.get("lead")
+            if lead is not None and (not isinstance(lead, str) or not lead.strip()):
+                errors.append(f"stream.json: entry '{eid}'.{lang}.lead must be a non-empty string")
+            body = loc.get("body")
+            if not isinstance(body, list) or not body or not all(isinstance(p, str) and p.strip() for p in body):
+                errors.append(f"stream.json: entry '{eid}'.{lang}.body must be a non-empty list of strings")
+            quote = loc.get("quote")
+            if quote is not None:
+                if not isinstance(quote, dict):
+                    errors.append(f"stream.json: entry '{eid}'.{lang}.quote must be an object")
+                else:
+                    q_text = quote.get("text")
+                    if not isinstance(q_text, str) or not q_text.strip():
+                        errors.append(f"stream.json: entry '{eid}'.{lang}.quote.text must be a non-empty string")
+                    q_src = quote.get("source")
+                    if q_src is not None and (not isinstance(q_src, str) or not q_src.strip()):
+                        errors.append(f"stream.json: entry '{eid}'.{lang}.quote.source must be a non-empty string")
+                    q_url = quote.get("url")
+                    if q_url is not None and (not isinstance(q_url, str) or not _is_safe_stream_url(q_url)):
+                        errors.append(f"stream.json: entry '{eid}'.{lang}.quote.url must be a local '/' or http(s) URL string")
+            code = loc.get("code")
+            if code is not None:
+                if not isinstance(code, dict):
+                    errors.append(f"stream.json: entry '{eid}'.{lang}.code must be an object")
+                else:
+                    c_content = code.get("content")
+                    if not isinstance(c_content, str) or not c_content.strip():
+                        errors.append(f"stream.json: entry '{eid}'.{lang}.code.content must be a non-empty string")
+                    c_lang = code.get("lang")
+                    if c_lang is not None and not isinstance(c_lang, str):
+                        errors.append(f"stream.json: entry '{eid}'.{lang}.code.lang must be a string")
+            updates = loc.get("updates")
+            if updates is not None:
+                if not isinstance(updates, list):
+                    errors.append(f"stream.json: entry '{eid}'.{lang}.updates must be a list")
+                else:
+                    for uidx, upd_item in enumerate(updates):
+                        if not isinstance(upd_item, dict):
+                            errors.append(f"stream.json: entry '{eid}'.{lang}.updates[{uidx}] must be an object")
+                            continue
+                        udate = upd_item.get("date")
+                        if not isinstance(udate, str) or not ISO_DATE_RE.match(udate):
+                            errors.append(f"stream.json: entry '{eid}'.{lang}.updates[{uidx}].date invalid ({udate!r})")
+                        else:
+                            try:
+                                dt.date.fromisoformat(udate)
+                            except ValueError:
+                                errors.append(f"stream.json: entry '{eid}'.{lang}.updates[{uidx}].date invalid calendar date '{udate}'")
+                        utext = upd_item.get("text")
+                        if not isinstance(utext, str) or not utext.strip():
+                            errors.append(f"stream.json: entry '{eid}'.{lang}.updates[{uidx}].text must be a non-empty string")
+
+    return errors
+
+
+def sorted_stream_entries(stream_data: dict) -> list[dict]:
+    return sorted(
+        stream_data["entries"],
+        key=lambda e: (str(e["date"]), str(e.get("time") or "00:00"), str(e["id"])),
+        reverse=True,
+    )
+
+
+def stream_latest_date(stream_data: dict) -> str:
+    dates = [str(e["date"]) for e in stream_data["entries"]]
+    now_block = stream_data.get("now")
+    if isinstance(now_block, dict) and now_block.get("updated"):
+        dates.append(str(now_block["updated"]))
+    for e in stream_data["entries"]:
+        for lang in ("zh", "en"):
+            for upd in e.get(lang, {}).get("updates") or []:
+                if upd.get("date"):
+                    dates.append(str(upd["date"]))
+    return max(dates)
+
+
+def format_stream_inline_html(text: str) -> str:
+    escaped = html_text_escape(text)
+    return INLINE_CODE_RE.sub(lambda m: f"<code>{m.group(1)}</code>", escaped)
+
+
+def render_stream_partial(stream_data: dict, catalog: dict, lang: str) -> str:
+    is_en = lang == "en"
+    entries = sorted_stream_entries(stream_data)
+    total = len(entries)
+    latest_iso = stream_latest_date(stream_data)
+    latest_date_obj = dt.date.fromisoformat(latest_iso)
+
+    concept_map = {c["id"]: c for c in catalog["concepts"]}
+    post_map = {p["slug"]: p for p in catalog["posts"]}
+
+    kind_counts: dict[str, int] = {k: 0 for k in STREAM_KIND_ORDER}
+    concept_counts: dict[str, int] = {}
+    date_entries: dict[str, list[dict]] = {}
+    months_order: list[str] = []
+    months_map: dict[str, list[dict]] = {}
+
+    for e in entries:
+        kind_counts[e["kind"]] = kind_counts.get(e["kind"], 0) + 1
+        for cid in e.get("concepts", []):
+            concept_counts[cid] = concept_counts.get(cid, 0) + 1
+        date_entries.setdefault(e["date"], []).append(e)
+        ym = e["date"][:7]
+        if ym not in months_map:
+            months_order.append(ym)
+            months_map[ym] = []
+        months_map[ym].append(e)
+
+    lines: list[str] = []
+
+    # Main Stream Workspace (Toolbar + Two-Track Ledger)
+    lines.append(
+        f'    <section class="shell stream-section" aria-label="{"Stream filters and entries" if is_en else "思维筛选与编年记录"}">'
+    )
+    lines.append('      <div class="stream-toolbar" data-stream-js hidden>')
+    lines.append('        <div class="filter-bar stream-filter-bar">')
+    lines.append(
+        f'          <div class="filter-group" data-filter-group="kind" role="group" aria-label="{"Filter by fragment kind" if is_en else "按片段形态筛选"}">'
+    )
+    lines.append(
+        f'            <button type="button" class="btn subtle" data-stream-kind="all" aria-pressed="true">'
+        f'{"All" if is_en else "全部"}</button>'
+    )
+    for k in STREAM_KIND_ORDER:
+        if kind_counts.get(k, 0) > 0:
+            label = STREAM_KINDS[k][lang]
+            lines.append(
+                f'            <button type="button" class="btn subtle" data-stream-kind="{k}" aria-pressed="false">'
+                f"{html_text_escape(label)}</button>"
+            )
+    lines.append("          </div>")
+    lines.append('          <div class="stream-toolbar-actions">')
+    random_label = "Serendipity" if is_en else "随机捞一条"
+    lines.append(
+        '            <button type="button" class="btn subtle stream-random-btn" data-stream-random>'
+        f'<span data-random-label>{random_label}</span>'
+        '<span class="stream-random-glyph" aria-hidden="true">↻</span>'
+        "</button>"
+    )
+    lines.append("          </div>")
+    lines.append("        </div>")
+
+    lines.append('        <div class="stream-active-filter" data-stream-active-bar hidden>')
+    lines.append('          <span class="stream-active-label" data-stream-active-label></span>')
+    lines.append(
+        f'          <button type="button" class="btn subtle stream-clear-btn" data-stream-reset>'
+        f'{"Clear" if is_en else "清除筛选"} ×</button>'
+    )
+    lines.append("        </div>")
+    lines.append("      </div>")
+    lines.append("")
+
+    # Two-track layout
+    lines.append('      <div class="stream-layout">')
+
+    # Left Sticky Rail
+    lines.append(f'        <aside class="stream-rail" aria-label="{"Chronology and index" if is_en else "时间索引与概念导览"}">')
+
+    # Rail Block 1: Months
+    lines.append('          <div class="stream-rail-block">')
+    lines.append(f'            <div class="stream-rail-title mono">{"Chronology" if is_en else "时间轴"}</div>')
+    lines.append('            <ul class="toc-list stream-month-list">')
+    for ym in months_order:
+        ym_disp = ym.replace("-", " / ")
+        ym_cnt = len(months_map[ym])
+        lines.append(
+            f'              <li><a href="#m-{ym}" data-rail-month="{ym}">'
+            f'<span>{ym_disp}</span><span class="mono stream-rail-num">{ym_cnt:02d}</span></a></li>'
+        )
+    lines.append("            </ul>")
+    lines.append("          </div>")
+
+    # Rail Block 2: 35-Day Swiss Cadence Matrix
+    lines.append('          <div class="stream-rail-block stream-matrix-block">')
+    lines.append('            <div class="stream-rail-head">')
+    lines.append(f'              <span class="stream-rail-title mono">{"35-Day Cadence" if is_en else "近 35 日节律"}</span>')
+    lines.append(
+        f'              <span class="stream-rail-sub mono">{(latest_date_obj - dt.timedelta(days=34)).strftime("%m.%d")}–{latest_date_obj.strftime("%m.%d")}</span>'
+    )
+    lines.append("            </div>")
+    lines.append(
+        f'            <div class="stream-matrix" role="group" aria-label="{"35-day thought activity matrix" if is_en else "近 35 日思维活跃点阵"}">'
+    )
+    for offset in range(34, -1, -1):
+        day_obj = latest_date_obj - dt.timedelta(days=offset)
+        day_iso = day_obj.isoformat()
+        day_disp = day_iso.replace("-", ".")
+        day_list = date_entries.get(day_iso, [])
+        cnt = len(day_list)
+        if cnt > 0:
+            lvl = 1 if cnt == 1 else (2 if cnt == 2 else 3)
+            first_id = day_list[0]["id"]
+            aria_lbl = (
+                f"{day_disp}: {cnt} {'note' if cnt == 1 else 'notes'}, jump to #{first_id}"
+                if is_en
+                else f"{day_disp}：{cnt} 条思维，点击定位至 #{first_id}"
+            )
+            lines.append(
+                f'              <a class="stream-cell is-active" href="#t-{first_id}" '
+                f'data-matrix-date="{day_iso}" data-count="{cnt}" data-level="{lvl}" '
+                f'data-first-id="{first_id}" aria-label="{html_attr_escape(aria_lbl)}"></a>'
+            )
+        else:
+            lines.append(
+                f'              <span class="stream-cell" data-date="{day_iso}" aria-hidden="true"></span>'
+            )
+    lines.append("            </div>")
+    default_readout = "Select a lit cell to jump" if is_en else "点击高亮点定位当日记录"
+    lines.append(
+        f'            <div class="stream-matrix-readout mono" data-matrix-readout '
+        f'data-default-label="{html_attr_escape(default_readout)}">{default_readout}</div>'
+    )
+    lines.append("          </div>")
+
+    # Rail Block 3: Concepts used in Stream
+    archive_base = "/en/archive/" if is_en else "/archive/"
+    used_concepts = [c for c in catalog["concepts"] if concept_counts.get(c["id"], 0) > 0]
+    if used_concepts:
+        lines.append('          <div class="stream-rail-block">')
+        lines.append(f'            <div class="stream-rail-title mono">{"Concepts" if is_en else "关联概念"}</div>')
+        lines.append('            <ul class="stream-rail-concepts">')
+        for c in used_concepts:
+            cid = c["id"]
+            clabel = c[lang]
+            ccnt = concept_counts[cid]
+            lines.append(
+                f'              <li><a class="stream-rail-concept-btn" '
+                f'href="{archive_base}?concept={html_attr_escape(cid)}" '
+                f'data-stream-concept="{html_attr_escape(cid)}">'
+                f'<span>{html_text_escape(clabel)}</span>'
+                f'<span class="mono stream-rail-num">{ccnt:02d}</span></a></li>'
+            )
+        lines.append("            </ul>")
+        lines.append("          </div>")
+
+    lines.append("        </aside>")
+    lines.append("")
+
+    # Right Ledger
+    lines.append('        <div class="stream-ledger" data-stream-ledger>')
+    for ym in months_order:
+        month_entries = months_map[ym]
+        ym_disp = ym.replace("-", " / ")
+        m_cnt_label = (
+            f"{len(month_entries):02d} {'note' if len(month_entries) == 1 else 'notes'}"
+            if is_en
+            else f"{len(month_entries):02d} 条"
+        )
+        lines.append(f'          <section class="stream-month-group" id="m-{ym}" data-month="{ym}">')
+        lines.append('            <header class="stream-month-head">')
+        lines.append(f'              <h2 class="stream-month-title mono">{ym_disp}</h2>')
+        lines.append(f'              <span class="stream-month-count mono" data-month-count="{ym}">{m_cnt_label}</span>')
+        lines.append("            </header>")
+        lines.append('            <ol class="stream-list">')
+
+        for e in month_entries:
+            eid = e["id"]
+            kind = e["kind"]
+            kind_label = STREAM_KINDS[kind][lang]
+            e_concepts = e.get("concepts", [])
+            concepts_csv = ",".join(e_concepts)
+            loc = e[lang]
+            date_iso = e["date"]
+            time_str = e.get("time") or ""
+            dt_attr = f"{date_iso}T{time_str}" if time_str else date_iso
+            md_disp = date_iso[5:].replace("-", ".")
+            time_disp = f"{md_disp} · {time_str}" if time_str else md_disp
+
+            lines.append(
+                f'              <li class="stream-item" data-stream-item data-stream-id="{eid}" '
+                f'data-kind="{kind}" data-date="{date_iso}" data-month="{ym}" '
+                f'data-concepts="{html_attr_escape(concepts_csv)}">'
+            )
+            lines.append(f'                <article class="stream-entry" id="t-{eid}">')
+
+            # Meta rail
+            lines.append('                  <div class="stream-entry-meta">')
+            anchor_aria = f"Permalink to note #{eid}" if is_en else f"思维碎片 #{eid} 锚点链接"
+            lines.append(
+                f'                    <a class="stream-anchor mono" href="#t-{eid}" '
+                f'data-stream-anchor="{eid}" aria-label="{html_attr_escape(anchor_aria)}">#{eid}</a>'
+            )
+            lines.append(
+                f'                    <time class="stream-time mono" datetime="{html_attr_escape(dt_attr)}">{time_disp}</time>'
+            )
+            lines.append(
+                f'                    <span class="stream-kind-cue">{html_text_escape(kind_label)}</span>'
+            )
+            lines.append("                  </div>")
+
+            # Content body
+            lines.append('                  <div class="stream-entry-body">')
+            if loc.get("lead"):
+                lines.append(f'                    <p class="stream-lead">{format_stream_inline_html(loc["lead"])}</p>')
+
+            if loc.get("quote"):
+                q = loc["quote"]
+                lines.append('                    <blockquote class="stream-quote">')
+                lines.append(f'                      <p>{format_stream_inline_html(q["text"])}</p>')
+                if q.get("source"):
+                    src_html = html_text_escape(q["source"])
+                    if q.get("url"):
+                        qurl = str(q["url"])
+                        ext_attrs = ' target="_blank" rel="noopener noreferrer"' if qurl.startswith(("http://", "https://")) else ""
+                        lines.append(
+                            f'                      <footer>— <a href="{html_attr_escape(qurl)}"{ext_attrs}>{src_html}</a></footer>'
+                        )
+                    else:
+                        lines.append(f"                      <footer>— {src_html}</footer>")
+                lines.append("                    </blockquote>")
+
+            lines.append('                    <div class="stream-prose">')
+            for para in loc["body"]:
+                lines.append(f"                      <p>{format_stream_inline_html(para)}</p>")
+            lines.append("                    </div>")
+
+            if loc.get("code"):
+                code_obj = loc["code"]
+                code_lang = str(code_obj.get("lang") or "").strip().upper()
+                code_aria = (
+                    f"{code_lang} code snippet" if code_lang else "Code snippet"
+                ) if is_en else (
+                    f"{code_lang} 代码片段" if code_lang else "代码片段"
+                )
+                lines.append('                    <div class="stream-code">')
+                if code_lang:
+                    lines.append(f'                      <div class="stream-code-head mono">{html_text_escape(code_lang)}</div>')
+                lines.append(
+                    f'                      <pre role="region" aria-label="{html_attr_escape(code_aria)}" tabindex="0">'
+                    f'<code>{html_text_escape(code_obj["content"])}</code></pre>'
+                )
+                lines.append("                    </div>")
+
+            if loc.get("updates"):
+                lines.append('                    <ol class="stream-updates">')
+                for upd in loc["updates"]:
+                    udate_disp = str(upd["date"]).replace("-", ".")
+                    upd_label = f"↳ {udate_disp} Update" if is_en else f"↳ {udate_disp} 追记"
+                    lines.append('                      <li class="stream-update-item">')
+                    lines.append(f'                        <span class="stream-update-mark mono">{upd_label}</span>')
+                    lines.append(f'                        <span class="stream-update-text">{format_stream_inline_html(upd["text"])}</span>')
+                    lines.append("                      </li>")
+                lines.append("                    </ol>")
+
+            if e.get("promoted_to") and e["promoted_to"] in post_map:
+                post_obj = post_map[e["promoted_to"]]
+                post_url = post_obj[lang]["url"]
+                post_title = post_obj[lang]["title"]
+                promo_text = (
+                    f'Expanded into No. {post_obj["issue_no"]} · {post_title}'
+                    if is_en
+                    else f'已展开为 No. {post_obj["issue_no"]} · {post_title}'
+                )
+                lines.append(
+                    f'                    <a class="stream-promoted" href="{html_attr_escape(post_url)}">'
+                    f'<span class="stream-promoted-arrow" aria-hidden="true">↗</span>'
+                    f"<span>{html_text_escape(promo_text)}</span></a>"
+                )
+
+            # Entry footer (concepts + quiet micro-actions)
+            lines.append('                    <footer class="stream-entry-foot">')
+            if e_concepts:
+                lines.append(
+                    f'                      <ul class="concept-list stream-entry-concepts" aria-label="{"Concepts" if is_en else "关联概念"}">'
+                )
+                for cid in e_concepts:
+                    if cid in concept_map:
+                        lines.append(
+                            f'                        <li><a class="concept-tag stream-concept-btn" '
+                            f'href="{archive_base}?concept={html_attr_escape(cid)}" '
+                            f'data-stream-concept="{html_attr_escape(cid)}">'
+                            f"{html_text_escape(concept_map[cid][lang])}</a></li>"
+                        )
+                lines.append("                      </ul>")
+            else:
+                lines.append("                      <span></span>")
+
+            copy_lbl = "Copy link" if is_en else "复制链接"
+            reply_lbl = f"Echo #{eid}" if is_en else f"回应 #{eid}"
+            lines.append('                      <div class="stream-entry-actions" data-stream-js hidden>')
+            lines.append(
+                f'                        <button type="button" class="stream-action-btn" data-stream-copy="{eid}">{copy_lbl}</button>'
+            )
+            lines.append(
+                f'                        <button type="button" class="stream-action-btn" data-stream-reply="{eid}">{reply_lbl}</button>'
+            )
+            lines.append("                      </div>")
+            lines.append("                    </footer>")
+
+            lines.append("                  </div>")
+            lines.append("                </article>")
+            lines.append("              </li>")
+
+        lines.append("            </ol>")
+        lines.append("          </section>")
+
+    empty_copy = (
+        "No fragments match this filter combination."
+        if is_en
+        else "当前筛选条件下暂无匹配的思维碎片。"
+    )
+    reset_copy = "Reset filters" if is_en else "重置筛选"
+    lines.append('          <div class="stream-empty" data-stream-empty hidden>')
+    lines.append(f"            <p>{empty_copy}</p>")
+    lines.append(f'            <button type="button" class="btn subtle" data-stream-reset>{reset_copy}</button>')
+    lines.append("          </div>")
+    lines.append("        </div>")
+    lines.append("      </div>")
+    lines.append("    </section>")
+
+    return "\n".join(lines)
+
+
+def build_stream_artifacts(
+    catalog: dict,
+    stream_data: dict,
+    public_dir: Path,
+) -> tuple[dict[str, str], dict[Path, str]]:
+    site = catalog["site"]
+    base_url = site["base_url"].rstrip("/")
+    entries = sorted_stream_entries(stream_data)
+    latest_iso = stream_latest_date(stream_data)
+    deterministic_generated_at = f"{latest_iso}T00:00:00Z"
+    concept_map = {c["id"]: c for c in catalog["concepts"]}
+    post_map = {p["slug"]: p for p in catalog["posts"]}
+
+    twins: dict[str, str] = {}
+    outputs: dict[Path, str] = {}
+
+    def register(rel_path: str, content: str) -> None:
+        dest = public_dir / rel_path
+        assert_contained_no_links(dest, public_dir, label=f"stream artifact '{rel_path}'")
+        if dest.name.lower() in RESERVED_OUTPUT_NAMES or dest in outputs:
+            raise ValueError(f"Duplicate or reserved stream artifact path: {dest}")
+        outputs[dest] = content
+
+    # 1. api/stream.json
+    api_payload = {
+        "site": site["name"],
+        "generated_at": deterministic_generated_at,
+        "count": len(entries),
+        "kinds": STREAM_KINDS,
+        "entries": entries,
+    }
+    register("api/stream.json", json.dumps(api_payload, ensure_ascii=False, indent=2) + "\n")
+
+    # 2. Bilingual Markdown twins + dedicated Stream RSS 2.0 feeds
+    for lang in ("zh", "en"):
+        is_en = lang == "en"
+        html_path = "/en/stream/" if is_en else "/stream/"
+        md_path = "/en/stream/index.md" if is_en else "/stream/index.md"
+        other_md_path = "/stream/index.md" if is_en else "/en/stream/index.md"
+        rss_rel = "en/stream/rss.xml" if is_en else "stream/rss.xml"
+        title_str = f"Stream | {site['name']}" if is_en else f"思维 | {site['name']}"
+
+        frontmatter = "\n".join(
+            [
+                "---",
+                f"title: {yaml_quote(title_str)}",
+                f"publication: {yaml_quote(site['name'])}",
+                f"author: {yaml_quote(site['author'])}",
+                f"section: {yaml_quote('stream')}",
+                f"lang: {yaml_quote('en' if is_en else 'zh-Hans')}",
+                f"updated: {yaml_quote(latest_iso)}",
+                f"count: {yaml_quote(str(len(entries)))}",
+                f"canonical_html: {yaml_quote(base_url + html_path)}",
+                f"canonical_md: {yaml_quote(base_url + md_path)}",
+                f"counterpart_md: {yaml_quote(base_url + other_md_path)}",
+                "---",
+            ]
+        )
+
+        md_lines = [
+            f"# {'Stream' if is_en else '思维'}",
+            "",
+            f"> {'Stray thoughts and fragments.' if is_en else '碎片思考与碎碎念。'}",
+            "",
+        ]
+
+        rss_items: list[str] = []
+        for e in entries:
+            eid = e["id"]
+            loc = e[lang]
+            kind_lbl = STREAM_KINDS[e["kind"]][lang]
+            stamp = f"{e['date']} {e['time']}" if e.get("time") else e["date"]
+            md_lines.append(f"## #{eid} · {stamp} · {kind_lbl}")
+            md_lines.append("")
+            if loc.get("lead"):
+                md_lines.append(f"**{loc['lead']}**")
+                md_lines.append("")
+            if loc.get("quote"):
+                q = loc["quote"]
+                md_lines.append(f"> {q['text']}")
+                q_url = str(q.get("url") or "").strip()
+                q_full_url = f"{base_url}{q_url}" if q_url.startswith("/") else q_url
+                if q.get("source") and q_full_url:
+                    md_lines.append(f"> — [{_escape_md_label(q['source'])}]({_format_md_dest(q_full_url)})")
+                elif q.get("source"):
+                    md_lines.append(f"> — {q['source']}")
+                elif q_full_url:
+                    md_lines.append(f"> — {_format_md_dest(q_full_url)}")
+                md_lines.append("")
+            for para in loc["body"]:
+                md_lines.append(para)
+                md_lines.append("")
+            if loc.get("code"):
+                code_lang = str(loc["code"].get("lang") or "").strip().lower()
+                code_body = loc["code"]["content"]
+                fence = _markdown_fence_for(code_body)
+                md_lines.append(f"{fence}{code_lang}")
+                md_lines.append(code_body)
+                md_lines.append(fence)
+                md_lines.append("")
+            if loc.get("updates"):
+                for upd in loc["updates"]:
+                    prefix = "Update" if is_en else "追记"
+                    md_lines.append(f"- *{upd['date']} {prefix}*: {upd['text']}")
+                md_lines.append("")
+            if e.get("promoted_to") and e["promoted_to"] in post_map:
+                po = post_map[e["promoted_to"]]
+                label_p = f"Expanded into No. {po['issue_no']}" if is_en else f"已展开为 No. {po['issue_no']}"
+                md_lines.append(f"- ↗ {label_p}: [{po[lang]['title']}]({base_url}{po[lang]['url']})")
+                md_lines.append("")
+            if e.get("concepts"):
+                c_names = [concept_map[c][lang] for c in e["concepts"] if c in concept_map]
+                if c_names:
+                    md_lines.append(f"*{'Concepts' if is_en else '关联概念'}: {', '.join(c_names)}*")
+                    md_lines.append("")
+
+            # RSS item
+            hh, mm = (e.get("time") or "00:00").split(":")
+            pub_dt = dt.datetime.strptime(e["date"], "%Y-%m-%d").replace(
+                hour=int(hh), minute=int(mm), tzinfo=dt.timezone.utc
+            )
+            pub_rfc822 = email.utils.format_datetime(pub_dt)
+            item_url = f"{base_url}{html_path}#t-{eid}"
+            plain_lead = loc.get("lead") or loc["body"][0]
+            rss_title = f"#{eid} ({kind_lbl}) — {plain_lead[:60]}{'…' if len(plain_lead) > 60 else ''}"
+            desc_parts = []
+            if loc.get("quote"):
+                desc_parts.append(f'“{loc["quote"]["text"]}”')
+            desc_parts.extend(loc["body"])
+            for upd in loc.get("updates") or []:
+                desc_parts.append(f"[{upd['date']}] {upd['text']}")
+            rss_items.append(
+                "\n".join(
+                    [
+                        "    <item>",
+                        f"      <title>{xml_escape(rss_title)}</title>",
+                        f"      <link>{xml_escape(item_url)}</link>",
+                        f'      <guid isPermaLink="true">{xml_escape(item_url)}</guid>',
+                        f"      <pubDate>{pub_rfc822}</pubDate>",
+                        f"      <description>{xml_escape(' '.join(desc_parts))}</description>",
+                        "    </item>",
+                    ]
+                )
+            )
+
+        full_md = f"{frontmatter}\n\n" + "\n".join(md_lines).rstrip() + "\n"
+        fm_parsed, _ = parse_frontmatter_strict(full_md)
+        if fm_parsed.get("section") != "stream":
+            raise ValueError(f"stream frontmatter round-trip mismatch ({lang})")
+        twins[lang] = full_md
+        register(md_path.lstrip("/"), full_md)
+
+        rss_xml = "\n".join(
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+                "  <channel>",
+                f"    <title>{xml_escape(site['name'])} — {'Stream (English)' if is_en else '思维切片（中文）'}</title>",
+                f"    <link>{xml_escape(base_url + html_path)}</link>",
+                f"    <description>{xml_escape('Short bilingual fragments and studio notes.' if is_en else '碎片思考、随手摘录与公开手记。')}</description>",
+                f"    <language>{'en' if is_en else 'zh-Hans'}</language>",
+                f'    <atom:link href="{xml_escape(base_url + "/" + rss_rel)}" rel="self" type="application/rss+xml" />',
+                *rss_items,
+                "  </channel>",
+                "</rss>",
+                "",
+            ]
+        )
+        ET.fromstring(rss_xml)
+        register(rss_rel, rss_xml)
+
+    return twins, outputs
+
+
 def build_machine_artifacts(
     catalog: dict,
     twins: dict[tuple[str, str], str],
     public_dir: Path,
+    stream_data: dict | None = None,
+    stream_twins: dict[str, str] | None = None,
 ) -> dict[Path, str]:
     site = catalog["site"]
     base_url = site["base_url"].rstrip("/")
@@ -658,6 +1487,15 @@ def build_machine_artifacts(
         f"- Full bilingual corpus: {base_url}/llms-full.txt",
         f"- Structured catalog JSON: {base_url}/api/posts.json",
         f"- Concept topology graph JSON: {base_url}/api/graph.json",
+        *(
+            [
+                f"- Stream (fragments) JSON: {base_url}/api/stream.json",
+                f"- Stream Markdown twins: {base_url}/en/stream/index.md | {base_url}/stream/index.md",
+                f"- Stream RSS feeds: {base_url}/en/stream/rss.xml | {base_url}/stream/rss.xml",
+            ]
+            if stream_data is not None
+            else []
+        ),
         f"- English RSS / JSON Feed: {base_url}/en/rss.xml | {base_url}/en/feed.json",
         f"- Chinese RSS / JSON Feed: {base_url}/rss.xml | {base_url}/feed.json",
         "",
@@ -678,6 +1516,15 @@ def build_machine_artifacts(
     for c in concepts:
         llms_lines.append(f"- **{c['en']} / {c['zh']}** (`{c['id']}`): {c['description']['en']}")
 
+    if stream_data is not None:
+        llms_lines.extend(["", "## Stream (Recent Fragments)"])
+        for e in sorted_stream_entries(stream_data)[:12]:
+            en_first = e["en"].get("lead") or e["en"]["body"][0]
+            zh_first = e["zh"].get("lead") or e["zh"]["body"][0]
+            llms_lines.append(
+                f"- [#{e['id']} ({e['date']} · {e['kind'].upper()})]({base_url}/en/stream/#t-{e['id']}): {en_first} / {zh_first}"
+            )
+
     register("llms.txt", "\n".join(llms_lines) + "\n")
 
     # 4. llms-full.txt
@@ -696,6 +1543,18 @@ def build_machine_artifacts(
         full_chunks.append(f"ISSUE {p['issue_no']} [ZH] — {base_url}{p['zh']['url']}")
         full_chunks.append("=" * 72)
         full_chunks.append(twins[(p["slug"], "zh")].strip())
+        full_chunks.append("")
+
+    if stream_twins:
+        full_chunks.append("=" * 72)
+        full_chunks.append(f"STREAM [EN] — {base_url}/en/stream/")
+        full_chunks.append("=" * 72)
+        full_chunks.append(stream_twins["en"].strip())
+        full_chunks.append("")
+        full_chunks.append("=" * 72)
+        full_chunks.append(f"STREAM [ZH] — {base_url}/stream/")
+        full_chunks.append("=" * 72)
+        full_chunks.append(stream_twins["zh"].strip())
         full_chunks.append("")
 
     register("llms-full.txt", "\n".join(full_chunks) + "\n")
@@ -779,6 +1638,11 @@ def build_machine_artifacts(
     static_pairs = [
         ("/", "/en/"),
         ("/archive/", "/en/archive/"),
+        *(
+            [("/stream/", "/en/stream/")]
+            if stream_data is not None
+            else []
+        ),
         ("/graph/", "/en/graph/"),
         ("/about/", "/en/about/"),
     ]
@@ -1105,6 +1969,10 @@ def audit_site(
     from virtual_files before falling back to disk (enabling pre-commit validation).
     """
     errors = validate_catalog(site_name, catalog, site_root, public_dir, expect_base_url=expect_base_url)
+    stream_data, stream_load_errs = load_stream_data(site_root, public_dir)
+    errors.extend(stream_load_errs)
+    if stream_data is not None:
+        errors.extend(validate_stream(stream_data, catalog))
     if errors:
         return errors
 
@@ -1129,12 +1997,19 @@ def audit_site(
     # 1. Regenerate expected derived artifacts in memory and verify exact UTF-8/LF byte parity
     try:
         twins, expected_twins = build_markdown_twins(catalog, site_root, public_dir)
-        expected_artifacts = build_machine_artifacts(catalog, twins, public_dir)
+        stream_twins: dict[str, str] | None = None
+        expected_stream_artifacts: dict[Path, str] = {}
+        if stream_data is not None:
+            stream_twins, expected_stream_artifacts = build_stream_artifacts(catalog, stream_data, public_dir)
+        expected_artifacts = build_machine_artifacts(
+            catalog, twins, public_dir, stream_data=stream_data, stream_twins=stream_twins
+        )
     except Exception as exc:
         return [f"Failed to build expected machine artifacts: {exc}"]
 
     expected_all: dict[Path, str] = {}
     expected_all.update(expected_twins)
+    expected_all.update(expected_stream_artifacts)
     expected_all.update(expected_artifacts)
 
     for path, expected_content in expected_all.items():
@@ -1176,10 +2051,14 @@ def audit_site(
         "assets/css/tokens.css",
         "assets/css/editorial.css",
         "assets/css/motion.css",
+        "assets/css/comments.css",
+        "assets/css/stream.css",
         "assets/js/site.js",
         "assets/js/transitions.js",
         "assets/js/graph.js",
         "assets/js/cover-model.js",
+        "assets/js/comments.js",
+        "assets/js/stream.js",
     ):
         if not (ENGINE_DIR / req_engine).is_file():
             errors.append(f"Missing required shared engine artifact: engine/{req_engine}")
@@ -1198,12 +2077,17 @@ def audit_site(
         utf8_paths = [
             f"/posts/{sample_slug}/index.md",
             f"/en/posts/{sample_slug}/index.md",
+            "/stream/index.md",
+            "/en/stream/index.md",
             "/llms.txt",
             "/llms-full.txt",
             "/api/posts.json",
+            "/api/stream.json",
             "/api/release.json",
             "/rss.xml",
             "/en/rss.xml",
+            "/stream/rss.xml",
+            "/en/stream/rss.xml",
             "/feed.json",
             "/en/feed.json",
         ]
@@ -1223,7 +2107,7 @@ def audit_site(
                 f"_headers: '/api/release.json' must revalidate on every request (got Cache-Control={rel_ccs!r})"
             )
 
-    # 4. Verify every catalog post has HTML editions
+    # 4. Verify every catalog post (and Stream editions when stream.json exists) has HTML editions
     post_by_url: dict[str, tuple[dict, str]] = {}
     for p in catalog["posts"]:
         for lang in ("zh", "en"):
@@ -1232,6 +2116,11 @@ def audit_site(
             html_file = public_dir / loc["url"].lstrip("/") / "index.html"
             if not html_file.is_file():
                 errors.append(f"Missing HTML edition: {html_file.relative_to(ROOT).as_posix()}")
+
+    if stream_data is not None:
+        for stream_rel in ("stream/index.html", "en/stream/index.html"):
+            if not (public_dir / stream_rel).is_file():
+                errors.append(f"Missing Stream HTML edition: sites/{site_name}/public/{stream_rel}")
 
     # 5. Parse all HTML pages (pass 1: collect IDs and structural audits)
     html_files = sorted(public_dir.rglob("*.html"))
@@ -1244,17 +2133,20 @@ def audit_site(
         url_path = rel_url_from_html(html_file, public_dir)
         lang = detect_lang(url_path, raw)
         is_post = "/posts/" in url_path
+        is_stream = url_path in ("/stream/", "/en/stream/")
         is_404 = url_path in ("/404.html", "/en/404.html")
 
         if not HEADER_RE.search(raw):
             errors.append(f"{rel}: missing <!-- @partial:header --> markers")
         if not FOOTER_RE.search(raw):
             errors.append(f"{rel}: missing <!-- @partial:footer --> markers")
+        if is_stream and stream_data is not None and not STREAM_RE.search(raw):
+            errors.append(f"{rel}: missing <!-- @partial:stream --> markers")
         if HEADER_RE.search(raw) and FOOTER_RE.search(raw):
-            expected_html = apply_partials_to_html(raw, url_path, partials, catalog)
+            expected_html = apply_partials_to_html(raw, url_path, partials, catalog, stream_data=stream_data)
             if expected_html != raw:
                 errors.append(
-                    f"{rel}: header/footer partial out of sync (run 'python tools/editorial_sync.py --site {site_name}')"
+                    f"{rel}: partial content out of sync (run 'python tools/editorial_sync.py --site {site_name}')"
                 )
 
         auditor = PageAuditor()
@@ -1337,7 +2229,7 @@ def audit_site(
                         if ld.get("dateModified") != post_obj["updated"]:
                             errors.append(f"{rel}: JSON-LD dateModified mismatch")
 
-        if is_post and not auditor.has_md_alternate:
+        if (is_post or (is_stream and stream_data is not None)) and not auditor.has_md_alternate:
             errors.append(f'{rel}: missing <link rel="alternate" type="text/markdown">')
 
     # 6. Pass 2: verify every local link & fragment anchor across all HTML files
@@ -1421,6 +2313,8 @@ def audit_site(
             js_rel = js_file.relative_to(ROOT).as_posix()
             for m in JS_FETCH_RE.finditer(js_text):
                 ref = m.group(2).strip()
+                if any(ref == p or ref.startswith(p + "/") for p in DYNAMIC_WORKER_API_PREFIXES):
+                    continue
                 target, _ = resolve_local_ref(js_file, ref, base_url, public_dir, virtual_paths=vpaths)
                 if target is None:
                     errors.append(f"{js_rel}: broken JS fetch('{ref}')")
@@ -1446,12 +2340,22 @@ def sync_site_atomically(
 ) -> tuple[int, int]:
     """Build & validate the complete proposed output in memory before committing per-file atomic writes."""
     errors = validate_catalog(site_name, catalog, site_root, public_dir, expect_base_url=expect_base_url)
+    stream_data, stream_load_errs = load_stream_data(site_root, public_dir)
+    errors.extend(stream_load_errs)
+    if stream_data is not None:
+        errors.extend(validate_stream(stream_data, catalog))
     if errors:
         raise ValueError("\n".join(errors))
 
     partials = load_partials()
     twins, twin_files = build_markdown_twins(catalog, site_root, public_dir)
-    artifact_files = build_machine_artifacts(catalog, twins, public_dir)
+    stream_twins: dict[str, str] | None = None
+    stream_artifact_files: dict[Path, str] = {}
+    if stream_data is not None:
+        stream_twins, stream_artifact_files = build_stream_artifacts(catalog, stream_data, public_dir)
+    artifact_files = build_machine_artifacts(
+        catalog, twins, public_dir, stream_data=stream_data, stream_twins=stream_twins
+    )
 
     html_updates: dict[Path, str] = {}
     for html_file in sorted(public_dir.rglob("*.html")):
@@ -1459,11 +2363,11 @@ def sync_site_atomically(
         raw = read_utf8_exact(html_file)
         normalized = raw.replace("\r\n", "\n")
         url_path = rel_url_from_html(html_file, public_dir)
-        new_content = apply_partials_to_html(normalized, url_path, partials, catalog)
+        new_content = apply_partials_to_html(normalized, url_path, partials, catalog, stream_data=stream_data)
         if new_content != raw:
             html_updates[html_file] = new_content
 
-    planned: dict[Path, str] = {**html_updates, **twin_files, **artifact_files}
+    planned: dict[Path, str] = {**html_updates, **twin_files, **stream_artifact_files, **artifact_files}
 
     # M9: Validate the complete proposed state BEFORE modifying a single file on disk
     pre_errors = audit_site(
@@ -1484,7 +2388,7 @@ def sync_site_atomically(
             if atomic_write_text(path, content):
                 written_html += 1
                 written_total += 1
-        for path, content in {**twin_files, **artifact_files}.items():
+        for path, content in {**twin_files, **stream_artifact_files, **artifact_files}.items():
             if atomic_write_text(path, content):
                 written_total += 1
     except Exception as exc:

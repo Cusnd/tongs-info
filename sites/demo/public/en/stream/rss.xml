@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tong's Information - Demo — Stream (English)</title>
+    <link>https://info-demo.esoren.com/en/stream/</link>
+    <description>Short bilingual fragments and studio notes.</description>
+    <language>en</language>
+    <atom:link href="https://info-demo.esoren.com/en/stream/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>#005 (Snippet) — Adding `view-transition-class` turns list filtering from an …</title>
+      <link>https://info-demo.esoren.com/en/stream/#t-005</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/en/stream/#t-005</guid>
+      <pubDate>Wed, 25 Nov 2026 21:15:00 +0000</pubDate>
+      <description>Adding `view-transition-class` turns list filtering from an abrupt hide/show snap into archival index cards gliding cleanly along a rail — all in under ten lines of CSS.</description>
+    </item>
+    <item>
+      <title>#004 (Question) — Once `llms.txt` and clean `index.md` twins give AI agents a …</title>
+      <link>https://info-demo.esoren.com/en/stream/#t-004</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/en/stream/#t-004</guid>
+      <pubDate>Sun, 22 Nov 2026 16:40:00 +0000</pubDate>
+      <description>Once `llms.txt` and clean `index.md` twins give AI agents a dedicated high-signal channel, can human-facing HTML finally stop flattening itself into plain text and become a tactile visual medium again? [2026-11-24] This thread grew into Issue 05, complete with an interactive Human/Agent Representation Inspector.</description>
+    </item>
+    <item>
+      <title>#003 (Quote) — A steady reminder whenever the urge strikes to wrap a contro…</title>
+      <link>https://info-demo.esoren.com/en/stream/#t-003</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/en/stream/#t-003</guid>
+      <pubDate>Mon, 16 Nov 2026 11:20:00 +0000</pubDate>
+      <description>“Weniger, aber besser — Less, but better.” A steady reminder whenever the urge strikes to wrap a control in one more border or slap a status dot on a heading. Restraint isn't scarcity; it lets typography and whitespace carry the room.</description>
+    </item>
+    <item>
+      <title>#002 (Musing) — An idea written in Chinese often lands with aphoristic compr…</title>
+      <link>https://info-demo.esoren.com/en/stream/#t-002</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/en/stream/#t-002</guid>
+      <pubDate>Sun, 08 Nov 2026 23:05:00 +0000</pubDate>
+      <description>An idea written in Chinese often lands with aphoristic compression, yet translating it into idiomatic English immediately exposes every unspoken premise. Bilingual publishing isn't just wider reach — it's a built-in calibration mirror for thought.</description>
+    </item>
+    <item>
+      <title>#001 (Musing) — First studio note on the ledger: no bundler, no runtime fram…</title>
+      <link>https://info-demo.esoren.com/en/stream/#t-001</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/en/stream/#t-001</guid>
+      <pubDate>Fri, 30 Oct 2026 09:50:00 +0000</pubDate>
+      <description>First studio note on the ledger: no bundler, no runtime framework. Ten years from now, on any machine that can still open a browser, double-clicking these plain HTML and Markdown files should still read cleanly.</description>
+    </item>
+  </channel>
+</rss>

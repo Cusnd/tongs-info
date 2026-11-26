@@ -7,7 +7,7 @@
   <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
   <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
   <title>Tong's Information</title>
-  <meta name="description" content="An independent bilingual Swiss modernist journal on interfaces, systems, information design, and digital publishing.">
+  <meta name="description" content="A fully static, frameworkless, open-source bilingual personal publication exploring independent blogging, craft, open source, and creation in the age of LLMs.">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://www.esoren.com/en/">
   <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/">
@@ -18,7 +18,8 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/motion.css">
-  <link rel="preload" as="image" href="/assets/images/issue-02-dual-audience-web.jpg" fetchpriority="high">
+  <link rel="stylesheet" href="/assets/css/publication.css">
+  <link rel="preload" as="image" href="/assets/images/issue-01-let-blogs-be-blogs-again.jpg" fetchpriority="high">
   <link rel="expect" href="#hero-fold" blocking="render">
   <script async blocking="render" src="/assets/js/transitions.js"></script>
   <script type="application/ld+json">
@@ -28,15 +29,15 @@
     "name": "Tong's Information",
     "url": "https://www.esoren.com/en/",
     "inLanguage": ["en", "zh-Hans"],
-    "description": "An independent bilingual Swiss modernist journal on interfaces, systems, information design, and digital publishing.",
-    "author": { "@type": "Person", "name": "Tong" }
+    "description": "A fully static, frameworkless, open-source bilingual personal publication exploring independent blogging, craft, open source, and creation in the age of LLMs.",
+    "author": { "@type": "Person", "name": "Liu Tong" }
   }
   </script>
 </head>
 <body class="is-cover" data-page-type="cover">
   <!-- @partial:header -->
 <a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
-<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Liu Tong" data-issue-order="{&quot;let-blogs-be-blogs-again&quot;:1}">
   <div class="shell masthead-bar">
     <a class="brand-mark" href="/en/">
       <span class="brand-wordmark">Tong's Information</span>
@@ -45,6 +46,7 @@
       <ul>
         <li><a href="/en/" aria-current="page">Cover</a></li>
         <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/stream/">Stream</a></li>
         <li><a href="/en/graph/">Graph</a></li>
         <li><a href="/en/about/">About</a></li>
       </ul>
@@ -76,22 +78,22 @@
   <!-- @endpartial:header -->
 
   <main id="main-content" tabindex="-1">
-    <section id="hero-fold" class="cover-sheet" data-lead-slug="dual-audience-web" aria-label="Magazine Cover">
+    <section id="hero-fold" class="cover-sheet" data-lead-slug="let-blogs-be-blogs-again" aria-label="Magazine Cover">
       <div class="cover-frame">
         <div class="cover-nameplate-inner">
           <h1 class="cover-masthead">Tong's Information</h1>
           <div class="cover-folio">
-            <span class="cover-folio-issue">ISSUE 05</span>
-            <span>NOVEMBER 2026 · BILINGUAL JOURNAL</span>
+            <span class="cover-folio-issue">ISSUE 01</span>
+            <span>NOVEMBER 2026 · INAUGURAL · CHENGDU</span>
           </div>
         </div>
       </div>
 
-      <figure class="cover-stage" data-cover-model>
+      <figure class="cover-stage" data-cover-model="issue-01">
         <img
           data-cover-fallback
-          src="/assets/images/issue-02-dual-audience-web.jpg"
-          alt="Two-sided interactive cover. Cobalt rings and a folded prism face human readers. Wireframes and data rails face agents. Both share a vermilion focal disc."
+          src="/assets/images/issue-01-let-blogs-be-blogs-again.jpg"
+          alt="Swiss modernist geometric lithograph showing dense obsidian modular cages on the left unhinging across a thin vertical meridian into translucent International Cobalt planes and an ascending arc, opening into serene gridded white space with a single floating vermilion circle"
           width="1376"
           height="768"
           fetchpriority="high"
@@ -102,46 +104,47 @@
         <div class="cover-floor-inner">
           <div class="cover-lead-story">
             <div class="meta-line">
-              <span class="tier-label">Cover Feature · No. 05</span>
-              <span>2 interactive labs</span>
+              <span class="tier-label">Inaugural Feature · No. 01</span>
+              <time datetime="2026-11-25">2026.11.25</time>
+              <span>2 interactive pieces</span>
             </div>
             <h2 class="cover-story-title">
-              <a href="/en/posts/dual-audience-web/">The Dual-Audience Web: Publishing for Human Eyes and AI Agents</a>
+              <a href="/en/posts/let-blogs-be-blogs-again/">Let Blogs Be Blogs Again</a>
             </h2>
             <p class="cover-story-deck">
-              Once machine readers receive their own clean text channel, the web page humans visit no longer needs to flatten into plain text — it is free to become a tactile visual work again.
+              From middle-school Hexo builds, Baota panels, and Sakurairo themes to a blank sheet of native HTML — when style stops being mere decoration, a blog breathes, grows, and evolves with thought again.
             </p>
             <div class="action-row">
-              <a class="btn primary" href="/en/posts/dual-audience-web/">Read Cover Feature →</a>
+              <a class="btn primary" href="/en/posts/let-blogs-be-blogs-again/">Read Inaugural Feature →</a>
               <a class="btn subtle" href="#inside">Turn Page ↓</a>
             </div>
           </div>
 
-          <aside class="cover-inside" aria-label="Inside this issue">
-            <div class="section-title">Inside This Issue</div>
+          <aside class="cover-inside" aria-label="Inside Issue 01">
+            <div class="section-title">Inside Issue 01</div>
             <ul class="cover-inside-list">
               <li>
-                <a href="/en/posts/ambient-interfaces/" data-post-slug="ambient-interfaces">
-                  <span class="cover-inside-num">04</span>
-                  <span>Quiet Interfaces: Designing Beyond the Click</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/en/posts/let-blogs-be-blogs-again/#s01">
+                  <span class="cover-inside-num">§ 01</span>
+                  <span>Early Rigs and Quiet Obsessions: Hexo, Baota &amp; Sakurairo</span>
                 </a>
               </li>
               <li>
-                <a href="/en/posts/bilingual-thought/" data-post-slug="bilingual-thought">
-                  <span class="cover-inside-num">03</span>
-                  <span>Thinking in Stereo: Writing Beyond Monolingual Boundaries</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/en/posts/let-blogs-be-blogs-again/#s02">
+                  <span class="cover-inside-num">§ 02</span>
+                  <span>Putting Down the Crutch of Frameworks</span>
                 </a>
               </li>
               <li>
-                <a href="/en/posts/software-longevity/" data-post-slug="software-longevity">
-                  <span class="cover-inside-num">02</span>
-                  <span>Readable in Ten Years: Static HTML and the Half-Life of Digital Work</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/en/posts/let-blogs-be-blogs-again/#lab-eras">
+                  <span class="cover-inside-num">§ 03</span>
+                  <span>From Frames to Blank Space</span>
                 </a>
               </li>
               <li>
-                <a href="/en/posts/agent-era-publishing/" data-post-slug="agent-era-publishing">
-                  <span class="cover-inside-num">01</span>
-                  <span>Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/en/posts/let-blogs-be-blogs-again/#lab-canvas">
+                  <span class="cover-inside-num">§ 04</span>
+                  <span>A Blank Sheet &amp; a Pen</span>
                 </a>
               </li>
             </ul>
@@ -150,157 +153,69 @@
       </div>
     </section>
 
-    <section id="inside" class="shell inside-band" aria-labelledby="recent-spread-heading-en">
+    <section id="inside" class="shell inside-band" aria-labelledby="inaugural-spread-heading-en">
       <div class="inside-band-head">
-        <h2 id="recent-spread-heading-en" class="section-title">Recent Dispatches</h2>
-        <a class="section-meta" href="/en/archive/">All 05 Issues →</a>
+        <h2 id="inaugural-spread-heading-en" class="section-title">Inaugural Feature &amp; Editor's Note</h2>
+        <a class="section-meta" href="/en/archive/">Browse Archive →</a>
       </div>
 
       <div class="magazine-spread-lead">
-        <article class="feature-plate-card" data-post-slug="ambient-interfaces">
+        <article class="feature-plate-card" data-post-slug="let-blogs-be-blogs-again">
           <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/en/posts/ambient-interfaces/" aria-label="Read Feature: Quiet Interfaces">
+            <a class="cover-artwork-link" href="/en/posts/let-blogs-be-blogs-again/" aria-label="Read Inaugural Feature: Let Blogs Be Blogs Again">
               <img
-                src="/assets/images/issue-04-ambient-interfaces.jpg"
-                alt="Swiss modernist lithograph showing dense obsidian rectangles dissolving across a fine grid into open silence anchored by a cobalt monolith and a vermilion bar"
-                width="1200"
-                height="896"
+                src="/assets/images/issue-01-let-blogs-be-blogs-again.jpg"
+                alt="Swiss modernist geometric lithograph of dense obsidian template frames unfolding into cobalt geometric planes and a lone vermilion circle floating on blank archival paper"
+                width="1376"
+                height="768"
                 loading="lazy"
               >
             </a>
           </figure>
           <div class="feature-plate-meta">
             <div class="meta-line">
-              <span class="tier-label">Feature · No. 04</span>
-              <time datetime="2026-11-18">2026.11.18</time>
+              <span class="tier-label">Feature · No. 01</span>
+              <time datetime="2026-11-25">2026.11.25</time>
             </div>
-            <span class="mono" style="font-size: var(--text-xs); color: var(--ink-muted);">Interactive Calibrator</span>
+            <span class="mono" style="font-size: var(--text-xs); color: var(--ink-muted);">5 min · 2 interactive pieces</span>
           </div>
           <h3 class="dispatch-title">
-            <a href="/en/posts/ambient-interfaces/">Quiet Interfaces: Designing Beyond the Click</a>
+            <a href="/en/posts/let-blogs-be-blogs-again/">Let Blogs Be Blogs Again</a>
           </h3>
           <p class="dispatch-summary">
-            Software spent twenty years piling badges, borders, and status ribbons onto every screen. As agents absorb mechanical clicks, interfaces can finally learn the art of silence.
+            From middle-school Hexo builds, Baota panels, and Sakurairo themes to a blank sheet of native HTML — featuring an abstract interactive evolution piece and a blank sketching sheet.
           </p>
           <div class="action-row">
-            <a class="btn primary" href="/en/posts/ambient-interfaces/">Read Feature →</a>
+            <a class="btn primary" href="/en/posts/let-blogs-be-blogs-again/">Read Feature →</a>
             <ul class="concept-list" aria-label="Concepts">
-              <li><a class="concept-tag" href="/en/archive/?concept=interface-craft">Interface Craft</a></li>
-              <li><a class="concept-tag" href="/en/archive/?concept=swiss-typography">Swiss Typography</a></li>
+              <li><a class="concept-tag" href="/en/archive/?concept=indie-blog">Independent Blogging</a></li>
+              <li><a class="concept-tag" href="/en/archive/?concept=frameworkless-web">Frameworkless Web</a></li>
+              <li><a class="concept-tag" href="/en/archive/?concept=llm-creation">Creation with LLMs</a></li>
+              <li><a class="concept-tag" href="/en/archive/?concept=personal-aesthetics">Personal Aesthetics</a></li>
             </ul>
           </div>
-        </article>
-
-        <article class="feature-plate-card" data-post-slug="bilingual-thought">
-          <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/en/posts/bilingual-thought/" aria-label="Read Essay: Thinking in Stereo">
-              <img
-                src="/assets/images/issue-03-bilingual-thought.jpg"
-                alt="Swiss modernist geometric diptych pairing interlocking cobalt arcs and obsidian rectilinear forms across a central axis with a single vermilion circle at their intersection"
-                width="1200"
-                height="896"
-                loading="lazy"
-              >
-            </a>
-          </figure>
-          <div class="feature-plate-meta">
-            <div class="meta-line">
-              <span class="mono">No. 03</span>
-              <span>Essay</span>
-              <time datetime="2026-11-11">2026.11.11</time>
-            </div>
-            <span class="mono" style="font-size: var(--text-xs); color: var(--ink-muted);">5 min read</span>
-          </div>
-          <h3 class="dispatch-title">
-            <a href="/en/posts/bilingual-thought/">Thinking in Stereo: Writing Beyond Monolingual Boundaries</a>
-          </h3>
-          <p class="dispatch-summary">
-            Legacy i18n reduced language to brittle lookup tables. Agent-native bilingual publishing lets an idea resonate simultaneously in Chinese compression and English precision.
-          </p>
-          <div class="action-row">
-            <a class="btn primary" href="/en/posts/bilingual-thought/">Read Essay →</a>
-            <ul class="concept-list" aria-label="Concepts">
-              <li><a class="concept-tag" href="/en/archive/?concept=bilingual-i18n">Bilingual</a></li>
-              <li><a class="concept-tag" href="/en/archive/?concept=knowledge-graph">Knowledge Graph</a></li>
-            </ul>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="shell inside-band" aria-labelledby="archive-spread-heading-en">
-      <div class="inside-band-head">
-        <h2 id="archive-spread-heading-en" class="section-title">Foundations &amp; Editor's Note</h2>
-        <a class="section-meta" href="/en/graph/">Open Knowledge Graph →</a>
-      </div>
-
-      <div class="magazine-spread-triple">
-        <article class="feature-plate-card" data-post-slug="software-longevity">
-          <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/en/posts/software-longevity/" aria-label="Read Essay: Readable in Ten Years">
-              <img
-                src="/assets/images/issue-02-software-longevity.jpg"
-                alt="Swiss modernist lithograph of alternating obsidian and cobalt horizontal strata bisected by a slender vertical meridian and a single vermilion square"
-                width="1200"
-                height="896"
-                loading="lazy"
-              >
-            </a>
-          </figure>
-          <div class="meta-line">
-            <span class="mono">No. 02</span>
-            <span>Longevity</span>
-            <time datetime="2026-11-04">2026.11.04</time>
-          </div>
-          <h3 class="plate-title-sm">
-            <a href="/en/posts/software-longevity/">Readable in Ten Years: Static HTML and the Half-Life of Digital Work</a>
-          </h3>
-          <p class="dispatch-summary">
-            Most personal sites do not die from a lack of ideas — they die from a broken dependency tree. Plain standard HTML is the surest hedge against churn.
-          </p>
-        </article>
-
-        <article class="feature-plate-card" data-post-slug="agent-era-publishing">
-          <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/en/posts/agent-era-publishing/" aria-label="Read Essay: Beyond Templates">
-              <img
-                src="/assets/images/issue-01-agent-era-publishing.jpg"
-                alt="Swiss modernist lithograph showing an orthogonal grid breaking free into overlapping translucent cobalt and obsidian diagonal paper planes with a single vermilion square"
-                width="1200"
-                height="896"
-                loading="lazy"
-              >
-            </a>
-          </figure>
-          <div class="meta-line">
-            <span class="mono">No. 01</span>
-            <span>Inaugural</span>
-            <time datetime="2026-10-28">2026.10.28</time>
-          </div>
-          <h3 class="plate-title-sm">
-            <a href="/en/posts/agent-era-publishing/">Beyond Templates: Why Personal Publishing Belongs to Agent-Authored HTML</a>
-          </h3>
-          <p class="dispatch-summary">
-            Traditional static site generators were an ergonomic compromise for human hands. With an agent at the desk, we reclaim the native craft of the web.
-          </p>
         </article>
 
         <aside class="editor-note-col" aria-labelledby="editors-note-heading-en">
           <h3 id="editors-note-heading-en" class="section-title">Editor's Note</h3>
           <p class="editor-quote">
-            “Reserve pure signal density for machine protocols; return breathing room, visual craft, and curiosity to human readers.”
+            “Style is no longer mere ornament dressed up to look pretty; it has become a direct conduit for personal sensibility. May you always keep a young explorer's spark.”
           </p>
           <p class="editor-copy">
-            <strong>Tong's Information</strong> publishes without frontend build frameworks. Every issue begins as plain-text notes, then receives bespoke typography, lithograph plates, and interactive demonstrations tailored to its thesis.
+            <strong>Tong's Information</strong> sets aside static-site generators and build pipelines, open-sourcing every line of code behind it. Each issue starts from a plain-text manuscript and is crafted directly in native HTML with bespoke lithographs, bilingual editions, and interactive pieces.
           </p>
           <nav class="editor-links" aria-label="Publication links">
+            <a href="/en/stream/">
+              <span>Browse Stream &amp; Field Notes</span>
+              <span class="mono">Stream →</span>
+            </a>
             <a href="/en/graph/">
               <span>Explore Knowledge Graph</span>
-              <span class="mono">05 × 07 →</span>
+              <span class="mono">01 × 05 →</span>
             </a>
             <a href="/en/archive/">
               <span>Browse Complete Archive</span>
-              <span class="mono">05 Issues →</span>
+              <span class="mono">01 Issue →</span>
             </a>
             <a href="/en/about/">
               <span>How This Publication Is Made</span>
@@ -326,6 +241,6 @@
   <!-- @endpartial:footer -->
 
   <script type="module" src="/assets/js/site.js"></script>
-  <script type="module" src="/assets/js/cover-model.js"></script>
+  <script type="module" src="/assets/js/cover-issue-01.js"></script>
 </body>
 </html>

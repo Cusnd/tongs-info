@@ -1,0 +1,155 @@
+{
+  "site": "Tong's Information - Demo",
+  "generated_at": "2026-11-25T00:00:00Z",
+  "count": 5,
+  "kinds": {
+    "musing": {
+      "zh": "随想",
+      "en": "Musing"
+    },
+    "quote": {
+      "zh": "摘录",
+      "en": "Quote"
+    },
+    "question": {
+      "zh": "待解",
+      "en": "Question"
+    },
+    "snippet": {
+      "zh": "切片",
+      "en": "Snippet"
+    }
+  },
+  "entries": [
+    {
+      "id": "005",
+      "date": "2026-11-25",
+      "time": "21:15",
+      "kind": "snippet",
+      "concepts": [
+        "swiss-typography",
+        "interface-craft"
+      ],
+      "zh": {
+        "body": [
+          "给碎片流加上 `view-transition-class` 之后，筛选分类不再是生硬的显隐跳变，而是像活页纸片顺着导轨滑入新位置——核心 CSS 不到十行。"
+        ],
+        "code": {
+          "lang": "css",
+          "content": "html[data-vt-mode=\"stream-filter\"] .stream-item {\n  view-transition-class: stream-item;\n}\n::view-transition-group(.stream-item) {\n  animation-duration: var(--duration-moderate);\n}"
+        }
+      },
+      "en": {
+        "body": [
+          "Adding `view-transition-class` turns list filtering from an abrupt hide/show snap into archival index cards gliding cleanly along a rail — all in under ten lines of CSS."
+        ],
+        "code": {
+          "lang": "css",
+          "content": "html[data-vt-mode=\"stream-filter\"] .stream-item {\n  view-transition-class: stream-item;\n}\n::view-transition-group(.stream-item) {\n  animation-duration: var(--duration-moderate);\n}"
+        }
+      }
+    },
+    {
+      "id": "004",
+      "date": "2026-11-22",
+      "time": "16:40",
+      "kind": "question",
+      "concepts": [
+        "agent-web",
+        "edge-architecture"
+      ],
+      "promoted_to": "dual-audience-web",
+      "zh": {
+        "body": [
+          "既然 `llms.txt` 和 `index.md` 已经替 AI Agent 铺好了极致纯净的高信噪比管道，那人类访问的 HTML 网页是不是终于可以卸下“信息喂食槽”的包袱，重新做回一件值得凝视的视觉作品？"
+        ],
+        "updates": [
+          {
+            "date": "2026-11-24",
+            "text": "这个念头最终长成了 No. 05 封面特稿，顺手还做了一套双面透视实验室。"
+          }
+        ]
+      },
+      "en": {
+        "body": [
+          "Once `llms.txt` and clean `index.md` twins give AI agents a dedicated high-signal channel, can human-facing HTML finally stop flattening itself into plain text and become a tactile visual medium again?"
+        ],
+        "updates": [
+          {
+            "date": "2026-11-24",
+            "text": "This thread grew into Issue 05, complete with an interactive Human/Agent Representation Inspector."
+          }
+        ]
+      }
+    },
+    {
+      "id": "003",
+      "date": "2026-11-16",
+      "time": "11:20",
+      "kind": "quote",
+      "concepts": [
+        "interface-craft",
+        "swiss-typography"
+      ],
+      "promoted_to": "ambient-interfaces",
+      "zh": {
+        "quote": {
+          "text": "Weniger, aber besser — 少，却更好。",
+          "source": "Dieter Rams"
+        },
+        "body": [
+          "每次忍不住想给按钮外再套一层边框或加个状态红点时，就把这句话贴在眼前。克制不是贫瘠，而是让真正重要的文字与留白自己说话。"
+        ]
+      },
+      "en": {
+        "quote": {
+          "text": "Weniger, aber besser — Less, but better.",
+          "source": "Dieter Rams"
+        },
+        "body": [
+          "A steady reminder whenever the urge strikes to wrap a control in one more border or slap a status dot on a heading. Restraint isn't scarcity; it lets typography and whitespace carry the room."
+        ]
+      }
+    },
+    {
+      "id": "002",
+      "date": "2026-11-08",
+      "time": "23:05",
+      "kind": "musing",
+      "concepts": [
+        "bilingual-i18n",
+        "knowledge-graph"
+      ],
+      "zh": {
+        "body": [
+          "同一个想法，用中文写出来往往凝练如金句，转成英文时却会立刻暴露隐含的前提和逻辑跳步。双语出版不只是多照顾一拨读者，更像自带一面逻辑校准镜。"
+        ]
+      },
+      "en": {
+        "body": [
+          "An idea written in Chinese often lands with aphoristic compression, yet translating it into idiomatic English immediately exposes every unspoken premise. Bilingual publishing isn't just wider reach — it's a built-in calibration mirror for thought."
+        ]
+      }
+    },
+    {
+      "id": "001",
+      "date": "2026-10-30",
+      "time": "09:50",
+      "kind": "musing",
+      "concepts": [
+        "static-architecture",
+        "agent-web"
+      ],
+      "zh": {
+        "body": [
+          "开卷第一条手记：不装任何构建器，不依赖运行时框架。十年后随便找一台还能打开浏览器的设备，双击这几个纯文本与 HTML 文件，它们应该依然读得清清楚楚。"
+        ]
+      },
+      "en": {
+        "body": [
+          "First studio note on the ledger: no bundler, no runtime framework. Ten years from now, on any machine that can still open a browser, double-clicking these plain HTML and Markdown files should still read cleanly."
+        ]
+      }
+    }
+  ]
+}

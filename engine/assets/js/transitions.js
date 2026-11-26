@@ -49,8 +49,9 @@
 
     if (basePath === "/") return { kind: "cover", basePath, tabIndex: 0, slug: null, lang };
     if (basePath === "/archive/") return { kind: "archive", basePath, tabIndex: 1, slug: null, lang };
-    if (basePath === "/graph/") return { kind: "graph", basePath, tabIndex: 2, slug: null, lang };
-    if (basePath === "/about/") return { kind: "about", basePath, tabIndex: 3, slug: null, lang };
+    if (basePath === "/stream/") return { kind: "stream", basePath, tabIndex: 2, slug: null, lang };
+    if (basePath === "/graph/") return { kind: "graph", basePath, tabIndex: 3, slug: null, lang };
+    if (basePath === "/about/") return { kind: "about", basePath, tabIndex: 4, slug: null, lang };
 
     const postMatch = basePath.match(/^\/posts\/([^/]+)\/$/);
     if (postMatch) {

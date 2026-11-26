@@ -25,15 +25,20 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import re
 import socket
+import struct
 import subprocess
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -53,22 +58,81 @@ REMOTE_OPENER = urllib.request.build_opener(NoRedirect())
 LOCAL_OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
 
-def fetch(base_url: str, path: str, timeout: float = 15.0, *, local: bool = False) -> tuple[int, dict[str, str], bytes]:
+def fetch(
+    base_url: str,
+    path: str,
+    timeout: float = 15.0,
+    *,
+    local: bool = False,
+    method: str = "GET",
+    body: bytes | None = None,
+    headers: dict[str, str] | None = None,
+) -> tuple[int, dict[str, str], bytes]:
     url = base_url.rstrip("/") + path
+    req_headers = {"User-Agent": "TongsInformation-SmokeTest/1.0"}
+    if headers:
+        req_headers.update(headers)
     req = urllib.request.Request(
         url,
-        headers={"User-Agent": "TongsInformation-SmokeTest/1.0"},
-        method="GET",
+        data=body,
+        headers=req_headers,
+        method=method,
     )
     opener = LOCAL_OPENER if local else REMOTE_OPENER
     try:
         with opener.open(req, timeout=timeout) as resp:
-            headers = {k.lower(): v for k, v in resp.headers.items()}
-            return resp.status, headers, resp.read()
+            resp_headers = {k.lower(): v for k, v in resp.headers.items()}
+            return resp.status, resp_headers, resp.read()
     except urllib.error.HTTPError as exc:
-        headers = {k.lower(): v for k, v in exc.headers.items()}
-        body = exc.read()
-        return exc.code, headers, body
+        resp_headers = {k.lower(): v for k, v in exc.headers.items()}
+        resp_body = exc.read()
+        return exc.code, resp_headers, resp_body
+
+
+def _solve_pow_local(gate_token: str, bits: int) -> str:
+    full = bits // 8
+    rem = bits % 8
+    mask = (0xFF << (8 - rem)) & 0xFF if rem > 0 else 0
+    for counter in range(2_000_000):
+        cand = format(counter, "x")
+        digest = hashlib.sha256(f"{gate_token}:{cand}".encode("utf-8")).digest()
+        if all(digest[i] == 0 for i in range(full)) and (rem == 0 or (digest[full] & mask) == 0):
+            return cand
+    raise RuntimeError("Failed to solve local PoW challenge")
+
+
+def _make_minimal_png(width: int = 2, height: int = 2) -> bytes:
+    def chunk(tag: bytes, payload: bytes) -> bytes:
+        crc = zlib.crc32(tag + payload) & 0xFFFFFFFF
+        return struct.pack(">I", len(payload)) + tag + payload + struct.pack(">I", crc)
+
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    raw_scanlines = b"".join(b"\x00" + b"\x00\x47\xff" * width for _ in range(height))
+    idat = zlib.compress(raw_scanlines)
+    return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", idat) + chunk(b"IEND", b"")
+
+
+def _build_multipart(payload_obj: dict[str, object], images: list[tuple[str, str, bytes]]) -> tuple[str, bytes]:
+    boundary = "----TongsInfoSmokeBoundary7MA4YWxkTrZu0gW"
+    parts: list[bytes] = []
+    payload_bytes = json.dumps(payload_obj).encode("utf-8")
+    parts.append(
+        f"--{boundary}\r\n"
+        f'Content-Disposition: form-data; name="payload"\r\n'
+        f"Content-Type: application/json\r\n\r\n".encode("utf-8")
+        + payload_bytes
+        + b"\r\n"
+    )
+    for filename, mime, content in images:
+        parts.append(
+            f"--{boundary}\r\n"
+            f'Content-Disposition: form-data; name="images"; filename="{filename}"\r\n'
+            f"Content-Type: {mime}\r\n\r\n".encode("utf-8")
+            + content
+            + b"\r\n"
+        )
+    parts.append(f"--{boundary}--\r\n".encode("utf-8"))
+    return f"multipart/form-data; boundary={boundary}", b"".join(parts)
 
 
 def pick_free_port() -> int:
@@ -95,8 +159,10 @@ def run_suite(
     base_url: str,
     catalog: dict,
     *,
+    stream_data: dict | None = None,
     local: bool = False,
     expect_dist: Path | None = None,
+    expect_comment_images: bool = False,
 ) -> list[str]:
     errors: list[str] = []
     site_name = catalog["site"]["name"]
@@ -108,16 +174,20 @@ def run_suite(
         "/en/",
         "/archive/",
         "/en/archive/",
+        "/stream/",
+        "/en/stream/",
         "/graph/",
         "/en/graph/",
         "/about/",
         "/en/about/",
     ]
+    core_bodies: dict[str, bytes] = {}
     for path in core_pages:
         status, hdrs, body = fetch(base_url, path, local=local)
         if status != 200:
             errors.append(f"GET {path}: expected 200, got {status}")
             continue
+        core_bodies[path] = body
         ct = hdrs.get("content-type", "").lower()
         if "text/html" not in ct:
             errors.append(f"GET {path}: expected text/html Content-Type, got {ct!r}")
@@ -161,10 +231,14 @@ def run_suite(
         "/assets/css/tokens.css",
         "/assets/css/editorial.css",
         "/assets/css/motion.css",
+        "/assets/css/comments.css",
+        "/assets/css/stream.css",
         "/assets/js/site.js",
         "/assets/js/transitions.js",
         "/assets/js/graph.js",
         "/assets/js/cover-model.js",
+        "/assets/js/comments.js",
+        "/assets/js/stream.js",
         "/assets/favicon.svg",
     ]
     for path in engine_assets:
@@ -191,7 +265,9 @@ def run_suite(
             errors.append(f"GET {path}: expected base_url {expected_base!r} in response")
 
     posts_payload_live: dict | None = None
-    for path in ("/api/posts.json", "/api/graph.json", "/feed.json", "/en/feed.json"):
+    stream_payload_live: dict | None = None
+    stream_raw_bodies: dict[str, bytes] = {}
+    for path in ("/api/posts.json", "/api/graph.json", "/api/stream.json", "/feed.json", "/en/feed.json"):
         status, hdrs, body = fetch(base_url, path, local=local)
         if status != 200:
             errors.append(f"GET {path}: expected 200, got {status}")
@@ -211,8 +287,31 @@ def run_suite(
                 errors.append(
                     f"GET /api/posts.json: site.base_url mismatch (got {actual_base!r}, expected {expected_base!r})"
                 )
+        elif path == "/api/stream.json":
+            stream_payload_live = payload
+            stream_raw_bodies[path] = body
+            if payload.get("site") != site_name:
+                errors.append(
+                    f"GET /api/stream.json: site mismatch (got {payload.get('site')!r}, expected {site_name!r})"
+                )
+            if stream_data is not None:
+                exp_entries = stream_data.get("entries") or []
+                exp_ids = {str(e.get("id")) for e in exp_entries}
+                live_entries = payload.get("entries") if isinstance(payload.get("entries"), list) else []
+                live_id_list = [str(e.get("id")) for e in live_entries if isinstance(e, dict)]
+                live_ids = set(live_id_list)
+                if (
+                    payload.get("count") != len(exp_ids)
+                    or len(live_entries) != len(exp_ids)
+                    or len(live_id_list) != len(exp_ids)
+                    or live_ids != exp_ids
+                ):
+                    errors.append(
+                        f"GET /api/stream.json: entry count/IDs mismatch "
+                        f"(got count={payload.get('count')!r} len={len(live_entries)} ids={sorted(live_ids)}, expected {sorted(exp_ids)})"
+                    )
 
-    for path in ("/rss.xml", "/en/rss.xml", "/sitemap.xml"):
+    for path in ("/rss.xml", "/en/rss.xml", "/stream/rss.xml", "/en/stream/rss.xml", "/sitemap.xml"):
         status, hdrs, body = fetch(base_url, path, local=local)
         if status != 200:
             errors.append(f"GET {path}: expected 200, got {status}")
@@ -221,9 +320,30 @@ def run_suite(
         if "charset=utf-8" not in ct:
             errors.append(f"GET {path}: missing charset=utf-8 in Content-Type ({ct!r})")
         try:
-            ET.fromstring(body.decode("utf-8"))
+            root_xml = ET.fromstring(body.decode("utf-8"))
         except Exception as exc:
             errors.append(f"GET {path}: invalid XML ({exc})")
+            continue
+        if path in ("/stream/rss.xml", "/en/stream/rss.xml"):
+            stream_raw_bodies[path] = body
+            exp_channel_link = f"{expected_base}/en/stream/" if path.startswith("/en/") else f"{expected_base}/stream/"
+            channel_link = root_xml.findtext("./channel/link")
+            if channel_link != exp_channel_link:
+                errors.append(
+                    f"GET {path}: channel link mismatch (got {channel_link!r}, expected {exp_channel_link!r})"
+                )
+            if stream_data is not None:
+                exp_links = {f"{exp_channel_link}#t-{e['id']}" for e in stream_data.get("entries") or []}
+                item_links_list = [
+                    el.text.strip()
+                    for el in root_xml.findall("./channel/item/link")
+                    if el.text and el.text.strip()
+                ]
+                item_links = set(item_links_list)
+                if len(item_links_list) != len(exp_links) or item_links != exp_links:
+                    errors.append(
+                        f"GET {path}: item links mismatch (got len={len(item_links_list)} {sorted(item_links)}, expected {sorted(exp_links)})"
+                    )
 
     # 5. All bilingual posts & Markdown twins (strict LF fence check)
     fetched_bodies: dict[str, bytes] = {}
@@ -249,6 +369,18 @@ def run_suite(
                     errors.append(f"GET {md_url}: expected text/markdown; charset=utf-8, got {ct!r}")
                 if not body.startswith(b"---\n"):
                     errors.append(f"GET {md_url}: missing LF YAML frontmatter header ('---\\n')")
+
+    for stream_md in ("/stream/index.md", "/en/stream/index.md"):
+        status, hdrs, body = fetch(base_url, stream_md, local=local)
+        if status != 200:
+            errors.append(f"GET {stream_md}: expected 200, got {status}")
+        else:
+            stream_raw_bodies[stream_md] = body
+            ct = hdrs.get("content-type", "").lower()
+            if "text/markdown" not in ct or "charset=utf-8" not in ct:
+                errors.append(f"GET {stream_md}: expected text/markdown; charset=utf-8, got {ct!r}")
+            if not body.startswith(b"---\n"):
+                errors.append(f"GET {stream_md}: missing LF YAML frontmatter header ('---\\n')")
 
     # 6. Release identity & staged bundle exact parity verification (M1)
     if expect_dist is not None:
@@ -283,6 +415,32 @@ def run_suite(
             exp_posts_payload = json.loads(exp_posts_file.read_text(encoding="utf-8"))
             if posts_payload_live != exp_posts_payload:
                 errors.append("GET /api/posts.json: live catalog payload differs from staged bundle")
+
+        exp_stream_file = expect_dist / "api" / "stream.json"
+        if exp_stream_file.is_file() and stream_payload_live is not None:
+            exp_stream_payload = json.loads(exp_stream_file.read_text(encoding="utf-8"))
+            if stream_payload_live != exp_stream_payload:
+                errors.append("GET /api/stream.json: live stream payload differs from staged bundle")
+
+        for s_path in ("/stream/rss.xml", "/en/stream/rss.xml", "/stream/index.md", "/en/stream/index.md"):
+            staged_file = expect_dist / s_path.lstrip("/")
+            if staged_file.is_file():
+                if s_path not in stream_raw_bodies:
+                    errors.append(f"GET {s_path}: missing live response for byte parity check")
+                elif stream_raw_bodies[s_path] != staged_file.read_bytes():
+                    errors.append(f"GET {s_path}: live bytes differ from staged bundle")
+
+        for s_html_path in ("/stream/", "/en/stream/"):
+            staged_html = expect_dist / s_html_path.lstrip("/") / "index.html"
+            if staged_html.is_file():
+                if s_html_path not in core_bodies:
+                    errors.append(f"GET {s_html_path}: missing live HTML response for byte parity check")
+                else:
+                    live_html = core_bodies[s_html_path]
+                    if not local:
+                        live_html = CF_BEACON_RE.sub(b"", live_html)
+                    if live_html != staged_html.read_bytes():
+                        errors.append(f"GET {s_html_path}: live HTML bytes differ from staged bundle")
 
         # Verify lead post HTML & Markdown twin exact byte parity using the already-verified responses
         if catalog["posts"]:
@@ -336,6 +494,359 @@ def run_suite(
     elif "Page Not Found" not in body.decode("utf-8", errors="replace"):
         errors.append("GET /en/__smoke-nonexistent-en__: missing English 404 page content")
 
+    # 8. Comments API contract & anti-abuse verification
+    if catalog["posts"]:
+        lead_slug = catalog["posts"][0]["slug"]
+        status, hdrs, body = fetch(base_url, f"/api/comments?slug={urllib.parse.quote(lead_slug)}", local=local)
+        if status != 200:
+            errors.append(f"GET /api/comments?slug={lead_slug}: expected 200, got {status}")
+        else:
+            cc = hdrs.get("cache-control", "").lower()
+            if "no-store" not in cc:
+                errors.append(f"GET /api/comments: expected Cache-Control: no-store, got {cc!r}")
+            try:
+                cdata = json.loads(body.decode("utf-8"))
+            except Exception as exc:
+                errors.append(f"GET /api/comments: invalid JSON ({exc})")
+                cdata = {}
+            if cdata.get("ok") is not True or not isinstance(cdata.get("comments"), list):
+                errors.append("GET /api/comments: malformed response payload")
+            else:
+                cfg = cdata.get("config") or {}
+                gate = cdata.get("gate") or {}
+                if not str(gate.get("token") or "").strip():
+                    errors.append("GET /api/comments: missing signed gate.token")
+                if expect_comment_images and cfg.get("imagesEnabled") is not True:
+                    errors.append(
+                        f"GET /api/comments: site declares r2_bucket_name but config.imagesEnabled is {cfg.get('imagesEnabled')!r} "
+                        "(apply migrations/0002_comment_images.sql and bind COMMENTS_IMAGES R2 bucket)"
+                    )
+            if local and cdata.get("ok") is True and isinstance(cdata.get("comments"), list):
+                gate = cdata.get("gate") or {}
+                gate_tok = str(gate.get("token") or "")
+                fb_bits = int(gate.get("fallbackPowBits") or 14)
+
+                # 8a. Invalid slug rejected with 400
+                bad_st, _, _ = fetch(base_url, "/api/comments?slug=BAD_SLUG!!", local=True)
+                if bad_st != 400:
+                    errors.append(f"GET /api/comments?slug=BAD_SLUG!!: expected 400, got {bad_st}")
+
+                # 8b. Missing PoW rejected with 403
+                p_bad, _, _ = fetch(
+                    base_url,
+                    "/api/comments",
+                    local=True,
+                    method="POST",
+                    headers={"Content-Type": "application/json"},
+                    body=json.dumps({
+                        "slug": lead_slug,
+                        "lang": "zh",
+                        "body": "Smoke test without PoW",
+                        "gateToken": gate_tok,
+                        "powNonce": "bad",
+                        "fallbackMode": True,
+                    }).encode("utf-8"),
+                )
+                if p_bad != 403:
+                    errors.append(f"POST /api/comments (bad PoW): expected 403, got {p_bad}")
+
+                # 8c. Honeypot silently shadow-drops (201 without persisting)
+                hp_st, _, _ = fetch(
+                    base_url,
+                    "/api/comments",
+                    local=True,
+                    method="POST",
+                    headers={"Content-Type": "application/json"},
+                    body=json.dumps({
+                        "slug": lead_slug,
+                        "lang": "zh",
+                        "body": "Spam bot honeypot probe",
+                        "websiteHp": "https://spam.example",
+                        "gateToken": gate_tok,
+                        "fallbackMode": True,
+                    }).encode("utf-8"),
+                )
+                if hp_st != 201:
+                    errors.append(f"POST /api/comments (honeypot): expected shadow-drop 201, got {hp_st}")
+
+                # 8d. Valid PoW persists comment; replaying gate nonce with DIFFERENT body must fail with gate_replayed (409)
+                nonce = _solve_pow_local(gate_tok, fb_bits)
+                good_payload = json.dumps({
+                    "slug": lead_slug,
+                    "lang": "zh",
+                    "authorName": "Smoke Reader",
+                    "body": "Smoke test comment verifying PoW & single-use gate.",
+                    "gateToken": gate_tok,
+                    "powNonce": nonce,
+                    "fallbackMode": True,
+                }).encode("utf-8")
+                p_ok, _, p_body = fetch(
+                    base_url,
+                    "/api/comments",
+                    local=True,
+                    method="POST",
+                    headers={"Content-Type": "application/json"},
+                    body=good_payload,
+                )
+                if p_ok != 201:
+                    errors.append(f"POST /api/comments (valid PoW): expected 201, got {p_ok} ({p_body.decode('utf-8', 'replace')})")
+                else:
+                    created = json.loads(p_body.decode("utf-8"))
+                    cid = created.get("comment", {}).get("id", "")
+                    replay_payload = json.dumps({
+                        "slug": lead_slug,
+                        "lang": "zh",
+                        "authorName": "Smoke Reader",
+                        "body": "Different body reusing spent single-use gate nonce.",
+                        "gateToken": gate_tok,
+                        "powNonce": nonce,
+                        "fallbackMode": True,
+                    }).encode("utf-8")
+                    p_rep, _, p_rep_body = fetch(
+                        base_url,
+                        "/api/comments",
+                        local=True,
+                        method="POST",
+                        headers={"Content-Type": "application/json"},
+                        body=replay_payload,
+                    )
+                    rep_err = json.loads(p_rep_body.decode("utf-8", "replace")).get("error") if p_rep_body else None
+                    if p_rep != 409 or rep_err != "gate_replayed":
+                        errors.append(f"POST /api/comments (gate replay): expected 409 gate_replayed, got {p_rep} ({rep_err!r})")
+
+                    # Author verify & delete cleanup
+                    auth_st, _, _ = fetch(
+                        base_url,
+                        "/api/comments/author/verify",
+                        local=True,
+                        method="POST",
+                        headers={"X-Author-Key": "smoke-test-author-key"},
+                    )
+                    if auth_st != 200:
+                        errors.append(f"POST /api/comments/author/verify: expected 200, got {auth_st}")
+                    del_st, _, _ = fetch(
+                        base_url,
+                        f"/api/comments/{urllib.parse.quote(cid)}",
+                        local=True,
+                        method="DELETE",
+                        headers={"X-Author-Key": "smoke-test-author-key"},
+                    )
+                    if del_st != 200:
+                        errors.append(f"DELETE /api/comments/{cid}: expected 200, got {del_st}")
+
+                # 8e. Comment image attachment contract (upload, serve, ETag 304, security headers, reject SVG/truncated/overflow, parent+reply cascade delete)
+                cfg = cdata.get("config") or {}
+                if cfg.get("imagesEnabled") is not True or cfg.get("maxImages") != 3:
+                    errors.append(f"GET /api/comments: expected config.imagesEnabled=True & maxImages=3, got {cfg!r}")
+                else:
+                    g2_st, _, g2_body = fetch(
+                        base_url, f"/api/comments?slug={urllib.parse.quote(lead_slug)}", local=True
+                    )
+                    g2_gate = (json.loads(g2_body.decode("utf-8")).get("gate") or {}) if g2_st == 200 else {}
+                    g2_tok = str(g2_gate.get("token") or "")
+                    g2_bits = int(g2_gate.get("fallbackPowBits") or 14)
+
+                    # Reject SVG disguised as PNG
+                    svg_bytes = b'<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>'
+                    ct_svg, body_svg = _build_multipart(
+                        {
+                            "slug": lead_slug,
+                            "lang": "zh",
+                            "body": "Disguised SVG probe",
+                            "gateToken": g2_tok,
+                            "powNonce": _solve_pow_local(g2_tok, g2_bits),
+                            "fallbackMode": True,
+                        },
+                        [("evil.png", "image/png", svg_bytes)],
+                    )
+                    svg_st, _, _ = fetch(
+                        base_url,
+                        "/api/comments",
+                        local=True,
+                        method="POST",
+                        headers={"Content-Type": ct_svg},
+                        body=body_svg,
+                    )
+                    if svg_st != 400:
+                        errors.append(f"POST /api/comments (disguised SVG): expected 400, got {svg_st}")
+
+                    # Reject truncated PNG missing IEND
+                    png_bytes = _make_minimal_png(3, 2)
+                    ct_trunc, body_trunc = _build_multipart(
+                        {
+                            "slug": lead_slug,
+                            "lang": "zh",
+                            "body": "Truncated PNG probe",
+                            "gateToken": g2_tok,
+                            "powNonce": _solve_pow_local(g2_tok, g2_bits),
+                            "fallbackMode": True,
+                        },
+                        [("trunc.png", "image/png", png_bytes[:-12])],
+                    )
+                    trunc_st, _, _ = fetch(
+                        base_url,
+                        "/api/comments",
+                        local=True,
+                        method="POST",
+                        headers={"Content-Type": ct_trunc},
+                        body=body_trunc,
+                    )
+                    if trunc_st != 400:
+                        errors.append(f"POST /api/comments (truncated PNG): expected 400, got {trunc_st}")
+
+                    # Reject > 3 images
+                    ct_many, body_many = _build_multipart(
+                        {"slug": lead_slug, "lang": "zh", "body": "Too many images"},
+                        [(f"p{i}.png", "image/png", png_bytes) for i in range(4)],
+                    )
+                    many_st, _, _ = fetch(
+                        base_url,
+                        "/api/comments",
+                        local=True,
+                        method="POST",
+                        headers={"Content-Type": ct_many},
+                        body=body_many,
+                    )
+                    if many_st != 400:
+                        errors.append(f"POST /api/comments (>3 images): expected 400, got {many_st}")
+
+                    # Valid image-only parent comment (empty text body + 1 PNG + alt text) with PoW
+                    ct_ok, body_ok = _build_multipart(
+                        {
+                            "slug": lead_slug,
+                            "lang": "en",
+                            "authorName": "Photo Reader",
+                            "body": "",
+                            "imageAlts": ["Blue test square"],
+                            "gateToken": g2_tok,
+                            "powNonce": _solve_pow_local(g2_tok, g2_bits),
+                            "fallbackMode": True,
+                        },
+                        [("shot.png", "image/png", png_bytes)],
+                    )
+                    img_post_st, _, img_post_body = fetch(
+                        base_url,
+                        "/api/comments",
+                        local=True,
+                        method="POST",
+                        headers={"Content-Type": ct_ok},
+                        body=body_ok,
+                    )
+                    if img_post_st != 201:
+                        errors.append(
+                            f"POST /api/comments (image-only multipart): expected 201, got {img_post_st} ({img_post_body.decode('utf-8', 'replace')})"
+                        )
+                    else:
+                        img_created = json.loads(img_post_body.decode("utf-8"))
+                        img_cid = img_created.get("comment", {}).get("id", "")
+                        imgs = img_created.get("comment", {}).get("images") or []
+                        next_gate = img_created.get("nextGate") or {}
+                        if (
+                            len(imgs) != 1
+                            or imgs[0].get("width") != 3
+                            or imgs[0].get("height") != 2
+                            or imgs[0].get("alt") != "Blue test square"
+                        ):
+                            errors.append(f"POST /api/comments (image metadata): unexpected {imgs!r}")
+                        else:
+                            img_url = str(imgs[0].get("url") or "")
+                            get_img_st, img_hdrs, img_raw = fetch(base_url, img_url, local=True)
+                            if get_img_st != 200 or img_raw != png_bytes:
+                                errors.append(f"GET {img_url}: expected 200 with exact PNG bytes, got {get_img_st}")
+                            else:
+                                if img_hdrs.get("content-type", "").lower() != "image/png":
+                                    errors.append(f"GET {img_url}: unexpected Content-Type {img_hdrs.get('content-type')!r}")
+                                if "sandbox" not in img_hdrs.get("content-security-policy", "").lower():
+                                    errors.append(f"GET {img_url}: missing sandbox CSP ({img_hdrs.get('content-security-policy')!r})")
+                                if img_hdrs.get("x-content-type-options", "").lower() != "nosniff":
+                                    errors.append(f"GET {img_url}: missing X-Content-Type-Options: nosniff")
+                                if img_hdrs.get("cross-origin-resource-policy", "").lower() != "same-origin":
+                                    errors.append(f"GET {img_url}: missing CORP same-origin")
+                                if "no-cache" not in img_hdrs.get("cache-control", "").lower():
+                                    errors.append(f"GET {img_url}: expected revalidating Cache-Control, got {img_hdrs.get('cache-control')!r}")
+                                etag = img_hdrs.get("etag", "")
+                                if not etag:
+                                    errors.append(f"GET {img_url}: missing ETag header")
+                                else:
+                                    st_304, _, _ = fetch(
+                                        base_url, img_url, local=True, headers={"If-None-Match": etag}
+                                    )
+                                    if st_304 != 304:
+                                        errors.append(f"GET {img_url} (If-None-Match): expected 304, got {st_304}")
+                                head_st, head_hdrs, head_raw = fetch(base_url, img_url, local=True, method="HEAD")
+                                if head_st != 200 or head_raw != b"" or head_hdrs.get("content-length") != str(len(png_bytes)):
+                                    errors.append(f"HEAD {img_url}: expected 200 empty body with exact Content-Length, got {head_st}")
+
+                            # Post an image-bearing reply under that parent and verify parent deletion cascades to both images (strictly asserted)
+                            reply_img_url = ""
+                            r_png = _make_minimal_png(4, 3)
+                            r_tok = str(next_gate.get("token") or "")
+                            r_bits = int(next_gate.get("fallbackPowBits") or 14)
+                            if not r_tok:
+                                g3_st, _, g3_body = fetch(
+                                    base_url, f"/api/comments?slug={urllib.parse.quote(lead_slug)}", local=True
+                                )
+                                g3_gate = (json.loads(g3_body.decode("utf-8")).get("gate") or {}) if g3_st == 200 else {}
+                                r_tok = str(g3_gate.get("token") or "")
+                                r_bits = int(g3_gate.get("fallbackPowBits") or 14)
+                            if not r_tok:
+                                errors.append("POST /api/comments (image reply): missing gate token for reply step")
+                            else:
+                                ct_rep, body_rep = _build_multipart(
+                                    {
+                                        "slug": lead_slug,
+                                        "lang": "en",
+                                        "parentId": img_cid,
+                                        "body": "Reply with attachment",
+                                        "gateToken": r_tok,
+                                        "powNonce": _solve_pow_local(r_tok, r_bits),
+                                        "fallbackMode": True,
+                                    },
+                                    [("reply.png", "image/png", r_png)],
+                                )
+                                rep_st, _, rep_body = fetch(
+                                    base_url,
+                                    "/api/comments",
+                                    local=True,
+                                    method="POST",
+                                    headers={"Content-Type": ct_rep},
+                                    body=body_rep,
+                                )
+                                if rep_st != 201:
+                                    errors.append(f"POST /api/comments (image reply): expected 201, got {rep_st}")
+                                else:
+                                    rep_imgs = json.loads(rep_body.decode("utf-8")).get("comment", {}).get("images") or []
+                                    if len(rep_imgs) != 1 or not str(rep_imgs[0].get("url") or "").strip():
+                                        errors.append(f"POST /api/comments (image reply): expected 1 reply image URL, got {rep_imgs!r}")
+                                    else:
+                                        reply_img_url = str(rep_imgs[0]["url"])
+                                        rep_get_st, _, rep_get_raw = fetch(base_url, reply_img_url, local=True)
+                                        if rep_get_st != 200 or rep_get_raw != r_png:
+                                            errors.append(
+                                                f"GET {reply_img_url} before parent delete: expected 200 with exact PNG bytes, got {rep_get_st}"
+                                            )
+
+                            # Cascade delete hides & removes both parent and reply images immediately
+                            del_img_st, _, _ = fetch(
+                                base_url,
+                                f"/api/comments/{urllib.parse.quote(img_cid)}",
+                                local=True,
+                                method="DELETE",
+                                headers={"X-Author-Key": "smoke-test-author-key"},
+                            )
+                            if del_img_st != 200:
+                                errors.append(f"DELETE /api/comments/{img_cid}: expected 200, got {del_img_st}")
+                            else:
+                                gone_st, _, _ = fetch(base_url, img_url, local=True)
+                                if gone_st != 404:
+                                    errors.append(f"GET {img_url} after parent delete: expected 404, got {gone_st}")
+                                if not reply_img_url:
+                                    errors.append("DELETE cascade verification: reply image was never created to verify 404 cascade")
+                                else:
+                                    rep_gone_st, _, _ = fetch(base_url, reply_img_url, local=True)
+                                    if rep_gone_st != 404:
+                                        errors.append(f"GET {reply_img_url} after parent delete: expected 404, got {rep_gone_st}")
+
     return errors
 
 
@@ -359,6 +870,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[smoke_test] ERROR: missing {catalog_path}")
         return 2
     catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    stream_path = SITES_DIR / args.site / "stream.json"
+    stream_data = json.loads(stream_path.read_text(encoding="utf-8")) if stream_path.is_file() else None
+    expect_comment_images = False
+    registry_path = SITES_DIR / "sites.json"
+    if registry_path.is_file():
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+        site_reg = (registry.get("sites") or {}).get(args.site) or {}
+        comments_reg = site_reg.get("comments") or {}
+        r2_name = comments_reg.get("r2_bucket_name")
+        expect_comment_images = isinstance(r2_name, str) and bool(r2_name.strip())
 
     expect_dist: Path | None = None
     if args.expect_dist:
@@ -378,14 +899,20 @@ def main(argv: list[str] | None = None) -> int:
                 "127.0.0.1",
                 "--port",
                 str(port),
+                "--ephemeral-db",
+                "--min-dwell-ms",
+                "0",
                 "--quiet",
             ]
             if args.dist:
                 cmd.extend(["--dir", args.dist])
             else:
                 cmd.extend(["--site", args.site])
+            child_env = os.environ.copy()
+            child_env["TI_LOCAL_AUTHOR_KEY"] = "smoke-test-author-key"
             server_proc = subprocess.Popen(
                 cmd,
+                env=child_env,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
@@ -397,7 +924,14 @@ def main(argv: list[str] | None = None) -> int:
         errors: list[str] = []
         for attempt in range(1, attempts + 1):
             try:
-                errors = run_suite(target_url, catalog, local=args.local, expect_dist=expect_dist)
+                errors = run_suite(
+                    target_url,
+                    catalog,
+                    stream_data=stream_data,
+                    local=args.local,
+                    expect_dist=expect_dist,
+                    expect_comment_images=expect_comment_images,
+                )
             except Exception as exc:
                 errors = [f"Request failure against {target_url}: {exc}"]
             if not errors:

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>Stream | Tong's Information</title>
+  <meta name="description" content="Unpolished sparks, stray observations, clippings, and studio notes from Tong's Information — published bilingually alongside a clean Markdown twin.">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://www.esoren.com/en/stream/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/stream/">
+  <link rel="alternate" hreflang="en" href="https://www.esoren.com/en/stream/">
+  <link rel="alternate" hreflang="x-default" href="https://www.esoren.com/stream/">
+  <link rel="alternate" type="text/markdown" href="./index.md">
+  <link rel="alternate" type="application/rss+xml" title="Tong's Information — Stream (English RSS)" href="/en/stream/rss.xml">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="stylesheet" href="/assets/css/stream.css">
+  <link rel="stylesheet" href="/assets/css/comments.css">
+  <link rel="stylesheet" href="/assets/css/publication.css">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Stream | Tong's Information",
+    "url": "https://www.esoren.com/en/stream/",
+    "inLanguage": "en"
+  }
+  </script>
+</head>
+<body data-page-type="stream">
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Liu Tong" data-issue-order="{&quot;let-blogs-be-blogs-again&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/en/">
+      <span class="brand-wordmark">Tong's Information</span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/en/">Cover</a></li>
+        <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/stream/" aria-current="page">Stream</a></li>
+        <li><a href="/en/graph/">Graph</a></li>
+        <li><a href="/en/about/">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="Open search index">Search</button>
+      <a class="btn subtle" href="/stream/" hreflang="zh-Hans" lang="zh-Hans" aria-label="切换至中文版">中文</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">Switch to dark theme</span>Dark</span>
+        <span class="label-to-light"><span class="visually-hidden">Switch to light theme</span>Light</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">Search</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">Close</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">Search essays, concepts, or machine endpoints</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="Search issues, concepts, or llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="Search results"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span id="stream-count" aria-live="polite"><!-- @partial:stream-count -->4 / 4 notes<!-- @endpartial:stream-count --></span>
+        </div>
+        <h1 class="article-h1">Stream</h1>
+        <p class="article-deck">Stray thoughts and fragments.</p>
+      </div>
+    </header>
+
+    <!-- @partial:stream -->
+    <section class="shell stream-section" aria-label="Stream filters and entries">
+      <div class="stream-toolbar" data-stream-js hidden>
+        <div class="filter-bar stream-filter-bar">
+          <div class="filter-group" data-filter-group="kind" role="group" aria-label="Filter by fragment kind">
+            <button type="button" class="btn subtle" data-stream-kind="all" aria-pressed="true">All</button>
+            <button type="button" class="btn subtle" data-stream-kind="musing" aria-pressed="false">Musing</button>
+            <button type="button" class="btn subtle" data-stream-kind="quote" aria-pressed="false">Quote</button>
+            <button type="button" class="btn subtle" data-stream-kind="question" aria-pressed="false">Question</button>
+            <button type="button" class="btn subtle" data-stream-kind="snippet" aria-pressed="false">Snippet</button>
+          </div>
+          <div class="stream-toolbar-actions">
+            <button type="button" class="btn subtle stream-random-btn" data-stream-random><span data-random-label>Serendipity</span><span class="stream-random-glyph" aria-hidden="true">↻</span></button>
+          </div>
+        </div>
+        <div class="stream-active-filter" data-stream-active-bar hidden>
+          <span class="stream-active-label" data-stream-active-label></span>
+          <button type="button" class="btn subtle stream-clear-btn" data-stream-reset>Clear ×</button>
+        </div>
+      </div>
+
+      <div class="stream-layout">
+        <aside class="stream-rail" aria-label="Chronology and index">
+          <div class="stream-rail-block">
+            <div class="stream-rail-title mono">Chronology</div>
+            <ul class="toc-list stream-month-list">
+              <li><a href="#m-2026-11" data-rail-month="2026-11"><span>2026 / 11</span><span class="mono stream-rail-num">04</span></a></li>
+            </ul>
+          </div>
+          <div class="stream-rail-block stream-matrix-block">
+            <div class="stream-rail-head">
+              <span class="stream-rail-title mono">35-Day Cadence</span>
+              <span class="stream-rail-sub mono">10.23–11.26</span>
+            </div>
+            <div class="stream-matrix" role="group" aria-label="35-day thought activity matrix">
+              <span class="stream-cell" data-date="2026-10-23" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-24" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-25" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-26" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-27" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-28" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-29" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-30" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-10-31" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-01" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-02" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-03" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-04" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-05" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-06" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-07" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-08" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-09" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-10" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-11" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-12" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-13" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-14" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-15" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-16" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-17" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-18" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-19" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-001" data-matrix-date="2026-11-20" data-count="1" data-level="1" data-first-id="001" aria-label="2026.11.20: 1 note, jump to #001"></a>
+              <span class="stream-cell" data-date="2026-11-21" aria-hidden="true"></span>
+              <span class="stream-cell" data-date="2026-11-22" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-002" data-matrix-date="2026-11-23" data-count="1" data-level="1" data-first-id="002" aria-label="2026.11.23: 1 note, jump to #002"></a>
+              <span class="stream-cell" data-date="2026-11-24" aria-hidden="true"></span>
+              <a class="stream-cell is-active" href="#t-003" data-matrix-date="2026-11-25" data-count="1" data-level="1" data-first-id="003" aria-label="2026.11.25: 1 note, jump to #003"></a>
+              <a class="stream-cell is-active" href="#t-004" data-matrix-date="2026-11-26" data-count="1" data-level="1" data-first-id="004" aria-label="2026.11.26: 1 note, jump to #004"></a>
+            </div>
+            <div class="stream-matrix-readout mono" data-matrix-readout data-default-label="Select a lit cell to jump">Select a lit cell to jump</div>
+          </div>
+          <div class="stream-rail-block">
+            <div class="stream-rail-title mono">Concepts</div>
+            <ul class="stream-rail-concepts">
+              <li><a class="stream-rail-concept-btn" href="/en/archive/?concept=indie-blog" data-stream-concept="indie-blog"><span>Independent Blogging</span><span class="mono stream-rail-num">02</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/en/archive/?concept=frameworkless-web" data-stream-concept="frameworkless-web"><span>Frameworkless Web</span><span class="mono stream-rail-num">02</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/en/archive/?concept=llm-creation" data-stream-concept="llm-creation"><span>Creation with LLMs</span><span class="mono stream-rail-num">01</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/en/archive/?concept=personal-aesthetics" data-stream-concept="personal-aesthetics"><span>Personal Aesthetics</span><span class="mono stream-rail-num">02</span></a></li>
+              <li><a class="stream-rail-concept-btn" href="/en/archive/?concept=open-source-chronicle" data-stream-concept="open-source-chronicle"><span>Open Source &amp; Memory</span><span class="mono stream-rail-num">01</span></a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <div class="stream-ledger" data-stream-ledger>
+          <section class="stream-month-group" id="m-2026-11" data-month="2026-11">
+            <header class="stream-month-head">
+              <h2 class="stream-month-title mono">2026 / 11</h2>
+              <span class="stream-month-count mono" data-month-count="2026-11">04 notes</span>
+            </header>
+            <ol class="stream-list">
+              <li class="stream-item" data-stream-item data-stream-id="004" data-kind="snippet" data-date="2026-11-26" data-month="2026-11" data-concepts="frameworkless-web,personal-aesthetics">
+                <article class="stream-entry" id="t-004">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-004" data-stream-anchor="004" aria-label="Permalink to note #004">#004</a>
+                    <time class="stream-time mono" datetime="2026-11-26T01:48">11.26 · 01:48</time>
+                    <span class="stream-kind-cue">Snippet</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <div class="stream-prose">
+                      <p>And this is an even more endless placeholder example. Since we just rolled out this fresh sheet of paper for Stream, might as well slip in a tiny CSS snippet to check whether tabular numerals, code blocks, and cobalt highlights feel nimble in both light and dark ink.</p>
+                    </div>
+                    <div class="stream-code">
+                      <div class="stream-code-head mono">CSS</div>
+                      <pre role="region" aria-label="CSS code snippet" tabindex="0"><code>.stream-entry:is(:hover, :target)::before {
+  background-color: var(--accent);
+  transform: scaleY(1);
+}</code></pre>
+                    </div>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="Concepts">
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=frameworkless-web" data-stream-concept="frameworkless-web">Frameworkless Web</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=personal-aesthetics" data-stream-concept="personal-aesthetics">Personal Aesthetics</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="004">Copy link</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="004">Echo #004</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+              <li class="stream-item" data-stream-item data-stream-id="003" data-kind="question" data-date="2026-11-25" data-month="2026-11" data-concepts="indie-blog,llm-creation">
+                <article class="stream-entry" id="t-003">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-003" data-stream-anchor="003" aria-label="Permalink to note #003">#003</a>
+                    <time class="stream-time mono" datetime="2026-11-25T23:20">11.25 · 23:20</time>
+                    <span class="stream-kind-cue">Question</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <div class="stream-prose">
+                      <p>This is yet another placeholder example. Sometimes a half-baked idea is too small for a numbered <code>No. XX</code> issue, yet too good to gather dust in a private notes app — maybe the Stream is simply the seedbed before an essay breaks ground?</p>
+                    </div>
+                    <ol class="stream-updates">
+                      <li class="stream-update-item">
+                        <span class="stream-update-mark mono">↳ 2026.11.26 Update</span>
+                        <span class="stream-update-text">Follow-up check: pairing fragments with dated updates and issue backlinks makes the whole arc from stray spark to finished essay visible.</span>
+                      </li>
+                    </ol>
+                    <a class="stream-promoted" href="/en/posts/let-blogs-be-blogs-again/"><span class="stream-promoted-arrow" aria-hidden="true">↗</span><span>Expanded into No. 01 · Let Blogs Be Blogs Again</span></a>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="Concepts">
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=indie-blog" data-stream-concept="indie-blog">Independent Blogging</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=llm-creation" data-stream-concept="llm-creation">Creation with LLMs</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="003">Copy link</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="003">Echo #003</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+              <li class="stream-item" data-stream-item data-stream-id="002" data-kind="quote" data-date="2026-11-23" data-month="2026-11" data-concepts="personal-aesthetics,open-source-chronicle">
+                <article class="stream-entry" id="t-002">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-002" data-stream-anchor="002" aria-label="Permalink to note #002">#002</a>
+                    <time class="stream-time mono" datetime="2026-11-23T19:05">11.23 · 19:05</time>
+                    <span class="stream-kind-cue">Quote</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <blockquote class="stream-quote">
+                      <p>Style is no longer mere ornament dressed up to look pretty; it has become a direct conduit for personal sensibility.</p>
+                      <footer>— <a href="/en/posts/let-blogs-be-blogs-again/#s03">Let Blogs Be Blogs Again · No. 01</a></footer>
+                    </blockquote>
+                    <div class="stream-prose">
+                      <p>This is also an example — demonstrating the typographic cadence of a clipping with margin commentary: editorial serif holding the excerpt aloft, crisp sans below for whatever stray note follows.</p>
+                    </div>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="Concepts">
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=personal-aesthetics" data-stream-concept="personal-aesthetics">Personal Aesthetics</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=open-source-chronicle" data-stream-concept="open-source-chronicle">Open Source &amp; Memory</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="002">Copy link</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="002">Echo #002</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+              <li class="stream-item" data-stream-item data-stream-id="001" data-kind="musing" data-date="2026-11-20" data-month="2026-11" data-concepts="indie-blog,frameworkless-web">
+                <article class="stream-entry" id="t-001">
+                  <div class="stream-entry-meta">
+                    <a class="stream-anchor mono" href="#t-001" data-stream-anchor="001" aria-label="Permalink to note #001">#001</a>
+                    <time class="stream-time mono" datetime="2026-11-20T14:30">11.20 · 14:30</time>
+                    <span class="stream-kind-cue">Musing</span>
+                  </div>
+                  <div class="stream-entry-body">
+                    <div class="stream-prose">
+                      <p>This is an example. No boxed cards, no notification badges, and no obligation to stretch a passing thought into two thousand words — just a quiet sheet of paper, a few lines of musing, and room to breathe.</p>
+                    </div>
+                    <footer class="stream-entry-foot">
+                      <ul class="concept-list stream-entry-concepts" aria-label="Concepts">
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=indie-blog" data-stream-concept="indie-blog">Independent Blogging</a></li>
+                        <li><a class="concept-tag stream-concept-btn" href="/en/archive/?concept=frameworkless-web" data-stream-concept="frameworkless-web">Frameworkless Web</a></li>
+                      </ul>
+                      <div class="stream-entry-actions" data-stream-js hidden>
+                        <button type="button" class="stream-action-btn" data-stream-copy="001">Copy link</button>
+                        <button type="button" class="stream-action-btn" data-stream-reply="001">Echo #001</button>
+                      </div>
+                    </footer>
+                  </div>
+                </article>
+              </li>
+            </ol>
+          </section>
+          <div class="stream-empty" data-stream-empty hidden>
+            <p>No fragments match this filter combination.</p>
+            <button type="button" class="btn subtle" data-stream-reset>Reset filters</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- @endpartial:stream -->
+
+    <section class="shell stream-comments-band" aria-label="Stream reader echoes">
+      <div class="stream-comments-grid">
+        <div class="stream-comments-slot">
+          <ti-comments
+            id="comments"
+            slug="stream"
+            heading="Stream Echoes"
+            placeholder="Respond to a fragment (e.g. Re #004:) or leave a stray note…"
+          ></ti-comments>
+          <noscript>
+            <p class="ti-comments-noscript">Enable JavaScript to load and post reader echoes (no login required).</p>
+          </noscript>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information</span>
+    <ul class="footer-links" aria-label="Feeds and language">
+      <li><a href="/en/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/stream/" hreflang="zh-Hans" lang="zh-Hans">中文</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/assets/js/stream.js"></script>
+</body>
+</html>

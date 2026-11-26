@@ -10,6 +10,8 @@ on:
       - "engine/**"
       - "editorial/**"
       - "tools/**"
+      - "worker/**"
+      - "migrations/**"
       - "cloudflare.config.ts"
       - "package.json"
       - "package-lock.json"

@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="stylesheet" href="/assets/css/comments.css">
   <link rel="preload" as="image" href="/assets/images/issue-01-agent-era-publishing.jpg" fetchpriority="high">
   <link rel="expect" href="#hero-fold" blocking="render">
   <script async blocking="render" src="/assets/js/transitions.js"></script>
@@ -48,6 +49,7 @@
       <ul>
         <li><a href="/">封面</a></li>
         <li><a href="/archive/">归档</a></li>
+        <li><a href="/stream/">思维</a></li>
         <li><a href="/graph/">图谱</a></li>
         <li><a href="/about/">关于</a></li>
       </ul>
@@ -200,6 +202,10 @@ tools/editorial_sync.py            # 零依赖脚本：同步壳子、派生 .md
             浏览器本身就是世界上兼容性最惊人的运行时。一份写得干净的 HTML5 + 现代 CSS（<code>@layer</code>、<code>light-dark()</code>、原生 <code>&lt;dialog&gt;</code>、跨文档 View Transitions）文件，在今天可以跑出满分的加载速度，在十年后依然可以被直接双击打开，被人类优雅阅读，也被下一代 AI Agent 毫无障碍地理解。
           </p>
           <p>这便是 <em>Tong's Information</em> 的第一期，也是这座编辑部的起点。</p>
+
+          <ti-comments id="comments">
+            <noscript><p class="ti-comments-noscript">评论区需要启用 JavaScript 以完成后台无感防滥用核验与留言投递。</p></noscript>
+          </ti-comments>
 
           <section class="article-footer-band" aria-label="关联概念与延伸阅读">
             <div>

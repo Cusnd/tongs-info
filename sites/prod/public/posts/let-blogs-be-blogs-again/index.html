@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
+  <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
+  <title>让博客重新成为博客 | Tong's Information</title>
+  <meta name="description" content="从初中的 Hexo、宝塔面板与 Sakurairo，到今天一页白纸般的原生 HTML 画布——内含抽象交互装置「从框架到白纸」与自由画纸「一页白纸和一支笔」。">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://www.esoren.com/posts/let-blogs-be-blogs-again/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/let-blogs-be-blogs-again/">
+  <link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/let-blogs-be-blogs-again/">
+  <link rel="alternate" hreflang="x-default" href="https://www.esoren.com/posts/let-blogs-be-blogs-again/">
+  <link rel="alternate" type="text/markdown" title="Agent Markdown Twin" href="./index.md">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/editorial.css">
+  <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="stylesheet" href="/assets/css/comments.css">
+  <link rel="stylesheet" href="/assets/css/publication.css">
+  <link rel="stylesheet" href="/posts/let-blogs-be-blogs-again/feature.css">
+  <link rel="preload" as="image" href="/assets/images/issue-01-let-blogs-be-blogs-again.jpg" fetchpriority="high">
+  <link rel="expect" href="#hero-fold" blocking="render">
+  <script async blocking="render" src="/assets/js/transitions.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "让博客重新成为博客",
+    "description": "从初中的 Hexo、宝塔面板与 Sakurairo，到今天一页白纸般的原生 HTML 画布——内含抽象交互装置「从框架到白纸」与自由画纸「一页白纸和一支笔」。",
+    "datePublished": "2026-11-25",
+    "dateModified": "2026-11-25",
+    "inLanguage": "zh-Hans",
+    "url": "https://www.esoren.com/posts/let-blogs-be-blogs-again/",
+    "author": { "@type": "Person", "name": "Liu Tong" },
+    "publisher": { "@type": "Organization", "name": "Tong's Information" }
+  }
+  </script>
+</head>
+<body data-page-type="article" data-post-slug="let-blogs-be-blogs-again">
+  <div class="reading-progress" aria-hidden="true"><div class="reading-progress-fill"></div></div>
+  <!-- @partial:header -->
+<a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Liu Tong" data-issue-order="{&quot;let-blogs-be-blogs-again&quot;:1}">
+  <div class="shell masthead-bar">
+    <a class="brand-mark" href="/">
+      <span class="brand-wordmark" lang="en">Tong's Information</span>
+    </a>
+    <nav class="primary-nav" aria-label="主导航">
+      <ul>
+        <li><a href="/">封面</a></li>
+        <li><a href="/archive/">归档</a></li>
+        <li><a href="/stream/">思维</a></li>
+        <li><a href="/graph/">图谱</a></li>
+        <li><a href="/about/">关于</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button type="button" class="btn subtle" data-open-palette aria-label="打开站内检索">检索</button>
+      <a class="btn subtle" href="/en/posts/let-blogs-be-blogs-again/" hreflang="en" lang="en" aria-label="Switch to English edition">EN</a>
+      <button type="button" class="btn subtle theme-toggle" data-theme-toggle>
+        <span class="label-to-dark"><span class="visually-hidden">切换至深色模式</span>暗色</span>
+        <span class="label-to-light"><span class="visually-hidden">切换至浅色模式</span>浅色</span>
+      </button>
+    </div>
+  </div>
+</header>
+<dialog id="command-palette" class="command-dialog" closedby="any" aria-labelledby="palette-title">
+  <div class="dialog-head">
+    <h1 id="palette-title" class="dialog-title">检索</h1>
+    <form method="dialog">
+      <button type="submit" class="btn subtle">关闭</button>
+    </form>
+  </div>
+  <search class="dialog-search-wrap">
+    <label for="palette-search" class="visually-hidden">搜索文章、概念或协议端点</label>
+    <input id="palette-search" class="dialog-search-input" type="text" inputmode="search" autocomplete="off" placeholder="搜索文章、概念或 llms.txt…" autofocus>
+  </search>
+  <ul id="palette-results" class="dialog-results" aria-label="检索结果"></ul>
+</dialog>
+<div id="live-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+  <!-- @endpartial:header -->
+
+  <main id="main-content" tabindex="-1">
+    <header id="hero-fold" class="article-hero">
+      <div class="shell article-hero-inner">
+        <div class="meta-line">
+          <span class="tier-label">创刊特稿 · No. 01</span>
+          <time datetime="2026-11-25">2026.11.25</time>
+          <span>5 分钟 · 含 2 组交互装置</span>
+        </div>
+        <h1 class="article-h1">让博客重新成为博客</h1>
+        <p class="article-deck">
+          从初中的 Hexo、宝塔面板与 Sakurairo，到今天一页白纸般的原生 HTML 画布——当样式不再只是为了好看而好看的形式，博客终于可以顺着思潮呼吸、生长、演进。
+        </p>
+        <div class="article-tools" role="region" aria-label="文章工具">
+          <button type="button" class="btn subtle" data-copy-md="./index.md">复制 Markdown</button>
+          <a href="./index.md">index.md</a>
+          <button type="button" class="btn subtle" data-copy-cite data-cite-title="让博客重新成为博客" data-cite-date="2026-11-25" data-cite-issue="01">复制引用</button>
+          <a href="/en/posts/let-blogs-be-blogs-again/" hreflang="en" lang="en">English ↗</a>
+        </div>
+      </div>
+      <figure class="shell article-cover-plate editorial-plate">
+        <img
+          src="/assets/images/issue-01-let-blogs-be-blogs-again.jpg"
+          alt="瑞士现代主义几何版画：左侧厚重叠压的墨黑线框与模块格子沿中轴垂直细线松动展开，向右化作半透明钴蓝平面与昂扬圆弧，进入开阔洁白的网格留白，一枚朱红圆点自由悬浮其间"
+          width="1376"
+          height="768"
+          fetchpriority="high"
+        >
+      </figure>
+    </header>
+
+    <div class="shell article-body-wrap">
+      <div class="essay-grid">
+        <aside class="essay-rail" aria-label="文章目录">
+          <ul class="toc-list">
+            <li><a href="#s01">§ 01 旧器与少年心事</a></li>
+            <li><a href="#s02">§ 02 放下框架拐杖</a></li>
+            <li><a href="#s03">§ 03 从物质到精神</a></li>
+            <li><a href="#lab-eras">互动 01 · 从框架到白纸</a></li>
+            <li><a href="#s04">§ 04 开源与新玩具</a></li>
+            <li><a href="#lab-canvas">互动 02 · 白纸和笔</a></li>
+            <li><a href="#comments">读者来信</a></li>
+          </ul>
+        </aside>
+
+        <article class="prose">
+          <h2 id="s01"><span class="section-index">§ 01</span>旧器与少年心事</h2>
+          <p>
+            从初中算起，我折腾个人博客已经有些年头了。
+          </p>
+
+          <div class="sidenote-anchor">
+            <p>
+              最初是 Hexo 搭配 GitHub Pages<a class="sidenote-ref" href="#sn-01" aria-label="查看边注 01：Hexo 与 GitHub Pages">01</a>；后来买过不知名闲鱼小厂套壳阿里云轻量的虚拟主机——只能进宝塔面板，连流量都捉襟见肘<a class="sidenote-ref" href="#sn-02" aria-label="查看边注 02：闲鱼套壳虚拟主机与宝塔面板">02</a>；再后来腾讯云 Lighthouse 问世，我终于拥有了自己的 VPS，在上面手搓 WordPress，不厌其烦地打磨各种主题（时至今日，我依然觉得我记忆里的 Sakurairo 美得惊艳）<a class="sidenote-ref" href="#sn-03" aria-label="查看边注 03：腾讯云 Lighthouse 与 Sakurairo">03</a>。
+            </p>
+            <div class="sidenote-stack">
+              <aside id="sn-01" class="sidenote" aria-label="边注 01">
+                <span class="sidenote-num">01</span>
+                <strong>Hexo &amp; GitHub Pages</strong>：基于 Node.js 的静态博客生成器搭配 GitHub 免费托管，写完 Markdown 敲一句 <code>hexo g &amp;&amp; hexo d</code> 即可发布，是无数中文技术少年的第一座“数字自留地”。
+              </aside>
+              <aside id="sn-02" class="sidenote" aria-label="边注 02">
+                <span class="sidenote-num">02</span>
+                <strong>闲鱼套壳主机与宝塔面板</strong>：二手平台闲鱼上常见几块钱一年的廉价分销空间，通常把一台轻量云切成无数小隔间，仅开放可视化面板「宝塔（BT Panel）」，无完整 SSH 权限，月流量也极其紧张。
+              </aside>
+              <aside id="sn-03" class="sidenote" aria-label="边注 03">
+                <span class="sidenote-num">03</span>
+                <strong>Lighthouse 与 Sakurairo</strong>：腾讯云轻量应用服务器（入门独立 VPS）；<em>Sakurairo</em> 是中文 WordPress 圈极具代表性的开源二次元美学主题（衍生自 Mashiro 的 Sakura 主题），以精致的动态封面与细腻光影著称。
+              </aside>
+            </div>
+          </div>
+
+          <div class="sidenote-anchor">
+            <p>
+              甚至还因为没有成年，没法把博客托管在大陆 VPS 上，没办法使用阿里云 DCDN 来加速站点而郁闷。<a class="sidenote-ref" href="#sn-04" aria-label="查看边注 04：未满 18 岁、大陆 VPS 与阿里云 DCDN">04</a>
+            </p>
+            <aside id="sn-04" class="sidenote" aria-label="边注 04">
+              <span class="sidenote-num">04</span>
+              <strong>未成年、ICP 备案与 DCDN</strong>：中国大陆境内的云服务器与全站加速 CDN（如阿里云 DCDN）依法要求域名完成 ICP 备案，而个人备案需年满 18 周岁——这道门槛曾让无数中学站长只能望低延迟节点兴叹。
+            </aside>
+          </div>
+
+          <div class="sidenote-anchor">
+            <p>
+              为不知将图片和视频托管在哪个图床上而焦虑。对象存储太过昂贵，我又想让根本没人访问的个人博客以最佳状态迎接它的第一个来访者。<a class="sidenote-ref" href="#sn-05" aria-label="查看边注 05：图床与对象存储">05</a>
+            </p>
+            <aside id="sn-05" class="sidenote" aria-label="边注 05">
+              <span class="sidenote-num">05</span>
+              <strong>图床与对象存储</strong>：早期个人站长常为云端对象存储（OSS/COS）和按量计费的下行流量犯愁，只好四处寻找免费第三方「图床」，在零成本与随时防盗链、跑路的风险间反复权衡。
+            </aside>
+          </div>
+
+          <p>
+            折腾许久，碍于升学等种种压力，博客闲置了。我的服务器也到期了。我没有选择续费。但如果现在让我去重复 7 年前我是怎么部署 WordPress 的，我肯定可以毫无阻碍地像当年一样熟练，乃至比当时更加关注许多细节。
+          </p>
+
+          <h2 id="s02"><span class="section-index">§ 02</span>放下框架这根拐杖</h2>
+
+          <div class="sidenote-anchor">
+            <p>
+              随后大模型浪潮席卷而来，笨重的 CMS 逐渐显得多余，甚至称得上束缚。我换上了 Astro 与 VuePress 这样轻盈的框架，将文字放在 Cloudflare Workers 的边缘节点之上。<a class="sidenote-ref" href="#sn-06" aria-label="查看边注 06：Astro、VuePress 与 Cloudflare Workers">06</a>
+            </p>
+            <aside id="sn-06" class="sidenote" aria-label="边注 06">
+              <span class="sidenote-num">06</span>
+              <strong>Astro、VuePress 与边缘节点</strong>：以内容为中心的轻量化现代静态站点框架，结合 Cloudflare 遍布全球的边缘网络部署，彻底摆脱了维护单台 VPS、续费与升级数据库的包袱。
+            </aside>
+          </div>
+
+          <p>
+            而走到今天，我们似乎连“框架”这根拐杖也可以放下了。AI 让想法与呈现之间的距离归零，浏览器彻底化作了创作者手中的画布：仅凭一个单页 HTML，便有人搭起瑰丽的 3D 世界，有人演绎动态的科普视界，甚至塞进了一整部 3D 射击游戏。
+          </p>
+
+          <div class="sidenote-anchor">
+            <p>
+              若是退回三年前，冒出这种念头的我，大概会怀疑自己是不是吃错了菌子。<a class="sidenote-ref" href="#sn-07" aria-label="查看边注 07：吃错了菌子">07</a>
+            </p>
+            <aside id="sn-07" class="sidenote" aria-label="边注 07">
+              <span class="sidenote-num">07</span>
+              <strong>吃错了菌子</strong>：中国西南地区（尤以云南及川渝语境亲切常见）的幽默俗语——误食未熟野生毒菌易见幻象，这里戏称“怀疑自己是不是产生了幻觉”。
+            </aside>
+          </div>
+
+          <p>
+            可如今，左手是 Gemini 4 Neon 灵动的想象力，右手是 GPT 6.2 Astra 缜密的执行力，一页白纸般的 HTML，终于可以长成我脑海中的任何模样。
+          </p>
+
+          <div class="sidenote-anchor">
+            <p class="prose-pause">
+              物非人是啊。<a class="sidenote-ref" href="#sn-08" aria-label="查看边注 08：物非人是">08</a>
+            </p>
+            <aside id="sn-08" class="sidenote" aria-label="边注 08">
+              <span class="sidenote-num">08</span>
+              <strong>物非人是</strong>：化用成语「物是人非」的反写——服务器、面板、主题与框架早已面目全非，但屏幕背后那个爱折腾、对世界保持好奇的人，依然还是当年的少年。
+            </aside>
+          </div>
+
+          <h2 id="s03"><span class="section-index">§ 03</span>从物质走向精神</h2>
+
+          <div class="sidenote-anchor">
+            <p>
+              感慨之外，更多的是兴奋。我的博客终于不必再困于千篇一律的 CSDN 样式（以及在各大主题群里流传的祖传 CSS 样式）<a class="sidenote-ref" href="#sn-09" aria-label="查看边注 09：CSDN 样式与祖传 CSS">09</a>，它现在可以顺着我的思潮呼吸、生长、演进。
+            </p>
+            <aside id="sn-09" class="sidenote" aria-label="边注 09">
+              <span class="sidenote-num">09</span>
+              <strong>CSDN 样式与主题群“祖传 CSS”</strong>：CSDN 是中文互联网年代悠久的开发者社区，版式高度千篇一律；而在独立博客主题交流群里，大家常相互拷贝流传多年的同一套魔改 CSS 片段，久而久之全网博客又渐渐长得越来越像。
+            </aside>
+          </div>
+
+          <p>
+            样式不再是为了好看而好看的形式，而是变成了个人独特审美的传递。从关心物质本身，到关心人的精神本身跃进了一大步。
+          </p>
+
+          <section id="lab-eras" class="feature-lab" aria-labelledby="lab-eras-title" data-evo-lab>
+            <div class="evo-head">
+              <div>
+                <div class="lab-kicker">互动 01</div>
+                <h3 id="lab-eras-title">从框架到白纸</h3>
+              </div>
+              <button type="button" class="evo-pause-btn" data-evo-pause hidden>暂停</button>
+            </div>
+            <div class="evo-stage">
+              <canvas
+                class="evo-canvas"
+                data-evo-canvas
+                tabindex="0"
+                role="img"
+                aria-label="从框架到白纸的抽象几何交互画布：拖拽朱红圆点感受四个阶段的边界变化，从 Hexo 的硬框阻挡、WordPress 的层叠重器、Astro 的边缘网格吸附，到原生 HTML 白纸上的完全自由。亦可使用方向键轻推圆点。"
+              ></canvas>
+              <noscript>
+                <svg class="evo-noscript-svg" viewBox="0 0 800 260" role="img" aria-label="四阶段抽象演进示意：从左侧厚重嵌套黑框逐步展开为右侧留白中的钴蓝弧线与自由朱红圆点">
+                  <rect x="44" y="42" width="144" height="176" fill="none" stroke="currentColor" stroke-width="2" />
+                  <rect x="66" y="64" width="100" height="132" fill="none" stroke="currentColor" stroke-width="1.5" />
+                  <rect x="88" y="88" width="56" height="84" fill="none" stroke="currentColor" stroke-width="1.2" />
+                  <circle cx="116" cy="130" r="7" fill="var(--signal)" />
+                  <circle cx="312" cy="130" r="70" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="18 8" />
+                  <circle cx="312" cy="130" r="46" fill="none" stroke="var(--accent)" stroke-width="1.5" />
+                  <circle cx="312" cy="130" r="7" fill="var(--signal)" />
+                  <g stroke="currentColor" stroke-opacity="0.35" stroke-width="1">
+                    <line x1="450" y1="60" x2="570" y2="60" /><line x1="450" y1="130" x2="570" y2="130" /><line x1="450" y1="200" x2="570" y2="200" />
+                    <line x1="450" y1="60" x2="450" y2="200" /><line x1="510" y1="60" x2="510" y2="200" /><line x1="570" y1="60" x2="570" y2="200" />
+                  </g>
+                  <circle cx="510" cy="130" r="7" fill="var(--signal)" />
+                  <path d="M 632 208 Q 704 166 728 52" fill="none" stroke="var(--accent)" stroke-width="4" />
+                  <circle cx="718" cy="112" r="8" fill="var(--signal)" />
+                </svg>
+              </noscript>
+            </div>
+            <div class="evo-controls" data-evo-controls hidden>
+              <div class="evo-scrub-row">
+                <label class="visually-hidden" for="evo-range-zh">连续切换从框架到白纸的四个演进阶段</label>
+                <input id="evo-range-zh" class="evo-range" type="range" min="0" max="3" step="0.01" value="0" data-evo-range>
+              </div>
+              <div class="evo-stops" role="group" aria-label="切换四个演进阶段">
+                <button type="button" class="evo-stop" data-evo-stop="0" aria-pressed="true"><span>01</span> Hexo</button>
+                <button type="button" class="evo-stop" data-evo-stop="1" aria-pressed="false"><span>02</span> WordPress</button>
+                <button type="button" class="evo-stop" data-evo-stop="2" aria-pressed="false"><span>03</span> Astro</button>
+                <button type="button" class="evo-stop" data-evo-stop="3" aria-pressed="false"><span>04</span> HTML</button>
+              </div>
+            </div>
+          </section>
+
+          <h2 id="s04"><span class="section-index">§ 04</span>开源、见证与新玩具</h2>
+          <p>
+            于是我将这里的每一行代码全部开源。也许十年后，“独立博客”早已成为互联网的遗迹，我对自我表达也会生出新的理解；但至少，这间仓库的 Commit 记录会保存：在这个时代，LLM 曾如何改变我的生活、思维和创造方式。
+          </p>
+
+          <p class="prose-pause prose-pause--quiet">
+            某种历史的见证吗？
+          </p>
+
+          <p>
+            我大概只是个刚得到新玩具的孩子，满心欢喜地拆开、把玩，急不可待地想把脑子里的好点子捧给全世界看。
+          </p>
+
+          <section id="lab-canvas" class="feature-lab" aria-labelledby="lab-canvas-title">
+            <div class="lab-kicker">互动 02</div>
+            <h3 id="lab-canvas-title">一页白纸和一支笔</h3>
+            <div class="sketch-workspace" hidden>
+              <div class="sketch-toolbar">
+                <div class="sketch-group" role="group" aria-label="笔墨">
+                  <button type="button" data-ink="ink" aria-pressed="true">墨黑</button>
+                  <button type="button" data-ink="cobalt" aria-pressed="false">钴蓝</button>
+                  <button type="button" data-ink="vermilion" aria-pressed="false">朱红</button>
+                  <button type="button" data-ink="graphite" aria-pressed="false">铅灰</button>
+                  <button type="button" data-ink="eraser" aria-pressed="false">橡皮</button>
+                </div>
+                <div class="sketch-group" role="group" aria-label="笔尖">
+                  <button type="button" data-nib="fine" aria-pressed="true">细</button>
+                  <button type="button" data-nib="medium" aria-pressed="false">中</button>
+                  <button type="button" data-nib="broad" aria-pressed="false">粗</button>
+                </div>
+                <div class="sketch-group" role="group" aria-label="纸面">
+                  <button type="button" data-paper="blank" aria-pressed="true">纯白</button>
+                  <button type="button" data-paper="dots" aria-pressed="false">点阵</button>
+                </div>
+              </div>
+              <div class="sketch-sheet">
+                <canvas tabindex="0" role="img" aria-label="自由画纸，可用鼠标、触屏或笔作画，也可以用下方的随机落一笔按钮。"></canvas>
+                <p class="sketch-prompt" aria-hidden="true">铺好一张白纸，拿起笔随便画点什么吧。</p>
+              </div>
+              <div class="sketch-actions" role="group" aria-label="画作操作">
+                <button type="button" data-action="doodle">随机落一笔</button>
+                <button type="button" data-action="undo" disabled aria-keyshortcuts="Control+z Meta+z">撤销</button>
+                <button type="button" data-action="clear" disabled>清空</button>
+                <button type="button" data-action="save">保存画作</button>
+              </div>
+            </div>
+            <noscript><p class="sketch-fallback">这支笔需要 JavaScript。也可以找张纸，在这里停一停，随手画几笔。</p></noscript>
+          </section>
+
+          <p>
+            也愿来到这里的你，永远不必长大，永远留有少年的探索心气。
+          </p>
+
+          <footer class="essay-colophon" aria-label="文章落款">
+            <span>2026-11-25 · 于成都</span>
+            <span class="essay-colophon-sig" lang="en">Liu Tong</span>
+          </footer>
+
+          <ti-comments id="comments">
+            <noscript><p class="ti-comments-noscript">评论区需要启用 JavaScript 以完成后台无感防滥用核验与留言投递。</p></noscript>
+          </ti-comments>
+
+          <section class="article-footer-band" aria-label="关联概念与刊物入口">
+            <div>
+              <h3 class="footer-heading">关联概念</h3>
+              <ul class="concept-list">
+                <li><a class="concept-tag" href="/archive/?concept=indie-blog">独立博客</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=frameworkless-web">无框架网页</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=llm-creation">AI 与创造力</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=personal-aesthetics">个人审美与表达</a></li>
+                <li><a class="concept-tag" href="/archive/?concept=open-source-chronicle">开源与时代见证</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="footer-heading">刊物延伸</h3>
+              <ul class="footer-list">
+                <li><a href="/graph/">在思想图谱中查看概念连接 →</a></li>
+                <li><a href="/about/">关于这份零框架刊物的制作方式 →</a></li>
+                <li><a href="/en/posts/let-blogs-be-blogs-again/" hreflang="en" lang="en">Read the English Edition →</a></li>
+              </ul>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- @partial:footer -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span class="footer-meta">© 2026 Tong's Information</span>
+    <ul class="footer-links" aria-label="订阅与语言">
+      <li><a href="/rss.xml">RSS</a></li>
+      <li><a href="/llms.txt">llms.txt</a></li>
+      <li><a href="/en/posts/let-blogs-be-blogs-again/" hreflang="en" lang="en">English</a></li>
+    </ul>
+  </div>
+</footer>
+  <!-- @endpartial:footer -->
+
+  <script type="module" src="/assets/js/site.js"></script>
+  <script type="module" src="/posts/let-blogs-be-blogs-again/feature.js"></script>
+</body>
+</html>

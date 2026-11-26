@@ -3,43 +3,15 @@
   <channel>
     <title>Tong's Information (中文)</title>
     <link>https://www.esoren.com/</link>
-    <description>全静态、零构建、由 Agent 编排的双语个人刊物。探索 Agent 时代的界面、系统架构、信息设计与数字出版。</description>
+    <description>全静态、零框架、开源双语个人出版物。记录独立博客、个人审美、开源实践与 AI 时代的创造方式。</description>
     <language>zh-Hans</language>
     <atom:link href="https://www.esoren.com/rss.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>双面万维网：同时写给人类眼睛与 AI Agent 的出版架构</title>
-      <link>https://www.esoren.com/posts/dual-audience-web/</link>
-      <guid isPermaLink="true">https://www.esoren.com/posts/dual-audience-web/</guid>
-      <pubDate>Tue, 24 Nov 2026 00:00:00 +0000</pubDate>
-      <description>拆解“一文双面”的静态出版范式，内置「人类/Agent 透视实验室」与「瑞士网格字阶实验台」两套零依赖交互装置。</description>
-    </item>
-    <item>
-      <title>宁静界面：当交互从点击转向意图</title>
-      <link>https://www.esoren.com/posts/ambient-interfaces/</link>
-      <guid isPermaLink="true">https://www.esoren.com/posts/ambient-interfaces/</guid>
-      <pubDate>Wed, 18 Nov 2026 00:00:00 +0000</pubDate>
-      <description>剖析界面过度装饰的根源，并内置「界面信噪比校准器」交互装置，实时对比控件堆砌与克制意图界面之间的视觉熵值。</description>
-    </item>
-    <item>
-      <title>双语即思考：Agent 时代的写作不再被单一语言围困</title>
-      <link>https://www.esoren.com/posts/bilingual-thought/</link>
-      <guid isPermaLink="true">https://www.esoren.com/posts/bilingual-thought/</guid>
-      <pubDate>Wed, 11 Nov 2026 00:00:00 +0000</pubDate>
-      <description>讨论中英双语写作如何反哺逻辑清晰度，并支持在段落左右留白处双击唤醒当前段落的英文对照版本。</description>
-    </item>
-    <item>
-      <title>十年之后依然可读：静态网页与数字资产的半衰期</title>
-      <link>https://www.esoren.com/posts/software-longevity/</link>
-      <guid isPermaLink="true">https://www.esoren.com/posts/software-longevity/</guid>
-      <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
-      <description>以数字出版物的半衰期为线索，对比动态栈、重型构建链与零依赖纯静态 HTML 在十年尺度下的维护成本与可迁移性。</description>
-    </item>
-    <item>
-      <title>后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML</title>
-      <link>https://www.esoren.com/posts/agent-era-publishing/</link>
-      <guid isPermaLink="true">https://www.esoren.com/posts/agent-era-publishing/</guid>
-      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
-      <description>阐述 Tong's Information 的发刊哲学：如何通过秩序层与创意层分离，实现零框架、抗熵增、原生双语的静态出版工作流。</description>
+      <title>让博客重新成为博客</title>
+      <link>https://www.esoren.com/posts/let-blogs-be-blogs-again/</link>
+      <guid isPermaLink="true">https://www.esoren.com/posts/let-blogs-be-blogs-again/</guid>
+      <pubDate>Wed, 25 Nov 2026 00:00:00 +0000</pubDate>
+      <description>从初中的 Hexo、宝塔面板与 Sakurairo，到今天一页白纸般的原生 HTML 画布——内含抽象交互装置「从框架到白纸」与自由画纸「一页白纸和一支笔」。</description>
     </item>
   </channel>
 </rss>

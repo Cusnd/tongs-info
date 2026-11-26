@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tong's Information — Stream (English)</title>
+    <link>https://www.esoren.com/en/stream/</link>
+    <description>Short bilingual fragments and studio notes.</description>
+    <language>en</language>
+    <atom:link href="https://www.esoren.com/en/stream/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>#004 (Snippet) — And this is an even more endless placeholder example. Since …</title>
+      <link>https://www.esoren.com/en/stream/#t-004</link>
+      <guid isPermaLink="true">https://www.esoren.com/en/stream/#t-004</guid>
+      <pubDate>Thu, 26 Nov 2026 01:48:00 +0000</pubDate>
+      <description>And this is an even more endless placeholder example. Since we just rolled out this fresh sheet of paper for Stream, might as well slip in a tiny CSS snippet to check whether tabular numerals, code blocks, and cobalt highlights feel nimble in both light and dark ink.</description>
+    </item>
+    <item>
+      <title>#003 (Question) — This is yet another placeholder example. Sometimes a half-ba…</title>
+      <link>https://www.esoren.com/en/stream/#t-003</link>
+      <guid isPermaLink="true">https://www.esoren.com/en/stream/#t-003</guid>
+      <pubDate>Wed, 25 Nov 2026 23:20:00 +0000</pubDate>
+      <description>This is yet another placeholder example. Sometimes a half-baked idea is too small for a numbered `No. XX` issue, yet too good to gather dust in a private notes app — maybe the Stream is simply the seedbed before an essay breaks ground? [2026-11-26] Follow-up check: pairing fragments with dated updates and issue backlinks makes the whole arc from stray spark to finished essay visible.</description>
+    </item>
+    <item>
+      <title>#002 (Quote) — This is also an example — demonstrating the typographic cade…</title>
+      <link>https://www.esoren.com/en/stream/#t-002</link>
+      <guid isPermaLink="true">https://www.esoren.com/en/stream/#t-002</guid>
+      <pubDate>Mon, 23 Nov 2026 19:05:00 +0000</pubDate>
+      <description>“Style is no longer mere ornament dressed up to look pretty; it has become a direct conduit for personal sensibility.” This is also an example — demonstrating the typographic cadence of a clipping with margin commentary: editorial serif holding the excerpt aloft, crisp sans below for whatever stray note follows.</description>
+    </item>
+    <item>
+      <title>#001 (Musing) — This is an example. No boxed cards, no notification badges, …</title>
+      <link>https://www.esoren.com/en/stream/#t-001</link>
+      <guid isPermaLink="true">https://www.esoren.com/en/stream/#t-001</guid>
+      <pubDate>Fri, 20 Nov 2026 14:30:00 +0000</pubDate>
+      <description>This is an example. No boxed cards, no notification badges, and no obligation to stretch a passing thought into two thousand words — just a quiet sheet of paper, a few lines of musing, and room to breathe.</description>
+    </item>
+  </channel>
+</rss>

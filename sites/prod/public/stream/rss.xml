@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tong's Information — 思维切片（中文）</title>
+    <link>https://www.esoren.com/stream/</link>
+    <description>碎片思考、随手摘录与公开手记。</description>
+    <language>zh-Hans</language>
+    <atom:link href="https://www.esoren.com/stream/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>#004 (切片) — 这更是一个没完没了的占位示例。既然刚刚给刊物铺好「思维」这页新白纸，顺手塞进一段极简 CSS 切片，检验一下等宽序号、代…</title>
+      <link>https://www.esoren.com/stream/#t-004</link>
+      <guid isPermaLink="true">https://www.esoren.com/stream/#t-004</guid>
+      <pubDate>Thu, 26 Nov 2026 01:48:00 +0000</pubDate>
+      <description>这更是一个没完没了的占位示例。既然刚刚给刊物铺好「思维」这页新白纸，顺手塞进一段极简 CSS 切片，检验一下等宽序号、代码块和深浅模式下的钴蓝光晕够不够灵动。</description>
+    </item>
+    <item>
+      <title>#003 (待解) — 这还是一个占位示例。有时候脑子里刚冒出一个半成品念头，还撑不起一整期 `No. XX` 正式刊号，但丢进私密备忘录又容易…</title>
+      <link>https://www.esoren.com/stream/#t-003</link>
+      <guid isPermaLink="true">https://www.esoren.com/stream/#t-003</guid>
+      <pubDate>Wed, 25 Nov 2026 23:20:00 +0000</pubDate>
+      <description>这还是一个占位示例。有时候脑子里刚冒出一个半成品念头，还撑不起一整期 `No. XX` 正式刊号，但丢进私密备忘录又容易吃灰——也许「思维」正是长文破土之前的那块苗圃？ [2026-11-26] 后记验证：给碎片加上日期追记和正式刊号回链之后，想法从发芽到长成文章的轨迹一目了然。</description>
+    </item>
+    <item>
+      <title>#002 (摘录) — 这也是一条示例。用来示范「摘录与旁白」的排印节奏：上面用衬线体安静托住原句，下面留给此刻随口补上的一两句碎碎念。</title>
+      <link>https://www.esoren.com/stream/#t-002</link>
+      <guid isPermaLink="true">https://www.esoren.com/stream/#t-002</guid>
+      <pubDate>Mon, 23 Nov 2026 19:05:00 +0000</pubDate>
+      <description>“样式不再是为了好看而好看的形式，而是变成了个人独特审美的传递。” 这也是一条示例。用来示范「摘录与旁白」的排印节奏：上面用衬线体安静托住原句，下面留给此刻随口补上的一两句碎碎念。</description>
+    </item>
+    <item>
+      <title>#001 (随想) — 这是一条示例。没有卡片边框、没有红点角标、也不必非得凑足两千字才配发出来——一页白纸，几行碎碎念，先让这块地方自由呼吸起…</title>
+      <link>https://www.esoren.com/stream/#t-001</link>
+      <guid isPermaLink="true">https://www.esoren.com/stream/#t-001</guid>
+      <pubDate>Fri, 20 Nov 2026 14:30:00 +0000</pubDate>
+      <description>这是一条示例。没有卡片边框、没有红点角标、也不必非得凑足两千字才配发出来——一页白纸，几行碎碎念，先让这块地方自由呼吸起来。</description>
+    </item>
+  </channel>
+</rss>

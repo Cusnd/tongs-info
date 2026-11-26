@@ -57,6 +57,28 @@ jobs:
           print(f"Discovered sites: {[x['site'] for x in include]}")
           PY
 
+  worker-contract:
+    name: Worker & Migrations Contract (PR)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install pinned Cloudflare cf CLI
+        run: npm ci
+
+      - name: Verify PR Worker, frontend JS, migrations & preview isolation
+        run: |
+          node --check worker/index.mjs
+          node --check engine/assets/js/comments.js
+          node tools/test_comments_worker.mjs
+
   validate:
     name: Validate (${{ matrix.site }})
     needs: discover
@@ -189,7 +211,7 @@ jobs:
                   affected[name] = True
           else:
               shared_re = re.compile(
-                  r"^(engine/|editorial/|tools/|sites/sites\.json$|cloudflare\.config\.ts$|package(-lock)?\.json$)"
+                  r"^(engine/|editorial/|tools/|worker/|migrations/|sites/sites\.json$|cloudflare\.config\.ts$|package(-lock)?\.json$)"
               )
               paths = [p.decode("utf-8", errors="surrogateescape") for p in res.stdout.split(b"\0") if p]
               for p in paths:

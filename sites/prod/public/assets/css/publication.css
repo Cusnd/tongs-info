@@ -1,0 +1,44 @@
+/* Typography and controls on the production issue and its index pages. */
+@layer components {
+  /* The graph renderer reads its canvas legend font from the root. */
+  :root:lang(zh-Hans):has(body[data-page-type="graph"]) { --font-mono: var(--font-sans); }
+
+  :lang(zh-Hans):is(.section-title, .section-meta, .footer-heading, .lab-kicker, .badge),
+  :lang(zh-Hans):is(.meta-line, .cover-folio) > span,
+  :lang(zh-Hans):is(.swiss-table caption, .swiss-table th),
+  a[lang="zh-Hans"] {
+    font-family: var(--font-sans);
+  }
+
+  :lang(zh-Hans) .cover-stage-cue {
+    font-family: var(--font-sans);
+  }
+
+  /* The canvas registers to this plate. Reserve the same HUD clearance during handoff. */
+  @media (max-width: 900px) {
+    .cover-stage[data-cover-model="issue-01"] > img[data-cover-fallback] {
+      max-block-size: calc(100% - 2.5rem);
+      margin-block-end: 2.5rem;
+    }
+  }
+
+  a.section-meta {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 1.5rem;
+  }
+}
+
+@layer utilities {
+  @media (pointer: coarse) {
+    :where(a[href]:not(.skip-link), button, input[type="range"]) {
+      min-inline-size: 2.75rem;
+      min-block-size: 2.75rem;
+    }
+
+    :is(.cover-story-title, .dispatch-title) a {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+}

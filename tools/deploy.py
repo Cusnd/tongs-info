@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Tong's Information — Cross-Platform Cloudflare Workers Static Assets Deployer
+Tong's Information — Cross-Platform Cloudflare Workers + Static Assets Deployer
 
 Security & safety guarantees:
 - Validates target site against the reviewed `sites/sites.json` registry
@@ -8,6 +8,8 @@ Security & safety guarantees:
 - Stages local runs into an owned per-invocation immutable directory (cleaned up on exit) so concurrent runs never race
 - Inspects lexical roots, ancestors, and the entire staged bundle tree for symlinks/junctions before resolving/opening
 - Recomputes bundle SHA-256 and verifies `api/release.json` (site, base_url, bundle_sha256, and GITHUB_SHA when in CI)
+- When comments API is enabled, emits a zero-bundler Build Output Specification v1 tree under `.cloudflare/output/v1/`
+  combining `worker/index.mjs` + staged static assets + D1/RateLimit bindings, and invokes `cf deploy --prebuilt`
 - Requires the pinned local `node_modules/.bin/cf` CLI by default (unless `--allow-global-cf`)
 - Serializes local `cf` invocations via retry-safe `.cloudflare/.deploy.lock`
 
@@ -41,8 +43,10 @@ else:
 
 ROOT = Path(__file__).resolve().parent.parent
 SITES_DIR = ROOT / "sites"
+WORKER_ENTRY = ROOT / "worker" / "index.mjs"
 REGISTRY_PATH = SITES_DIR / "sites.json"
 DIST_DIR = ROOT / ".dist"
+BUILD_OUTPUT_DIR = ROOT / ".cloudflare" / "output"
 SITE_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
@@ -161,6 +165,18 @@ def resolve_worker_name(
     if not expected_name:
         raise ValueError(f"sites/sites.json: missing '{mode_key}' for site '{site_name}'")
 
+    if is_preview:
+        all_release_workers = {
+            str(other.get("worker_name", "")).strip()
+            for other in registry.values()
+            if isinstance(other, dict)
+        } - {""}
+        if expected_name in all_release_workers:
+            raise ValueError(
+                f"Preview isolation guard blocked deploy: preview Worker '{expected_name}' for site "
+                f"'{site_name}' matches a release Worker declared in sites/sites.json."
+            )
+
     requested = (override or os.environ.get("CF_WORKER_NAME") or "").strip()
     if requested and requested != expected_name:
         raise ValueError(
@@ -234,6 +250,196 @@ def verify_staged_bundle(
             )
 
 
+def _optional_trimmed_str(obj: dict, key: str, *, label: str) -> str:
+    val = obj.get(key)
+    if val is None:
+        return ""
+    if not isinstance(val, str):
+        raise ValueError(f"{label}.{key} must be a string or null")
+    return val.strip()
+
+
+def resolve_comments_bindings(
+    site_name: str,
+    entry: dict,
+    *,
+    is_preview: bool,
+    registry: dict[str, dict] | None = None,
+) -> dict[str, object] | None:
+    """
+    Resolve comments Worker bindings with strict cross-site preview/release storage isolation.
+    Previews NEVER bind any site's release D1/R2 storage; if isolated preview_* IDs are not configured,
+    returns None so previews deploy safely in assets-only mode.
+    """
+    comments = entry.get("comments")
+    if not isinstance(comments, dict) or not comments.get("enabled") or not WORKER_ENTRY.is_file():
+        return None
+
+    label = f"sites/sites.json: site '{site_name}' comments"
+    release_d1_id = _optional_trimmed_str(comments, "d1_database_id", label=label)
+    release_d1_name = _optional_trimmed_str(comments, "d1_database_name", label=label)
+    release_r2_name = _optional_trimmed_str(comments, "r2_bucket_name", label=label)
+
+    # Gather release resources across ALL registered sites so a preview cannot bind another site's live storage either
+    all_release_d1_ids = {release_d1_id} if release_d1_id else set()
+    all_release_d1_names = {release_d1_name} if release_d1_name else set()
+    all_release_r2_names = {release_r2_name} if release_r2_name else set()
+    if registry:
+        for other_site, other_entry in registry.items():
+            other_c = other_entry.get("comments")
+            if isinstance(other_c, dict):
+                other_lbl = f"sites/sites.json: site '{other_site}' comments"
+                oid = _optional_trimmed_str(other_c, "d1_database_id", label=other_lbl)
+                oname = _optional_trimmed_str(other_c, "d1_database_name", label=other_lbl)
+                or2 = _optional_trimmed_str(other_c, "r2_bucket_name", label=other_lbl)
+                if oid:
+                    all_release_d1_ids.add(oid)
+                if oname:
+                    all_release_d1_names.add(oname)
+                if or2:
+                    all_release_r2_names.add(or2)
+
+    if is_preview:
+        d1_id = _optional_trimmed_str(comments, "preview_d1_database_id", label=label)
+        d1_name = _optional_trimmed_str(comments, "preview_d1_database_name", label=label)
+        r2_bucket_name = _optional_trimmed_str(comments, "preview_r2_bucket_name", label=label)
+        if d1_id and d1_id in all_release_d1_ids:
+            raise ValueError(f"{label}: preview_d1_database_id must not match any release d1_database_id")
+        if d1_name and d1_name in all_release_d1_names:
+            raise ValueError(f"{label}: preview_d1_database_name must not match any release d1_database_name")
+        if r2_bucket_name and r2_bucket_name in all_release_r2_names:
+            raise ValueError(f"{label}: preview_r2_bucket_name must not match any release r2_bucket_name")
+        if not d1_id:
+            return None
+        if not d1_name:
+            raise ValueError(f"{label}: preview_d1_database_id requires preview_d1_database_name")
+        sitekey = _optional_trimmed_str(comments, "preview_turnstile_sitekey", label=label)
+        allowed_hosts = [
+            str(h).strip() for h in (comments.get("preview_allowed_hostnames") or []) if str(h).strip()
+        ]
+        rate_namespace = "2001" if site_name == "prod" else "2002"
+        site_id = f"{site_name}-preview"
+    else:
+        d1_id = release_d1_id
+        d1_name = release_d1_name
+        r2_bucket_name = release_r2_name
+        if not d1_id or not d1_name:
+            raise ValueError(f"{label}: missing d1_database_id or d1_database_name")
+        sitekey = _optional_trimmed_str(comments, "turnstile_sitekey", label=label)
+        allowed_hosts = [str(h).strip() for h in (comments.get("allowed_hostnames") or []) if str(h).strip()]
+        rate_namespace = "1001" if site_name == "prod" else "1002"
+        site_id = site_name
+
+    return {
+        "d1_id": d1_id,
+        "d1_name": d1_name,
+        "r2_bucket_name": r2_bucket_name,
+        "sitekey": sitekey,
+        "allowed_hosts": allowed_hosts,
+        "rate_namespace": rate_namespace,
+        "site_id": site_id,
+    }
+
+
+def emit_prebuilt_worker_output(
+    *,
+    site_name: str,
+    worker_name: str,
+    bindings_cfg: dict[str, object],
+    dist_dir: Path,
+    is_preview: bool,
+) -> None:
+    """
+    Assemble Cloudflare Build Output Specification v1 (`.cloudflare/output/v1/`) directly
+    from `worker/index.mjs` + staged static assets — zero bundler, zero Wrangler config.
+    """
+    if not WORKER_ENTRY.is_file() or is_link_or_junction(WORKER_ENTRY):
+        raise ValueError(f"Missing or unsafe Worker entrypoint: {WORKER_ENTRY}")
+
+    d1_id = str(bindings_cfg["d1_id"])
+    d1_name = str(bindings_cfg["d1_name"])
+    r2_bucket_name = str(bindings_cfg["r2_bucket_name"])
+    sitekey = str(bindings_cfg["sitekey"])
+    allowed_hosts = list(bindings_cfg["allowed_hosts"])  # type: ignore[arg-type]
+    rate_namespace = str(bindings_cfg["rate_namespace"])
+    site_id = str(bindings_cfg["site_id"])
+
+    catalog_path = SITES_DIR / site_name / "catalog.json"
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    site_author = str(catalog.get("site", {}).get("author", "")).strip()
+
+    v1_dir = BUILD_OUTPUT_DIR / "v1"
+    worker_dir = v1_dir / "workers" / "default"
+    bundle_dir = worker_dir / "bundle"
+    assets_dir = worker_dir / "assets"
+
+    if BUILD_OUTPUT_DIR.exists():
+        shutil.rmtree(BUILD_OUTPUT_DIR)
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    shutil.copy2(WORKER_ENTRY, bundle_dir / "index.mjs")
+    shutil.copytree(dist_dir, assets_dir, symlinks=False)
+
+    root_config = {
+        "producer": {"name": "tongs-info-deploy", "version": "1.0.0"},
+        "buildContext": {"isPreview": is_preview},
+    }
+    (v1_dir / "config.json").write_text(
+        json.dumps(root_config, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+
+    worker_env: dict[str, object] = {
+        "ASSETS": {"type": "assets"},
+        "COMMENTS_DB": {
+            "type": "d1",
+            "id": d1_id,
+            "name": d1_name,
+        },
+        "COMMENT_RATE_LIMIT": {
+            "type": "rate-limit",
+            "namespace": rate_namespace,
+            "simple": {"limit": 12, "period": 60},
+        },
+        "SITE_ID": {"type": "text", "value": site_id},
+        "SITE_AUTHOR": {"type": "text", "value": site_author},
+        "TURNSTILE_SITEKEY": {"type": "text", "value": sitekey},
+        "TURNSTILE_HOSTNAMES": {"type": "text", "value": ",".join(allowed_hosts)},
+    }
+    if r2_bucket_name:
+        worker_env["COMMENTS_IMAGES"] = {
+            "type": "r2",
+            "name": r2_bucket_name,
+        }
+
+    worker_config = {
+        "name": worker_name,
+        "compatibilityDate": "2026-11-25",
+        "observability": {
+            "enabled": True,
+            "logs": {"enabled": True},
+            "traces": {"enabled": True},
+        },
+        "assets": {
+            "htmlHandling": "auto-trailing-slash",
+            "notFoundHandling": "404-page",
+            "runWorkerFirst": ["/api/comments", "/api/comments/*"],
+        },
+        "env": worker_env,
+        "manifest": {
+            "type": "complete",
+            "mainModule": "index.mjs",
+            "modules": {
+                "index.mjs": {"type": "esm"},
+            },
+        },
+    }
+    (worker_dir / "worker.config.json").write_text(
+        json.dumps(worker_config, separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Stage and deploy a site via Cloudflare cf CLI")
     parser.add_argument("--site", required=True, help="Target site declared in sites/sites.json (e.g. demo, prod)")
@@ -245,6 +451,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--preview-name", help="Explicit preview name passed to 'cf previews deploy --preview-name'")
     parser.add_argument("--tag", help="Worker Version tag passed to 'cf deploy --tag'")
     parser.add_argument("--message", help="Worker Version message passed to 'cf deploy --message'")
+    parser.add_argument("--secrets-file", help="Optional JSON/.env secrets file passed to 'cf deploy --secrets-file'")
     parser.add_argument("--dry-run", action="store_true", help="Pass --dry-run to cf CLI (no remote mutation)")
     parser.add_argument("--skip-sync", action="store_true", help="Skip editorial_sync.py (still recomputes digest)")
     parser.add_argument("--allow-global-cf", action="store_true", help="Allow falling back to global cf binary")
@@ -265,7 +472,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[deploy] ERROR: site '{site_name}' is not declared in sites/sites.json")
         return 2
 
-    reg_base_url = str(registry[site_name]["base_url"]).rstrip("/")
+    entry = registry[site_name]
+    reg_base_url = str(entry["base_url"]).rstrip("/")
     expected_base_url = (args.expect_base_url or reg_base_url).rstrip("/")
     if expected_base_url != reg_base_url:
         print(
@@ -281,22 +489,27 @@ def main(argv: list[str] | None = None) -> int:
             is_preview=args.preview,
             override=args.worker_name,
         )
+        comments_bindings = resolve_comments_bindings(
+            site_name,
+            entry,
+            is_preview=args.preview,
+            registry=registry,
+        )
     except ValueError as exc:
         print(f"[deploy:{site_name}] ERROR: {exc}")
         return 1
 
+    comments_enabled = comments_bindings is not None
     owned_temp_stage: Path | None = None
     try:
         if args.dist_dir:
-            # Keep lexical Path before assert_lexical_tree_clean inspects it (M6)
             dist_dir = Path(args.dist_dir)
             if not dist_dir.is_absolute():
                 dist_dir = Path.cwd() / dist_dir
         elif not args.skip_sync:
-            # M4: Stage into an owned per-invocation immutable directory so concurrent local deploys never race
             DIST_DIR.mkdir(parents=True, exist_ok=True)
             owned_temp_stage = Path(tempfile.mkdtemp(prefix=f".deploy-{site_name}-", dir=str(DIST_DIR)))
-            owned_temp_stage.rmdir()  # editorial_sync --stage-dir requires a fresh non-existent path
+            owned_temp_stage.rmdir()
             dist_dir = owned_temp_stage
         else:
             dist_dir = DIST_DIR / site_name
@@ -324,21 +537,34 @@ def main(argv: list[str] | None = None) -> int:
         env["CF_WORKER_NAME"] = worker_name
 
         cf_cmd = resolve_cf_command(allow_global=args.allow_global_cf)
-        if args.preview:
-            cf_cmd.extend(["previews", "deploy", str(dist_dir)])
-            if args.preview_name:
-                cf_cmd.extend(["--preview-name", args.preview_name])
+        if comments_enabled:
+            if args.preview:
+                cf_cmd.extend(["previews", "deploy", "--prebuilt"])
+                if args.preview_name:
+                    cf_cmd.extend(["--preview-name", args.preview_name])
+            else:
+                cf_cmd.extend(["deploy", "--prebuilt"])
+                if args.tag:
+                    cf_cmd.extend(["--tag", args.tag])
+                if args.message:
+                    cf_cmd.extend(["--message", args.message])
+            if args.secrets_file:
+                cf_cmd.extend(["--secrets-file", str(Path(args.secrets_file).resolve())])
         else:
-            cf_cmd.extend(["deploy", str(dist_dir)])
-            if args.tag:
-                cf_cmd.extend(["--tag", args.tag])
-            if args.message:
-                cf_cmd.extend(["--message", args.message])
+            if args.preview:
+                cf_cmd.extend(["previews", "deploy", str(dist_dir)])
+                if args.preview_name:
+                    cf_cmd.extend(["--preview-name", args.preview_name])
+            else:
+                cf_cmd.extend(["deploy", str(dist_dir)])
+                if args.tag:
+                    cf_cmd.extend(["--tag", args.tag])
+                if args.message:
+                    cf_cmd.extend(["--message", args.message])
 
         if args.dry_run:
             cf_cmd.append("--dry-run")
 
-        # Hold locks across final bundle verification + CLI upload (also lock shared .dist/<site> when used)
         uses_shared_stage = args.skip_sync and not args.dist_dir
         stage_guard = (
             exclusive_lock(DIST_DIR / f".{site_name}.lock")
@@ -352,9 +578,18 @@ def main(argv: list[str] | None = None) -> int:
                 expected_base_url,
                 expected_git_sha=args.expect_git_sha,
             )
+            if comments_enabled and comments_bindings is not None:
+                emit_prebuilt_worker_output(
+                    site_name=site_name,
+                    worker_name=worker_name,
+                    bindings_cfg=comments_bindings,
+                    dist_dir=dist_dir,
+                    is_preview=args.preview,
+                )
             print(
                 f"[deploy:{site_name}] Running: {' '.join(cf_cmd)} "
-                f"(CF_SITE_TARGET={site_name}, CF_DEPLOY_KIND={deploy_kind}, CF_WORKER_NAME={worker_name})",
+                f"(CF_SITE_TARGET={site_name}, CF_DEPLOY_KIND={deploy_kind}, "
+                f"CF_WORKER_NAME={worker_name}, comments={'worker+assets' if comments_enabled else 'assets-only'})",
                 flush=True,
             )
             return subprocess.run(cf_cmd, cwd=ROOT, env=env).returncode

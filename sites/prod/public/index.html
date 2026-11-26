@@ -7,7 +7,7 @@
   <script>try{document.querySelector('meta[name="color-scheme"]').content=localStorage.getItem("color-scheme")??"light dark";}catch{}</script>
   <style>@media (prefers-reduced-motion: no-preference){@view-transition{navigation:auto;}}</style>
   <title>Tong's Information</title>
-  <meta name="description" content="一份关于界面、系统、信息设计与数字出版的独立双语瑞士现代主义刊物。">
+  <meta name="description" content="全静态、零框架、开源双语个人出版物。记录独立博客、个人审美、开源实践与 AI 时代的创造方式。">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://www.esoren.com/">
   <link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/">
@@ -18,7 +18,8 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/motion.css">
-  <link rel="preload" as="image" href="/assets/images/issue-02-dual-audience-web.jpg" fetchpriority="high">
+  <link rel="stylesheet" href="/assets/css/publication.css">
+  <link rel="preload" as="image" href="/assets/images/issue-01-let-blogs-be-blogs-again.jpg" fetchpriority="high">
   <link rel="expect" href="#hero-fold" blocking="render">
   <script async blocking="render" src="/assets/js/transitions.js"></script>
   <script type="application/ld+json">
@@ -28,15 +29,15 @@
     "name": "Tong's Information",
     "url": "https://www.esoren.com/",
     "inLanguage": ["zh-Hans", "en"],
-    "description": "一份关于界面、系统、信息设计与数字出版的独立双语瑞士现代主义刊物。",
-    "author": { "@type": "Person", "name": "Tong" }
+    "description": "全静态、零框架、开源双语个人出版物。记录独立博客、个人审美、开源实践与 AI 时代的创造方式。",
+    "author": { "@type": "Person", "name": "Liu Tong" }
   }
   </script>
 </head>
 <body class="is-cover" data-page-type="cover">
   <!-- @partial:header -->
 <a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
-<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Liu Tong" data-issue-order="{&quot;let-blogs-be-blogs-again&quot;:1}">
   <div class="shell masthead-bar">
     <a class="brand-mark" href="/">
       <span class="brand-wordmark" lang="en">Tong's Information</span>
@@ -45,6 +46,7 @@
       <ul>
         <li><a href="/" aria-current="page">封面</a></li>
         <li><a href="/archive/">归档</a></li>
+        <li><a href="/stream/">思维</a></li>
         <li><a href="/graph/">图谱</a></li>
         <li><a href="/about/">关于</a></li>
       </ul>
@@ -76,22 +78,22 @@
   <!-- @endpartial:header -->
 
   <main id="main-content" tabindex="-1">
-    <section id="hero-fold" class="cover-sheet" data-lead-slug="dual-audience-web" aria-label="刊物封面">
+    <section id="hero-fold" class="cover-sheet" data-lead-slug="let-blogs-be-blogs-again" aria-label="刊物封面">
       <div class="cover-frame">
         <div class="cover-nameplate-inner">
           <h1 class="cover-masthead" lang="en">Tong's Information</h1>
           <div class="cover-folio">
-            <span class="cover-folio-issue">ISSUE 05</span>
-            <span>2026年11月 · 独立双语刊物</span>
+            <span class="cover-folio-issue">ISSUE 01</span>
+            <span>2026年11月 · 创刊号 · 成都</span>
           </div>
         </div>
       </div>
 
-      <figure class="cover-stage" data-cover-model>
+      <figure class="cover-stage" data-cover-model="issue-01">
         <img
           data-cover-fallback
-          src="/assets/images/issue-02-dual-audience-web.jpg"
-          alt="双面交互封面。正面的钴蓝光环与折叠棱镜面向人类，背面的线框与数据轨道面向 Agent，两面共用一个朱红焦点。"
+          src="/assets/images/issue-01-let-blogs-be-blogs-again.jpg"
+          alt="瑞士现代主义几何版画：左侧厚重叠压的墨黑线框与模块格子沿中轴垂直细线松动展开，向右化作半透明钴蓝平面与昂扬圆弧，进入开阔洁白的网格留白，一枚朱红圆点自由悬浮其间"
           width="1376"
           height="768"
           fetchpriority="high"
@@ -102,46 +104,47 @@
         <div class="cover-floor-inner">
           <div class="cover-lead-story">
             <div class="meta-line">
-              <span class="tier-label">封面特稿 · No. 05</span>
-              <span>含 2 组交互实验</span>
+              <span class="tier-label">创刊特稿 · No. 01</span>
+              <time datetime="2026-11-25">2026.11.25</time>
+              <span>含 2 组交互装置</span>
             </div>
             <h2 class="cover-story-title">
-              <a href="/posts/dual-audience-web/">双面万维网：同时写给人类眼睛与 AI Agent 的出版架构</a>
+              <a href="/posts/let-blogs-be-blogs-again/">让博客重新成为博客</a>
             </h2>
             <p class="cover-story-deck">
-              当机器读者已经拥有纯净的文本通道，人类看到的网页就不该再向平庸妥协——它应该重新成为一件值得凝视与把玩的视觉作品。
+              从初中的 Hexo、宝塔面板与 Sakurairo，到今天一页白纸般的原生 HTML 画布——当样式不再只是为了好看而好看的形式，博客终于可以顺着思潮呼吸、生长、演进。
             </p>
             <div class="action-row">
-              <a class="btn primary" href="/posts/dual-audience-web/">阅读本期特稿 →</a>
+              <a class="btn primary" href="/posts/let-blogs-be-blogs-again/">阅读创刊特稿 →</a>
               <a class="btn subtle" href="#inside">翻开内页 ↓</a>
             </div>
           </div>
 
-          <aside class="cover-inside" aria-label="本期内页导读">
-            <div class="section-title">本期内页 · Inside</div>
+          <aside class="cover-inside" aria-label="本期章节导读">
+            <div class="section-title">本期导读 · Inside Issue 01</div>
             <ul class="cover-inside-list">
               <li>
-                <a href="/posts/ambient-interfaces/" data-post-slug="ambient-interfaces">
-                  <span class="cover-inside-num">04</span>
-                  <span>宁静界面：当交互从点击转向意图</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/posts/let-blogs-be-blogs-again/#s01">
+                  <span class="cover-inside-num">§ 01</span>
+                  <span>旧器与少年心事：Hexo、宝塔面板与 Sakurairo</span>
                 </a>
               </li>
               <li>
-                <a href="/posts/bilingual-thought/" data-post-slug="bilingual-thought">
-                  <span class="cover-inside-num">03</span>
-                  <span>双语即思考：Agent 时代的写作不再被单一语言围困</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/posts/let-blogs-be-blogs-again/#s02">
+                  <span class="cover-inside-num">§ 02</span>
+                  <span>放下框架这根拐杖：一页白纸般的 HTML</span>
                 </a>
               </li>
               <li>
-                <a href="/posts/software-longevity/" data-post-slug="software-longevity">
-                  <span class="cover-inside-num">02</span>
-                  <span>十年之后依然可读：静态网页与数字资产的半衰期</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/posts/let-blogs-be-blogs-again/#lab-eras">
+                  <span class="cover-inside-num">§ 03</span>
+                  <span>从框架到白纸</span>
                 </a>
               </li>
               <li>
-                <a href="/posts/agent-era-publishing/" data-post-slug="agent-era-publishing">
-                  <span class="cover-inside-num">01</span>
-                  <span>后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML</span>
+                <a data-post-slug="let-blogs-be-blogs-again" href="/posts/let-blogs-be-blogs-again/#lab-canvas">
+                  <span class="cover-inside-num">§ 04</span>
+                  <span>一页白纸和一支笔</span>
                 </a>
               </li>
             </ul>
@@ -150,157 +153,69 @@
       </div>
     </section>
 
-    <section id="inside" class="shell inside-band" aria-labelledby="recent-spread-heading">
+    <section id="inside" class="shell inside-band" aria-labelledby="inaugural-spread-heading">
       <div class="inside-band-head">
-        <h2 id="recent-spread-heading" class="section-title">近期刊物 · Recent Dispatches</h2>
-        <a class="section-meta" href="/archive/">全部 05 期归档 →</a>
+        <h2 id="inaugural-spread-heading" class="section-title">创刊特稿与寄语 · Inaugural Issue &amp; Editor's Note</h2>
+        <a class="section-meta" href="/archive/">浏览刊物归档 →</a>
       </div>
 
       <div class="magazine-spread-lead">
-        <article class="feature-plate-card" data-post-slug="ambient-interfaces">
+        <article class="feature-plate-card" data-post-slug="let-blogs-be-blogs-again">
           <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/posts/ambient-interfaces/" aria-label="阅读交互特稿：宁静界面">
+            <a class="cover-artwork-link" href="/posts/let-blogs-be-blogs-again/" aria-label="阅读创刊特稿：让博客重新成为博客">
               <img
-                src="/assets/images/issue-04-ambient-interfaces.jpg"
-                alt="瑞士现代主义平版版画：左侧密集的墨黑细框碎片在网格间逐渐消融，向右化为宁静留白中的钴蓝垂直色块与一笔朱红横线"
-                width="1200"
-                height="896"
+                src="/assets/images/issue-01-let-blogs-be-blogs-again.jpg"
+                alt="瑞士现代主义几何版画：厚重叠压的墨黑模板线框向右展开为钴蓝弧线与洁白画布上悬浮的朱红圆点"
+                width="1376"
+                height="768"
                 loading="lazy"
               >
             </a>
           </figure>
           <div class="feature-plate-meta">
             <div class="meta-line">
-              <span class="tier-label">特稿 · No. 04</span>
-              <time datetime="2026-11-18">2026.11.18</time>
+              <span class="tier-label">特稿 · No. 01</span>
+              <time datetime="2026-11-25">2026.11.25</time>
             </div>
-            <span class="mono" style="font-size: var(--text-xs); color: var(--ink-muted);">含交互校准器</span>
+            <span style="font-size: var(--text-xs); color: var(--ink-muted);">5 分钟 · 2 组交互装置</span>
           </div>
           <h3 class="dispatch-title">
-            <a href="/posts/ambient-interfaces/">宁静界面：当交互从点击转向意图</a>
+            <a href="/posts/let-blogs-be-blogs-again/">让博客重新成为博客</a>
           </h3>
           <p class="dispatch-summary">
-            软件工业花了二十年往屏幕上堆砌按钮、红点与带框卡片。当 Agent 接管繁琐操作，真正高级的界面终于可以学会闭嘴。
+            从初中的 Hexo、宝塔面板与 Sakurairo，到今天一页白纸般的原生 HTML 画布——内含抽象交互装置「从框架到白纸」与自由画纸「一页白纸和一支笔」。
           </p>
           <div class="action-row">
-            <a class="btn primary" href="/posts/ambient-interfaces/">阅读特稿 →</a>
+            <a class="btn primary" href="/posts/let-blogs-be-blogs-again/">阅读创刊特稿 →</a>
             <ul class="concept-list" aria-label="关联概念">
-              <li><a class="concept-tag" href="/archive/?concept=interface-craft">界面克制</a></li>
-              <li><a class="concept-tag" href="/archive/?concept=swiss-typography">瑞士排印</a></li>
+              <li><a class="concept-tag" href="/archive/?concept=indie-blog">独立博客</a></li>
+              <li><a class="concept-tag" href="/archive/?concept=frameworkless-web">无框架网页</a></li>
+              <li><a class="concept-tag" href="/archive/?concept=llm-creation">AI 与创造力</a></li>
+              <li><a class="concept-tag" href="/archive/?concept=personal-aesthetics">个人审美</a></li>
             </ul>
           </div>
-        </article>
-
-        <article class="feature-plate-card" data-post-slug="bilingual-thought">
-          <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/posts/bilingual-thought/" aria-label="阅读专栏：双语即思考">
-              <img
-                src="/assets/images/issue-03-bilingual-thought.jpg"
-                alt="瑞士现代主义双联几何版画：钴蓝弧线斜切结构与墨黑正交模块沿中轴交汇叠合，交点落有一枚朱红圆点"
-                width="1200"
-                height="896"
-                loading="lazy"
-              >
-            </a>
-          </figure>
-          <div class="feature-plate-meta">
-            <div class="meta-line">
-              <span class="mono">No. 03</span>
-              <span>专栏</span>
-              <time datetime="2026-11-11">2026.11.11</time>
-            </div>
-            <span class="mono" style="font-size: var(--text-xs); color: var(--ink-muted);">5 分钟</span>
-          </div>
-          <h3 class="dispatch-title">
-            <a href="/posts/bilingual-thought/">双语即思考：Agent 时代的写作不再被单一语言围困</a>
-          </h3>
-          <p class="dispatch-summary">
-            传统国际化的本质是把界面硬塞进翻译字典；而 Agent 时代的双语出版，让每篇思考同时在中文的凝练与英文的精密中获得立体感。
-          </p>
-          <div class="action-row">
-            <a class="btn primary" href="/posts/bilingual-thought/">阅读专栏 →</a>
-            <ul class="concept-list" aria-label="关联概念">
-              <li><a class="concept-tag" href="/archive/?concept=bilingual-i18n">原生双语</a></li>
-              <li><a class="concept-tag" href="/archive/?concept=knowledge-graph">思想图谱</a></li>
-            </ul>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="shell inside-band" aria-labelledby="archive-spread-heading">
-      <div class="inside-band-head">
-        <h2 id="archive-spread-heading" class="section-title">创刊卷精选 · Foundations &amp; Editor's Note</h2>
-        <a class="section-meta" href="/graph/">进入思想图谱 →</a>
-      </div>
-
-      <div class="magazine-spread-triple">
-        <article class="feature-plate-card" data-post-slug="software-longevity">
-          <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/posts/software-longevity/" aria-label="阅读专栏：十年之后依然可读">
-              <img
-                src="/assets/images/issue-02-software-longevity.jpg"
-                alt="瑞士现代主义平版版画：墨黑与钴蓝水平地质层叠横条由一根垂直基准线贯穿，中心落有一枚朱红正方形标点"
-                width="1200"
-                height="896"
-                loading="lazy"
-              >
-            </a>
-          </figure>
-          <div class="meta-line">
-            <span class="mono">No. 02</span>
-            <span>系统长期主义</span>
-            <time datetime="2026-11-04">2026.11.04</time>
-          </div>
-          <h3 class="plate-title-sm">
-            <a href="/posts/software-longevity/">十年之后依然可读：静态网页与数字资产的半衰期</a>
-          </h3>
-          <p class="dispatch-summary">
-            绝大多数个人博客不是死于失去写作热情，而是死于一次失败的依赖升级。把文字与交互沉淀为标准 HTML，是最朴素的抗衰法则。
-          </p>
-        </article>
-
-        <article class="feature-plate-card" data-post-slug="agent-era-publishing">
-          <figure class="editorial-plate">
-            <a class="cover-artwork-link" href="/posts/agent-era-publishing/" aria-label="阅读创刊专栏：后模板时代">
-              <img
-                src="/assets/images/issue-01-agent-era-publishing.jpg"
-                alt="瑞士现代主义平版插画：规整的黑白网格模块向外破格展开为叠合的钴蓝与墨黑斜切纸面，配以一处朱红方块"
-                width="1200"
-                height="896"
-                loading="lazy"
-              >
-            </a>
-          </figure>
-          <div class="meta-line">
-            <span class="mono">No. 01</span>
-            <span>创刊专栏</span>
-            <time datetime="2026-10-28">2026.10.28</time>
-          </div>
-          <h3 class="plate-title-sm">
-            <a href="/posts/agent-era-publishing/">后模板时代：为什么个人出版物应该由 Agent 直接书写 HTML</a>
-          </h3>
-          <p class="dispatch-summary">
-            传统静态博客框架是为了弥补人类手写 HTML 的体力极限而生的妥协。当编写者变成 Agent，我们可以拿回网页原本的表达自由。
-          </p>
         </article>
 
         <aside class="editor-note-col" aria-labelledby="editors-note-heading">
           <h3 id="editors-note-heading" class="section-title">发刊寄语 · Editor's Note</h3>
           <p class="editor-quote">
-            “把极致的高信噪比留给机器协议，把呼吸感、视觉构成与好奇心完整还给人类读者。”
+            “样式不再是为了好看而好看的形式，而是变成了个人独特审美的传递。也愿来到这里的你，永远不必长大，永远留有少年的探索心气。”
           </p>
           <p class="editor-copy">
-            <strong>Tong's Information</strong> 不使用任何前端构建框架。每一期都以纯文本原稿起笔，随后由编辑部为不同题材定制版面节奏、视觉版画与交互实验——普通随笔克制如纸质季刊，深度特稿则自由舒展。
+            <strong>Tong's Information</strong> 放下了一切静态博客框架与构建链，把这里的每一行代码全部开源。每一期都从纯文本原稿起笔，随后由作者与 AI Agent 直接在原生 HTML 画布上共创中英双语版面、视觉版画与交互实验。
           </p>
           <nav class="editor-links" aria-label="刊物延伸入口">
+            <a href="/stream/">
+              <span>翻阅思维碎片与手记</span>
+              <span class="mono">Stream →</span>
+            </a>
             <a href="/graph/">
               <span>探索思想图谱</span>
-              <span class="mono">05 × 07 →</span>
+              <span class="mono">01 × 05 →</span>
             </a>
             <a href="/archive/">
               <span>浏览全部刊物归档</span>
-              <span class="mono">05 Issues →</span>
+              <span class="mono">01 Issue →</span>
             </a>
             <a href="/about/">
               <span>了解这份刊物的制作方式</span>
@@ -326,6 +241,6 @@
   <!-- @endpartial:footer -->
 
   <script type="module" src="/assets/js/site.js"></script>
-  <script type="module" src="/assets/js/cover-model.js"></script>
+  <script type="module" src="/assets/js/cover-issue-01.js"></script>
 </body>
 </html>

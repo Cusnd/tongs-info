@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tong's Information - Demo — 思维切片（中文）</title>
+    <link>https://info-demo.esoren.com/stream/</link>
+    <description>碎片思考、随手摘录与公开手记。</description>
+    <language>zh-Hans</language>
+    <atom:link href="https://info-demo.esoren.com/stream/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>#005 (切片) — 给碎片流加上 `view-transition-class` 之后，筛选分类不再是生硬的显隐跳变，而是像活页纸片顺着导轨…</title>
+      <link>https://info-demo.esoren.com/stream/#t-005</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/stream/#t-005</guid>
+      <pubDate>Wed, 25 Nov 2026 21:15:00 +0000</pubDate>
+      <description>给碎片流加上 `view-transition-class` 之后，筛选分类不再是生硬的显隐跳变，而是像活页纸片顺着导轨滑入新位置——核心 CSS 不到十行。</description>
+    </item>
+    <item>
+      <title>#004 (待解) — 既然 `llms.txt` 和 `index.md` 已经替 AI Agent 铺好了极致纯净的高信噪比管道，那人类访问…</title>
+      <link>https://info-demo.esoren.com/stream/#t-004</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/stream/#t-004</guid>
+      <pubDate>Sun, 22 Nov 2026 16:40:00 +0000</pubDate>
+      <description>既然 `llms.txt` 和 `index.md` 已经替 AI Agent 铺好了极致纯净的高信噪比管道，那人类访问的 HTML 网页是不是终于可以卸下“信息喂食槽”的包袱，重新做回一件值得凝视的视觉作品？ [2026-11-24] 这个念头最终长成了 No. 05 封面特稿，顺手还做了一套双面透视实验室。</description>
+    </item>
+    <item>
+      <title>#003 (摘录) — 每次忍不住想给按钮外再套一层边框或加个状态红点时，就把这句话贴在眼前。克制不是贫瘠，而是让真正重要的文字与留白自己说话。</title>
+      <link>https://info-demo.esoren.com/stream/#t-003</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/stream/#t-003</guid>
+      <pubDate>Mon, 16 Nov 2026 11:20:00 +0000</pubDate>
+      <description>“Weniger, aber besser — 少，却更好。” 每次忍不住想给按钮外再套一层边框或加个状态红点时，就把这句话贴在眼前。克制不是贫瘠，而是让真正重要的文字与留白自己说话。</description>
+    </item>
+    <item>
+      <title>#002 (随想) — 同一个想法，用中文写出来往往凝练如金句，转成英文时却会立刻暴露隐含的前提和逻辑跳步。双语出版不只是多照顾一拨读者，更像自…</title>
+      <link>https://info-demo.esoren.com/stream/#t-002</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/stream/#t-002</guid>
+      <pubDate>Sun, 08 Nov 2026 23:05:00 +0000</pubDate>
+      <description>同一个想法，用中文写出来往往凝练如金句，转成英文时却会立刻暴露隐含的前提和逻辑跳步。双语出版不只是多照顾一拨读者，更像自带一面逻辑校准镜。</description>
+    </item>
+    <item>
+      <title>#001 (随想) — 开卷第一条手记：不装任何构建器，不依赖运行时框架。十年后随便找一台还能打开浏览器的设备，双击这几个纯文本与 HTML 文…</title>
+      <link>https://info-demo.esoren.com/stream/#t-001</link>
+      <guid isPermaLink="true">https://info-demo.esoren.com/stream/#t-001</guid>
+      <pubDate>Fri, 30 Oct 2026 09:50:00 +0000</pubDate>
+      <description>开卷第一条手记：不装任何构建器，不依赖运行时框架。十年后随便找一台还能打开浏览器的设备，双击这几个纯文本与 HTML 文件，它们应该依然读得清清楚楚。</description>
+    </item>
+  </channel>
+</rss>

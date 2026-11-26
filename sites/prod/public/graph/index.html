@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="stylesheet" href="/assets/css/publication.css">
   <link rel="expect" href="#hero-fold" blocking="render">
   <script async blocking="render" src="/assets/js/transitions.js"></script>
   <script type="application/ld+json">
@@ -31,7 +32,7 @@
 <body data-page-type="graph">
   <!-- @partial:header -->
 <a href="#main-content" class="skip-link visually-hidden">跳至正文内容</a>
-<header class="site-header" data-site-name="Tong's Information" data-site-author="Tong" data-issue-order="{&quot;dual-audience-web&quot;:5,&quot;ambient-interfaces&quot;:4,&quot;bilingual-thought&quot;:3,&quot;software-longevity&quot;:2,&quot;agent-era-publishing&quot;:1}">
+<header class="site-header" data-site-name="Tong's Information" data-site-author="Liu Tong" data-issue-order="{&quot;let-blogs-be-blogs-again&quot;:1}">
   <div class="shell masthead-bar">
     <a class="brand-mark" href="/">
       <span class="brand-wordmark" lang="en">Tong's Information</span>
@@ -40,6 +41,7 @@
       <ul>
         <li><a href="/">封面</a></li>
         <li><a href="/archive/">归档</a></li>
+        <li><a href="/stream/">思维</a></li>
         <li><a href="/graph/" aria-current="page">图谱</a></li>
         <li><a href="/about/">关于</a></li>
       </ul>
@@ -92,7 +94,7 @@
         <aside class="graph-inspector" aria-label="节点检查器">
           <div id="graph-inspector-body" class="stack-sm">
             <span class="badge">拓扑概览</span>
-            <h2 style="font-size: var(--text-xl);">5 期文章 × 7 个核心概念</h2>
+            <h2 style="font-size: var(--text-xl);">1 期文章 × 5 个核心概念</h2>
             <p style="font-size: var(--text-sm); color: var(--ink-secondary);">
               启用 JavaScript 后可在画布或下方索引中交互高亮双向连接；也可直接点击下方结构化索引表中的文章与概念链接，或访问 <a href="/api/graph.json">/api/graph.json</a>。
             </p>
@@ -119,76 +121,40 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong><a href="/posts/dual-audience-web/">No. 05 双面万维网</a></strong></td>
+            <td><strong><a href="/posts/let-blogs-be-blogs-again/">No. 01 让博客重新成为博客</a></strong></td>
             <td class="mono">Feature</td>
-            <td>关联：Agent 万维网、思想图谱、边缘演进架构、瑞士排印与网格</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="post:dual-audience-web" hidden>查看</button><noscript><a class="btn subtle" href="/posts/dual-audience-web/">阅读 →</a></noscript></td>
+            <td>关联：独立博客、无框架网页、AI 与创造力、个人审美与表达、开源与时代见证</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="post:let-blogs-be-blogs-again" hidden>查看</button><noscript><a class="btn subtle" href="/posts/let-blogs-be-blogs-again/">阅读 →</a></noscript></td>
           </tr>
           <tr>
-            <td><strong><a href="/posts/ambient-interfaces/">No. 04 宁静界面</a></strong></td>
-            <td class="mono">Feature</td>
-            <td>关联：界面克制与意图设计、Agent 万维网、瑞士排印与网格</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="post:ambient-interfaces" hidden>查看</button><noscript><a class="btn subtle" href="/posts/ambient-interfaces/">阅读 →</a></noscript></td>
-          </tr>
-          <tr>
-            <td><strong><a href="/posts/bilingual-thought/">No. 03 双语即思考</a></strong></td>
-            <td class="mono">Essay</td>
-            <td>关联：Agent 原生双语、Agent 万维网、思想图谱</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="post:bilingual-thought" hidden>查看</button><noscript><a class="btn subtle" href="/posts/bilingual-thought/">阅读 →</a></noscript></td>
-          </tr>
-          <tr>
-            <td><strong><a href="/posts/software-longevity/">No. 02 十年之后依然可读</a></strong></td>
-            <td class="mono">Essay</td>
-            <td>关联：纯静态架构、边缘演进架构、界面克制与意图设计</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="post:software-longevity" hidden>查看</button><noscript><a class="btn subtle" href="/posts/software-longevity/">阅读 →</a></noscript></td>
-          </tr>
-          <tr>
-            <td><strong><a href="/posts/agent-era-publishing/">No. 01 后模板时代</a></strong></td>
-            <td class="mono">Essay</td>
-            <td>关联：Agent 万维网、纯静态架构、瑞士排印与网格、Agent 原生双语</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="post:agent-era-publishing" hidden>查看</button><noscript><a class="btn subtle" href="/posts/agent-era-publishing/">阅读 →</a></noscript></td>
-          </tr>
-          <tr>
-            <td><strong><a href="/archive/?concept=agent-web">Agent 万维网</a></strong></td>
+            <td><strong><a href="/archive/?concept=indie-blog">独立博客</a></strong></td>
             <td class="mono">Concept</td>
-            <td>将网站同时设计为人类阅读界面与机器可消费的知识协议。</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="concept:agent-web" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=agent-web">归档 →</a></noscript></td>
+            <td>从虚拟主机、WordPress 到无框架静态网页，个人数字自留地的演进与回归。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:indie-blog" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=indie-blog">归档 →</a></noscript></td>
           </tr>
           <tr>
-            <td><strong><a href="/archive/?concept=interface-craft">界面克制与意图设计</a></strong></td>
+            <td><strong><a href="/archive/?concept=frameworkless-web">无框架网页</a></strong></td>
             <td class="mono">Concept</td>
-            <td>剥离多余控件与视觉噪音，让界面回归清晰意图与安静秩序。</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="concept:interface-craft" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=interface-craft">归档 →</a></noscript></td>
+            <td>放下构建工具与模板拐杖，以一页原生 HTML5 作为自由呼吸与生长的画布。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:frameworkless-web" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=frameworkless-web">归档 →</a></noscript></td>
           </tr>
           <tr>
-            <td><strong><a href="/archive/?concept=static-architecture">纯静态架构</a></strong></td>
+            <td><strong><a href="/archive/?concept=llm-creation">AI 与创造力</a></strong></td>
             <td class="mono">Concept</td>
-            <td>告别重型构建链与依赖腐烂，回归长期可持续的原生 Web 标准。</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="concept:static-architecture" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=static-architecture">归档 →</a></noscript></td>
+            <td>当想象力与执行力之间的距离归零，大语言模型如何重塑个人的思考与表达。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:llm-creation" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=llm-creation">归档 →</a></noscript></td>
           </tr>
           <tr>
-            <td><strong><a href="/archive/?concept=swiss-typography">瑞士排印与网格</a></strong></td>
+            <td><strong><a href="/archive/?concept=personal-aesthetics">个人审美与表达</a></strong></td>
             <td class="mono">Concept</td>
-            <td>以数学网格、清晰层级、发丝分割线与克制留白构建理性阅读秩序。</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="concept:swiss-typography" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=swiss-typography">归档 →</a></noscript></td>
+            <td>跳出千篇一律的社区模板与祖传 CSS，让样式从形式装饰跃进为人的精神传递。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:personal-aesthetics" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=personal-aesthetics">归档 →</a></noscript></td>
           </tr>
           <tr>
-            <td><strong><a href="/archive/?concept=bilingual-i18n">Agent 原生双语</a></strong></td>
+            <td><strong><a href="/archive/?concept=open-source-chronicle">开源与时代见证</a></strong></td>
             <td class="mono">Concept</td>
-            <td>以单一灵感源稿出发，由 Agent 编辑部产出同等文学与排印品质的双语版本。</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="concept:bilingual-i18n" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=bilingual-i18n">归档 →</a></noscript></td>
-          </tr>
-          <tr>
-            <td><strong><a href="/archive/?concept=knowledge-graph">思想图谱</a></strong></td>
-            <td class="mono">Concept</td>
-            <td>用概念拓扑与双向连接取代扁平时间线，沉淀可演进的个人知识网络。</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="concept:knowledge-graph" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=knowledge-graph">归档 →</a></noscript></td>
-          </tr>
-          <tr>
-            <td><strong><a href="/archive/?concept=edge-architecture">边缘演进架构</a></strong></td>
-            <td class="mono">Concept</td>
-            <td>基于 Cloudflare Workers Static Assets，兼顾当下纯静态与未来边缘 Agent 能力。</td>
-            <td><button type="button" class="btn subtle" data-select-graph-node="concept:edge-architecture" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=edge-architecture">归档 →</a></noscript></td>
+            <td>把每一行代码交由开源仓库与 Commit 记录留存，见证一个时代的思维与手艺。</td>
+            <td><button type="button" class="btn subtle" data-select-graph-node="concept:open-source-chronicle" hidden>查看</button><noscript><a class="btn subtle" href="/archive/?concept=open-source-chronicle">归档 →</a></noscript></td>
           </tr>
         </tbody>
       </table>

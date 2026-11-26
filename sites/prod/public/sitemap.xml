@@ -21,6 +21,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/archive/" />
   </url>
   <url>
+    <loc>https://www.esoren.com/stream/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/stream/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/stream/" />
+  </url>
+  <url>
+    <loc>https://www.esoren.com/en/stream/</loc>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/stream/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/stream/" />
+  </url>
+  <url>
     <loc>https://www.esoren.com/graph/</loc>
     <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/graph/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/graph/" />
@@ -41,63 +51,15 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/about/" />
   </url>
   <url>
-    <loc>https://www.esoren.com/posts/dual-audience-web/</loc>
-    <lastmod>2026-11-24</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/dual-audience-web/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/dual-audience-web/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/en/posts/dual-audience-web/</loc>
-    <lastmod>2026-11-24</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/dual-audience-web/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/dual-audience-web/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/posts/ambient-interfaces/</loc>
-    <lastmod>2026-11-18</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/ambient-interfaces/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/ambient-interfaces/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/en/posts/ambient-interfaces/</loc>
-    <lastmod>2026-11-18</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/ambient-interfaces/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/ambient-interfaces/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/posts/bilingual-thought/</loc>
+    <loc>https://www.esoren.com/posts/let-blogs-be-blogs-again/</loc>
     <lastmod>2026-11-25</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/bilingual-thought/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/bilingual-thought/" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/let-blogs-be-blogs-again/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/let-blogs-be-blogs-again/" />
   </url>
   <url>
-    <loc>https://www.esoren.com/en/posts/bilingual-thought/</loc>
+    <loc>https://www.esoren.com/en/posts/let-blogs-be-blogs-again/</loc>
     <lastmod>2026-11-25</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/bilingual-thought/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/bilingual-thought/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/posts/software-longevity/</loc>
-    <lastmod>2026-11-04</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/software-longevity/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/software-longevity/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/en/posts/software-longevity/</loc>
-    <lastmod>2026-11-04</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/software-longevity/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/software-longevity/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/posts/agent-era-publishing/</loc>
-    <lastmod>2026-11-24</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/agent-era-publishing/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/agent-era-publishing/" />
-  </url>
-  <url>
-    <loc>https://www.esoren.com/en/posts/agent-era-publishing/</loc>
-    <lastmod>2026-11-24</lastmod>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/agent-era-publishing/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/agent-era-publishing/" />
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.esoren.com/posts/let-blogs-be-blogs-again/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.esoren.com/en/posts/let-blogs-be-blogs-again/" />
   </url>
 </urlset>

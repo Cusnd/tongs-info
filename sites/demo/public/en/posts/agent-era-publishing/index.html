@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/editorial.css">
   <link rel="stylesheet" href="/assets/css/motion.css">
+  <link rel="stylesheet" href="/assets/css/comments.css">
   <link rel="preload" as="image" href="/assets/images/issue-01-agent-era-publishing.jpg" fetchpriority="high">
   <link rel="expect" href="#hero-fold" blocking="render">
   <script async blocking="render" src="/assets/js/transitions.js"></script>
@@ -48,6 +49,7 @@
       <ul>
         <li><a href="/en/">Cover</a></li>
         <li><a href="/en/archive/">Archive</a></li>
+        <li><a href="/en/stream/">Stream</a></li>
         <li><a href="/en/graph/">Graph</a></li>
         <li><a href="/en/about/">About</a></li>
       </ul>
@@ -200,6 +202,10 @@ tools/editorial_sync.py            # Zero-dep sync: chrome, .md twins, RSS, llms
             The web browser remains the most backwards-compatible runtime ever built. Clean HTML5 paired with modern CSS (<code>@layer</code>, <code>light-dark()</code>, native <code>&lt;dialog&gt;</code>, and cross-document View Transitions) delivers instant performance today and remains effortlessly legible ten years from now — both to human eyes and to the next generation of AI agents.
           </p>
           <p>This is Issue 01 of <em>Tong's Information</em>, and the foundation of the desk.</p>
+
+          <ti-comments id="comments">
+            <noscript><p class="ti-comments-noscript">Reader Notes requires JavaScript for silent anti-abuse verification and posting.</p></noscript>
+          </ti-comments>
 
           <section class="article-footer-band" aria-label="Concepts and related reading">
             <div>

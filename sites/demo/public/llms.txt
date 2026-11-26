@@ -7,6 +7,9 @@
 - Full bilingual corpus: https://info-demo.esoren.com/llms-full.txt
 - Structured catalog JSON: https://info-demo.esoren.com/api/posts.json
 - Concept topology graph JSON: https://info-demo.esoren.com/api/graph.json
+- Stream (fragments) JSON: https://info-demo.esoren.com/api/stream.json
+- Stream Markdown twins: https://info-demo.esoren.com/en/stream/index.md | https://info-demo.esoren.com/stream/index.md
+- Stream RSS feeds: https://info-demo.esoren.com/en/stream/rss.xml | https://info-demo.esoren.com/stream/rss.xml
 - English RSS / JSON Feed: https://info-demo.esoren.com/en/rss.xml | https://info-demo.esoren.com/en/feed.json
 - Chinese RSS / JSON Feed: https://info-demo.esoren.com/rss.xml | https://info-demo.esoren.com/feed.json
 
@@ -32,3 +35,10 @@
 - **Agent-Native i18n / Agent 原生双语** (`bilingual-i18n`): Writing from a single source of thought while an agent editorial desk crafts idiomatic bilingual editions.
 - **Knowledge Graph / 思想图谱** (`knowledge-graph`): Replacing flat chronological feeds with conceptual topology and bidirectional links.
 - **Edge Architecture / 边缘演进架构** (`edge-architecture`): Hosting on Cloudflare Workers Static Assets for zero-ops static delivery today with seamless upgrades to content negotiation and MCP tomorrow.
+
+## Stream (Recent Fragments)
+- [#005 (2026-11-25 · SNIPPET)](https://info-demo.esoren.com/en/stream/#t-005): Adding `view-transition-class` turns list filtering from an abrupt hide/show snap into archival index cards gliding cleanly along a rail — all in under ten lines of CSS. / 给碎片流加上 `view-transition-class` 之后，筛选分类不再是生硬的显隐跳变，而是像活页纸片顺着导轨滑入新位置——核心 CSS 不到十行。
+- [#004 (2026-11-22 · QUESTION)](https://info-demo.esoren.com/en/stream/#t-004): Once `llms.txt` and clean `index.md` twins give AI agents a dedicated high-signal channel, can human-facing HTML finally stop flattening itself into plain text and become a tactile visual medium again? / 既然 `llms.txt` 和 `index.md` 已经替 AI Agent 铺好了极致纯净的高信噪比管道，那人类访问的 HTML 网页是不是终于可以卸下“信息喂食槽”的包袱，重新做回一件值得凝视的视觉作品？
+- [#003 (2026-11-16 · QUOTE)](https://info-demo.esoren.com/en/stream/#t-003): A steady reminder whenever the urge strikes to wrap a control in one more border or slap a status dot on a heading. Restraint isn't scarcity; it lets typography and whitespace carry the room. / 每次忍不住想给按钮外再套一层边框或加个状态红点时，就把这句话贴在眼前。克制不是贫瘠，而是让真正重要的文字与留白自己说话。
+- [#002 (2026-11-08 · MUSING)](https://info-demo.esoren.com/en/stream/#t-002): An idea written in Chinese often lands with aphoristic compression, yet translating it into idiomatic English immediately exposes every unspoken premise. Bilingual publishing isn't just wider reach — it's a built-in calibration mirror for thought. / 同一个想法，用中文写出来往往凝练如金句，转成英文时却会立刻暴露隐含的前提和逻辑跳步。双语出版不只是多照顾一拨读者，更像自带一面逻辑校准镜。
+- [#001 (2026-10-30 · MUSING)](https://info-demo.esoren.com/en/stream/#t-001): First studio note on the ledger: no bundler, no runtime framework. Ten years from now, on any machine that can still open a browser, double-clicking these plain HTML and Markdown files should still read cleanly. / 开卷第一条手记：不装任何构建器，不依赖运行时框架。十年后随便找一台还能打开浏览器的设备，双击这几个纯文本与 HTML 文件，它们应该依然读得清清楚楚。

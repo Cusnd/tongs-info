@@ -24,6 +24,14 @@
   Content-Type: text/markdown; charset=utf-8
   Cache-Control: public, max-age=300
 
+/stream/index.md
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=300
+
+/en/stream/index.md
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=300
+
 /api/*
   Content-Type: application/json; charset=utf-8
   Access-Control-Allow-Origin: *
@@ -33,11 +41,29 @@
   ! Cache-Control
   Cache-Control: public, max-age=0, must-revalidate
 
+/api/comments
+  ! Cache-Control
+  ! Access-Control-Allow-Origin
+  Cache-Control: no-store
+
+/api/comments/*
+  ! Cache-Control
+  ! Access-Control-Allow-Origin
+  Cache-Control: no-store
+
 /rss.xml
   Content-Type: application/rss+xml; charset=utf-8
   Cache-Control: public, max-age=300
 
 /en/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8
+  Cache-Control: public, max-age=300
+
+/stream/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8
+  Cache-Control: public, max-age=300
+
+/en/stream/rss.xml
   Content-Type: application/rss+xml; charset=utf-8
   Cache-Control: public, max-age=300
 
