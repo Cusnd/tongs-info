@@ -22,7 +22,10 @@ const URL_COUNT_RE = /(?:https?:\/\/|www\.)\S+/gi;
 const CONTROL_AND_BIDI_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u202A-\u202E\u2066-\u2069]/g;
 
 const MAX_REQUEST_BYTES = 16 * 1024;
+const MAX_AUTH_REQUEST_BYTES = 2 * 1024;
 const MAX_MULTIPART_BYTES = 7 * 1024 * 1024;
+const AUTHOR_COOKIE_NAME = "ti_author_session";
+const AUTHOR_SESSION_TTL_SEC = 30 * 24 * 60 * 60;
 const MAX_IMAGES_PER_COMMENT = 3;
 const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 const MAX_IMAGE_DIMENSION = 4096;
@@ -341,6 +344,10 @@ async function readCreateCommentPayload(request) {
       const fb = formData.get("fallbackMode");
       if (typeof fb === "string") {
         data.fallbackMode = fb === "true" || fb === "1";
+      }
+      const expAuthor = formData.get("expectAuthor");
+      if (typeof expAuthor === "string") {
+        data.expectAuthor = expAuthor === "true" || expAuthor === "1";
       }
     }
 
@@ -1036,11 +1043,98 @@ async function verifyGateToken(env, token, expectedSite, expectedSlug) {
   return { ok: true, payload, now };
 }
 
-async function verifyAuthorHeader(request, env) {
-  const token = (request.headers.get("X-Author-Key") || "").trim();
+function parseCookie(request, name) {
+  const header = request.headers.get("Cookie");
+  if (!header) return "";
+  const prefix = `${name}=`;
+  for (const part of header.split(";")) {
+    const trimmed = part.trim();
+    if (trimmed.startsWith(prefix)) {
+      return trimmed.slice(prefix.length).trim();
+    }
+  }
+  return "";
+}
+
+async function deriveAuthorSessionKey(env) {
   const configured = (env.COMMENT_ADMIN_TOKEN || "").trim();
-  if (!token || !configured) return false;
-  return timingSafeEqualStrings(token, configured);
+  if (!configured) return null;
+  const gateSecret = (env.COMMENT_GATE_SECRET || "").trim();
+  // Including COMMENT_ADMIN_TOKEN in the key derivation ensures rotating the admin secret
+  // immediately revokes all previously issued session cookies.
+  return sha256Hex(`ti-author-session-v1:${gateSecret}:${configured}`);
+}
+
+function formatAuthorCookie(request, value, maxAgeSec) {
+  const isHttps = new URL(request.url).protocol === "https:";
+  const parts = [
+    `${AUTHOR_COOKIE_NAME}=${value}`,
+    "Path=/api/comments",
+    "HttpOnly",
+    "SameSite=Strict",
+    `Max-Age=${maxAgeSec}`,
+  ];
+  if (isHttps) parts.push("Secure");
+  return parts.join("; ");
+}
+
+async function issueAuthorSessionCookie(request, env, site) {
+  const key = await deriveAuthorSessionKey(env);
+  if (!key) return null;
+  const now = Date.now();
+  const payload = {
+    v: 1,
+    site,
+    iat: now,
+    exp: now + AUTHOR_SESSION_TTL_SEC * 1000,
+  };
+  const payloadB64 = bytesToBase64Url(encoder.encode(JSON.stringify(payload)));
+  const sigB64 = bytesToBase64Url(await hmacSign(key, payloadB64));
+  return formatAuthorCookie(request, `${payloadB64}.${sigB64}`, AUTHOR_SESSION_TTL_SEC);
+}
+
+function clearAuthorSessionCookie(request) {
+  return formatAuthorCookie(request, "", 0);
+}
+
+async function verifyAuthorSessionCookie(request, env, expectedSite) {
+  const raw = parseCookie(request, AUTHOR_COOKIE_NAME);
+  if (!raw || raw.length < 20 || raw.length > 512) return false;
+  const key = await deriveAuthorSessionKey(env);
+  if (!key) return false;
+  const dotIdx = raw.indexOf(".");
+  if (dotIdx <= 0 || dotIdx !== raw.lastIndexOf(".")) return false;
+  const payloadB64 = raw.slice(0, dotIdx);
+  const sigB64 = raw.slice(dotIdx + 1);
+  const expectedSig = bytesToBase64Url(await hmacSign(key, payloadB64));
+  const sigMatch = await timingSafeEqualStrings(sigB64, expectedSig);
+  if (!sigMatch) return false;
+  let payload;
+  try {
+    payload = JSON.parse(decoder.decode(base64UrlToBytes(payloadB64)));
+  } catch {
+    return false;
+  }
+  if (
+    payload?.v !== 1 ||
+    payload?.site !== expectedSite ||
+    typeof payload?.exp !== "number" ||
+    Date.now() > payload.exp
+  ) {
+    return false;
+  }
+  return true;
+}
+
+async function verifyAuthorRequest(request, env) {
+  const configured = (env.COMMENT_ADMIN_TOKEN || "").trim();
+  if (!configured) return false;
+  const headerToken = (request.headers.get("X-Author-Key") || "").trim();
+  if (headerToken) {
+    return timingSafeEqualStrings(headerToken, configured);
+  }
+  const site = String(env.SITE_ID || "prod");
+  return verifyAuthorSessionCookie(request, env, site);
 }
 
 async function verifyTurnstileToken(env, token, clientIp) {
@@ -1259,7 +1353,8 @@ async function handleGetComments(request, env, ctx) {
   }
 
   const site = String(env.SITE_ID || "prod");
-  const isAuthor = await verifyAuthorHeader(request, env);
+  const hasSessionCookie = Boolean(parseCookie(request, AUTHOR_COOKIE_NAME));
+  const isAuthor = await verifyAuthorRequest(request, env);
 
   const imagesQuery = env.COMMENTS_DB.prepare(
     `SELECT id, comment_id, mime_type, width, height, size_bytes, alt, sort_order
@@ -1313,6 +1408,11 @@ async function handleGetComments(request, env, ctx) {
     ctx.waitUntil(drainImageDeletionOutbox(env, site, origin).catch(() => {}));
   }
 
+  const extraHeaders = {};
+  if (hasSessionCookie && !isAuthor) {
+    extraHeaders["Set-Cookie"] = clearAuthorSessionCookie(request);
+  }
+
   return jsonResponse({
     ok: true,
     site,
@@ -1331,8 +1431,9 @@ async function handleGetComments(request, env, ctx) {
       maxImageBytes: MAX_IMAGE_BYTES,
       acceptedImageTypes: ACCEPTED_IMAGE_TYPES,
       authorMode: isAuthor,
+      authorName: isAuthor ? String(env.SITE_AUTHOR || "Author") : "",
     },
-  });
+  }, 200, extraHeaders);
 }
 
 async function handleGetCommentImage(request, env, imageId, ctx) {
@@ -1481,6 +1582,33 @@ async function handleGetCommentImage(request, env, imageId, ctx) {
   return response;
 }
 
+async function readAuthorVerifyCandidate(request) {
+  const headerToken = (request.headers.get("X-Author-Key") || "").trim();
+  if (headerToken) return { token: headerToken };
+
+  const ct = (request.headers.get("Content-Type") || "").toLowerCase();
+  if (!ct.includes("application/json")) return { token: "" };
+
+  const rawBody = await readBodyBytesBounded(request, MAX_AUTH_REQUEST_BYTES);
+  if (rawBody.error) {
+    return { error: rawBody.error === "invalid_payload" ? "invalid_json" : rawBody.error, status: rawBody.status };
+  }
+  try {
+    const parsed = JSON.parse(decoder.decode(rawBody.bytes));
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return { error: "invalid_json", status: 400 };
+    }
+    const candidate = typeof parsed.password === "string"
+      ? parsed.password
+      : typeof parsed.authorKey === "string"
+        ? parsed.authorKey
+        : "";
+    return { token: candidate.trim() };
+  } catch {
+    return { error: "invalid_json", status: 400 };
+  }
+}
+
 async function handleAuthorVerify(request, env) {
   if (!isOriginAllowed(request, env)) {
     return jsonResponse({ ok: false, error: "forbidden_origin" }, 403);
@@ -1491,11 +1619,41 @@ async function handleAuthorVerify(request, env) {
   if (!allowed) {
     return jsonResponse({ ok: false, error: "rate_limited", retryAfterSec: 60 }, 429);
   }
-  const isAuthor = await verifyAuthorHeader(request, env);
+  const configured = (env.COMMENT_ADMIN_TOKEN || "").trim();
+  if (!configured) {
+    return jsonResponse({ ok: false, error: "auth_unconfigured" }, 503);
+  }
+  const parsed = await readAuthorVerifyCandidate(request);
+  if (parsed.error) {
+    return jsonResponse({ ok: false, error: parsed.error }, parsed.status || 400);
+  }
+  const isAuthor = await timingSafeEqualStrings(parsed.token || "", configured);
   if (!isAuthor) {
     return jsonResponse({ ok: false, error: "invalid_author_key" }, 401);
   }
-  return jsonResponse({ ok: true, author: true });
+  const site = String(env.SITE_ID || "prod");
+  const cookie = await issueAuthorSessionCookie(request, env, site);
+  const extraHeaders = cookie ? { "Set-Cookie": cookie } : {};
+  return jsonResponse(
+    {
+      ok: true,
+      author: true,
+      authorName: String(env.SITE_AUTHOR || "Author"),
+    },
+    200,
+    extraHeaders
+  );
+}
+
+async function handleAuthorLogout(request, env) {
+  if (!isOriginAllowed(request, env)) {
+    return jsonResponse({ ok: false, error: "forbidden_origin" }, 403);
+  }
+  return jsonResponse(
+    { ok: true, author: false },
+    200,
+    { "Set-Cookie": clearAuthorSessionCookie(request) }
+  );
 }
 
 async function handleCreateComment(request, env, ctx) {
@@ -1507,7 +1665,7 @@ async function handleCreateComment(request, env, ctx) {
   }
 
   const site = String(env.SITE_ID || "prod");
-  const isAuthor = await verifyAuthorHeader(request, env);
+  const isAuthor = await verifyAuthorRequest(request, env);
   const clientIp = getClientIp(request);
   const ipHashes = await computeDailyIpHashes(clientIp, env.COMMENT_GATE_SECRET);
   const ipHash = ipHashes.current;
@@ -1526,6 +1684,14 @@ async function handleCreateComment(request, env, ctx) {
   }
   const input = parsedPayload.data;
   const uploadedFiles = parsedPayload.files || [];
+
+  if (input.expectAuthor === true && !isAuthor) {
+    return jsonResponse(
+      { ok: false, error: "author_session_expired" },
+      401,
+      { "Set-Cookie": clearAuthorSessionCookie(request) }
+    );
+  }
 
   if (uploadedFiles.length > MAX_IMAGES_PER_COMMENT) {
     return jsonResponse({ ok: false, error: "too_many_images" }, 400);
@@ -2256,9 +2422,14 @@ async function handleDeleteComment(request, env, commentId, ctx) {
     return jsonResponse({ ok: false, error: "rate_limited", retryAfterSec: 60 }, 429);
   }
 
-  const isAuthor = await verifyAuthorHeader(request, env);
+  const hasSessionCookie = Boolean(parseCookie(request, AUTHOR_COOKIE_NAME));
+  const isAuthor = await verifyAuthorRequest(request, env);
   if (!isAuthor) {
-    return jsonResponse({ ok: false, error: "unauthorized" }, 401);
+    return jsonResponse(
+      { ok: false, error: "unauthorized" },
+      401,
+      hasSessionCookie ? { "Set-Cookie": clearAuthorSessionCookie(request) } : {}
+    );
   }
   if (!COMMENT_ID_RE.test(commentId)) {
     return jsonResponse({ ok: false, error: "invalid_id" }, 400);
@@ -2350,6 +2521,13 @@ export default {
     if (path === "/api/comments/author/verify") {
       if (request.method === "POST") {
         return handleAuthorVerify(request, env);
+      }
+      return jsonResponse({ ok: false, error: "method_not_allowed" }, 405, { Allow: "POST" });
+    }
+
+    if (path === "/api/comments/author/logout") {
+      if (request.method === "POST") {
+        return handleAuthorLogout(request, env);
       }
       return jsonResponse({ ok: false, error: "method_not_allowed" }, 405, { Allow: "POST" });
     }

@@ -76,6 +76,38 @@ const COPY = {
     justNow: "刚刚",
     statusReady: "无需登录 · Ctrl/⌘ + Enter 投递",
     statusReadyImages: "无需登录 · 支持粘贴或拖入图片 · Ctrl/⌘ + Enter",
+    statusReadyAuthor: "作者模式 · 免核验直发 · Ctrl/⌘ + Enter",
+    statusReadyAuthorImages: "作者模式 · 支持粘贴或拖入图片 · Ctrl/⌘ + Enter",
+    authorModeBanner: (name) => (name ? `作者模式 · 将以「${name}」身份发布` : "作者模式 · 将附带作者认证标识"),
+    authorSignOut: "退出",
+    authorSignInDone: (name) => (name ? `已验证作者身份（${name}）。` : "已验证作者身份。"),
+    authorSignOutDone: "已退出作者模式。",
+    authDialogTitle: "作者身份验证",
+    authDialogDesc: "输入管理员密码，以作者权限发表评论或管理当前讨论。",
+    authDialogActiveDesc: (name) =>
+      name
+        ? `当前已处于作者模式（${name}）。发言将自动附带「作者」标识，并可管理留言。`
+        : "当前已处于作者模式。发言将自动附带「作者」标识，并可管理留言。",
+    authPasswordLabel: "管理员密码",
+    authPasswordPlaceholder: "请输入管理员密码",
+    authShowPassword: "显示密码",
+    authHidePassword: "隐藏密码",
+    authShowWarning: "注意：这将在屏幕上明文显示密码。",
+    authCancel: "取消",
+    authSubmit: "验证身份",
+    authSubmitting: "验证中…",
+    authSignOutBtn: "退出作者模式",
+    authErrEmpty: "请输入管理员密码。",
+    authErrInvalid: "密码不正确，请检查后重试。",
+    authErrRateLimited: "尝试过于频繁，请稍后再试。",
+    authErrUnconfigured: "当前站点尚未配置作者鉴权密钥。",
+    authErrNetwork: "网络暂时中断，无法完成验证。",
+    errAuthorExpired: "作者登录状态已过期，请重新输入密码验证。",
+    delete: "删除",
+    deleteConfirm: "确认删除",
+    deleting: "删除中…",
+    deleteDone: "已删除该条来信。",
+    deleteFailed: "删除失败，请稍后重试。",
     statusInking: "校准墨迹…",
     statusVerifying: "核验来信印记…",
     statusSealing: "静默签章中…",
@@ -91,6 +123,11 @@ const COPY = {
     dropHint: "松开以附带图片",
     removeImage: (idx) => `移除第 ${idx} 张图片`,
     previewImage: (idx) => `预览第 ${idx} 张待发送图片`,
+    altBtn: "ALT",
+    altBtnFilled: "ALT ✓",
+    altToggleAria: (idx) => `编辑第 ${idx} 张图片的说明（选填）`,
+    altTag: (idx, total) => (total > 1 ? `图 ${idx} 说明` : "图片说明"),
+    altDone: "完成",
     altPlaceholder: "图片说明 · 选填",
     altAria: (idx) => `第 ${idx} 张图片的说明（选填）`,
     viewImage: (idx, total) => (total > 1 ? `查看大图（${idx}/${total}）` : "查看大图"),
@@ -153,6 +190,38 @@ const COPY = {
     justNow: "just now",
     statusReady: "No login · Ctrl/⌘ + Enter to post",
     statusReadyImages: "No login · Paste or drop images · Ctrl/⌘ + Enter",
+    statusReadyAuthor: "Author Mode · Instant post · Ctrl/⌘ + Enter",
+    statusReadyAuthorImages: "Author Mode · Paste or drop images · Ctrl/⌘ + Enter",
+    authorModeBanner: (name) => (name ? `Author Mode · Posting as ${name}` : "Author Mode · Verified author badge enabled"),
+    authorSignOut: "Sign out",
+    authorSignInDone: (name) => (name ? `Signed in as author (${name}).` : "Author Mode enabled."),
+    authorSignOutDone: "Signed out of Author Mode.",
+    authDialogTitle: "Author Verification",
+    authDialogDesc: "Enter the admin password to post with the verified Author badge and moderate notes.",
+    authDialogActiveDesc: (name) =>
+      name
+        ? `Author Mode is active (${name}). Your notes will carry the verified Author badge.`
+        : "Author Mode is active. Your notes will carry the verified Author badge.",
+    authPasswordLabel: "Admin password",
+    authPasswordPlaceholder: "Enter admin password",
+    authShowPassword: "Show password",
+    authHidePassword: "Hide password",
+    authShowWarning: "Warning: this will display your password on the screen.",
+    authCancel: "Cancel",
+    authSubmit: "Verify",
+    authSubmitting: "Verifying…",
+    authSignOutBtn: "Sign out",
+    authErrEmpty: "Please enter the admin password.",
+    authErrInvalid: "Incorrect password. Please try again.",
+    authErrRateLimited: "Too many attempts. Please wait a moment and try again.",
+    authErrUnconfigured: "Author authentication is not configured for this site.",
+    authErrNetwork: "Network error — could not verify password.",
+    errAuthorExpired: "Your author session expired. Please verify again.",
+    delete: "Delete",
+    deleteConfirm: "Confirm delete",
+    deleting: "Deleting…",
+    deleteDone: "Note deleted.",
+    deleteFailed: "Could not delete note right now.",
     statusInking: "Inking…",
     statusVerifying: "Verifying postmark…",
     statusSealing: "Sealing postmark…",
@@ -168,6 +237,11 @@ const COPY = {
     dropHint: "Drop images to attach",
     removeImage: (idx) => `Remove image ${idx}`,
     previewImage: (idx) => `Preview staged image ${idx}`,
+    altBtn: "ALT",
+    altBtnFilled: "ALT ✓",
+    altToggleAria: (idx) => `Edit optional alt text for image ${idx}`,
+    altTag: (idx, total) => (total > 1 ? `Image ${idx} alt` : "Alt text"),
+    altDone: "Done",
     altPlaceholder: "Alt text · optional",
     altAria: (idx) => `Optional alt text for image ${idx}`,
     viewImage: (idx, total) => (total > 1 ? `View full image (${idx} of ${total})` : "View full image"),
@@ -203,6 +277,38 @@ const MAX_CLIENT_ANIM_TOTAL_PIXELS = 64_000_000;
 
 function supportsTopLayerExit() {
   return Boolean(window.CSS?.supports?.("overlay", "auto") && canTransitionDisplay());
+}
+
+function scrollIntoViewAsync(element, options) {
+  if (!element || typeof element.scrollIntoView !== "function") {
+    return Promise.resolve();
+  }
+  const result = element.scrollIntoView(options);
+  if (result instanceof Promise) {
+    return result;
+  }
+  if (options?.behavior === "auto" || options?.behavior === "instant") {
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => {
+    let idleTimer = 0;
+    let maxTimer = 0;
+    const finish = () => {
+      window.clearTimeout(idleTimer);
+      window.clearTimeout(maxTimer);
+      window.removeEventListener("scrollend", finish);
+      window.removeEventListener("scroll", onScroll);
+      resolve();
+    };
+    const onScroll = () => {
+      window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(finish, 100);
+    };
+    window.addEventListener("scrollend", finish, { once: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    idleTimer = window.setTimeout(finish, 100);
+    maxTimer = window.setTimeout(finish, 1200);
+  });
 }
 
 function sniffClientImageBytes(bytes) {
@@ -627,7 +733,7 @@ async function decodeImageSource(blob) {
   }
 }
 
-async function prepareImageAttachment(file, maxBytes = DEFAULT_MAX_IMAGE_BYTES) {
+async function prepareImageAttachment(file, maxBytes = DEFAULT_MAX_IMAGE_BYTES, options = {}) {
   if (!file || typeof file.size !== "number" || file.size <= 0) {
     throw Object.assign(new Error("errImageProcess"), { code: "errImageProcess" });
   }
@@ -761,32 +867,56 @@ async function prepareImageAttachment(file, maxBytes = DEFAULT_MAX_IMAGE_BYTES) 
       return { blob: out, width: w, height: h };
     };
 
+    const edgeLimit =
+      Number.isFinite(options.maxEdge) && options.maxEdge > 0
+        ? Math.max(320, Math.min(MAX_OPTIMIZED_IMAGE_EDGE, Math.round(options.maxEdge)))
+        : MAX_OPTIMIZED_IMAGE_EDGE;
+    const targetBytes =
+      Number.isFinite(options.targetBytes) && options.targetBytes > 0
+        ? Math.min(maxBytes, Math.round(options.targetBytes))
+        : maxBytes;
+    const customQ =
+      Number.isFinite(options.quality) && options.quality > 0
+        ? Math.max(0.5, Math.min(0.95, options.quality))
+        : null;
+    const fallbackEdge = Math.min(edgeLimit, 1200);
+    const compactEdge = Math.min(edgeLimit, 960);
+
     const attempts =
       sniffed.mime === "image/png"
         ? [
-            [MAX_OPTIMIZED_IMAGE_EDGE, "image/webp", 0.9],
-            [MAX_OPTIMIZED_IMAGE_EDGE, "image/png", undefined],
-            [MAX_OPTIMIZED_IMAGE_EDGE, "image/webp", 0.78],
-            [1200, "image/webp", 0.74],
-            [MAX_OPTIMIZED_IMAGE_EDGE, "image/jpeg", 0.84],
-            [1200, "image/jpeg", 0.72],
+            [edgeLimit, "image/webp", customQ ?? 0.9],
+            [edgeLimit, "image/png", undefined],
+            [edgeLimit, "image/webp", customQ ? Math.max(0.55, customQ - 0.1) : 0.78],
+            [customQ ? compactEdge : fallbackEdge, "image/webp", customQ ? Math.max(0.5, customQ - 0.14) : 0.74],
+            [edgeLimit, "image/jpeg", customQ ?? 0.84],
+            [customQ ? compactEdge : fallbackEdge, "image/jpeg", 0.72],
           ]
         : [
-            [MAX_OPTIMIZED_IMAGE_EDGE, "image/webp", 0.84],
-            [MAX_OPTIMIZED_IMAGE_EDGE, "image/jpeg", 0.84],
-            [MAX_OPTIMIZED_IMAGE_EDGE, "image/webp", 0.72],
-            [1200, "image/webp", 0.68],
-            [1200, "image/jpeg", 0.72],
+            [edgeLimit, "image/webp", customQ ?? 0.84],
+            [edgeLimit, "image/jpeg", customQ ?? 0.84],
+            [edgeLimit, "image/webp", customQ ? Math.max(0.55, customQ - 0.12) : 0.72],
+            [customQ ? compactEdge : fallbackEdge, "image/webp", 0.68],
+            [customQ ? compactEdge : fallbackEdge, "image/jpeg", 0.72],
           ];
 
     let chosen = null;
+    let smallestWithinMax = null;
     for (const [edge, mime, qual] of attempts) {
       const candidate = await encodeAt(edge, mime, qual);
-      if (candidate && candidate.blob.size > 0 && candidate.blob.size <= maxBytes) {
+      if (!candidate || candidate.blob.size <= 0) continue;
+      if (candidate.blob.size <= targetBytes) {
         chosen = candidate;
         break;
       }
+      if (
+        candidate.blob.size <= maxBytes &&
+        (!smallestWithinMax || candidate.blob.size < smallestWithinMax.blob.size)
+      ) {
+        smallestWithinMax = candidate;
+      }
     }
+    chosen = chosen || smallestWithinMax;
 
     if (!chosen) {
       throw Object.assign(new Error("errImageTooLarge"), { code: "errImageTooLarge" });
@@ -849,8 +979,9 @@ function ensureCoreStylesheet() {
   const style = document.createElement("style");
   style.dataset.tiCommentsCore = "true";
   style.textContent =
-    'ti-comments [data-part="lightbox"]:modal{overscroll-behavior:contain;}' +
-    'ti-comments [data-part="lightbox"]::backdrop{overflow:hidden;overscroll-behavior:contain;}';
+    'ti-comments :is([data-part="lightbox"],[data-part="auth-dialog"]):modal{overscroll-behavior:contain;}' +
+    'ti-comments :is([data-part="lightbox"],[data-part="auth-dialog"])::backdrop{overflow:hidden;overscroll-behavior:contain;}' +
+    'ti-comments [data-part="sr-only"]{position:absolute;inline-size:1px;block-size:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);border:0;white-space:nowrap;}';
   document.head.appendChild(style);
 }
 
@@ -1040,6 +1171,16 @@ function readLocalHeight(el) {
   const h = Number.parseFloat(cs.height);
   if (Number.isFinite(h)) return h;
   return el.offsetHeight;
+}
+
+function layoutLeftIn(el, ancestor) {
+  let x = 0;
+  let cur = el;
+  while (cur && cur !== ancestor && cur instanceof HTMLElement) {
+    x += cur.offsetLeft;
+    cur = cur.offsetParent;
+  }
+  return cur === ancestor ? x : null;
 }
 
 function readLocalBoxSize(el) {
@@ -1242,13 +1383,33 @@ class TiCommentsElement extends HTMLElement {
   };
   #attachments = [];
   #attachmentsRev = 0;
+  #editingAltUid = "";
+  #mediaOp = 0;
+  #mediaAnim = null;
+  #mediaAnimatingMode = null;
+  #mediaListHeight = 0;
+  #altDrawerOp = 0;
+  #suppressAltSubmitUntil = 0;
+  #explicitSubmit = false;
+  #exitingPreviewUrls = new Set();
   #processingImages = false;
   #pendingFileQueue = [];
+  #activeImageBatch = null;
+  #freshAttachmentUids = new Set();
   #imageOpSeq = 0;
+  #scrollOp = 0;
   #dragDepth = 0;
   #lightboxItems = [];
   #lightboxIndex = 0;
   #lightboxOp = 0;
+  #authorMode = false;
+  #authorName = "";
+  #authOp = 0;
+  #authSubmitting = false;
+  #authErrorKey = "";
+  #authReturnFocusToComposer = false;
+  #onAuthorChange = null;
+  #deleteConfirmTimers = new Map();
   #replyTarget = null;
   #replySeq = 0;
   #sortOrder = "oldest";
@@ -1367,6 +1528,7 @@ class TiCommentsElement extends HTMLElement {
     this.#restoreAttachmentPreviewUrls();
     this.#observeColorScheme();
     this.#observeLayout();
+    this.#bindAuthorSync();
     this.#settlePanelVisualState();
     this.#syncCooldownOnConnect();
     this.#syncHintFit({ force: true });
@@ -1387,9 +1549,27 @@ class TiCommentsElement extends HTMLElement {
 
   disconnectedCallback() {
     this.#settlePanelVisualState();
-    this.#imageOpSeq += 1;
-    this.#pendingFileQueue = [];
-    this.#processingImages = false;
+    this.#scrollOp += 1;
+    this.#mediaOp += 1;
+    this.#altDrawerOp += 1;
+    this.#mediaAnim?.cancel();
+    this.#mediaAnim = null;
+    this.#mediaAnimatingMode = null;
+    if (this.#els.composerMedia) {
+      this.#els.composerMedia.style.height = "";
+      this.#els.composerMedia.style.overflow = "";
+      this.#els.composerMedia.style.opacity = "";
+    }
+    this.#els.stagedList?.querySelectorAll('[data-part="staged-item"][data-closing="true"]').forEach((n) => n.remove());
+    if (this.#els.altDrawer) {
+      this.#els.altDrawer.dataset.open = "false";
+      this.#els.altDrawer.hidden = true;
+      this.#els.altDrawer.inert = true;
+    }
+    this.#editingAltUid = "";
+    this.#revokeExitingPreviewUrls();
+    this.#abortPendingImageQueue();
+    this.#freshAttachmentUids.clear();
     this.#dragDepth = 0;
     if (this.#els.form) {
       delete this.#els.form.dataset.dragover;
@@ -1403,6 +1583,13 @@ class TiCommentsElement extends HTMLElement {
     } else if (this.#els.lightboxImg) {
       this.#els.lightboxImg.removeAttribute("src");
     }
+    if (this.#els.authDialog?.open) {
+      this.#els.authDialog.removeAttribute("data-closing");
+      this.#els.authDialog.close();
+    }
+    this.#resetAuthDialogInputs();
+    this.#unbindAuthorSync();
+    this.#clearDeleteConfirmTimers();
     this.#revokeAttachmentPreviewUrls();
     this.#fetchSeq += 1;
     this.#fetchAbort?.abort();
@@ -1956,8 +2143,13 @@ class TiCommentsElement extends HTMLElement {
   #resolveStatusCopy(keyOrText) {
     if (!keyOrText) return "";
     const c = this.#copy;
-    if (keyOrText === "statusReady" && this.#config.imagesEnabled) {
-      return c.statusReadyImages;
+    if (keyOrText === "statusReady") {
+      if (this.#authorMode) {
+        return this.#config.imagesEnabled ? c.statusReadyAuthorImages : c.statusReadyAuthor;
+      }
+      if (this.#config.imagesEnabled) {
+        return c.statusReadyImages;
+      }
     }
     if (keyOrText === "statusCooldown") {
       const rem = Math.max(1, Math.ceil((this.#cooldownUntil - Date.now()) / 1000));
@@ -2014,7 +2206,7 @@ class TiCommentsElement extends HTMLElement {
   #observeLayout() {
     this.#ro?.disconnect();
     if (typeof ResizeObserver === "undefined") return;
-    const { sortGroup, toggle, panelBody } = this.#els;
+    const { sortGroup, toggle, panelBody, composerMedia } = this.#els;
     this.#ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.target === sortGroup) {
@@ -2024,12 +2216,15 @@ class TiCommentsElement extends HTMLElement {
           this.#syncToggleEdgeGeometry();
         } else if (entry.target === panelBody) {
           this.#handlePanelBodyResize();
+        } else if (entry.target === composerMedia && this.#editingAltUid) {
+          this.#syncAltCaret(false);
         }
       }
     });
     if (sortGroup) this.#ro.observe(sortGroup);
     if (toggle) this.#ro.observe(toggle);
     if (panelBody) this.#ro.observe(panelBody);
+    if (composerMedia) this.#ro.observe(composerMedia);
     document.fonts?.ready?.then(() => {
       if (!this.isConnected) return;
       this.#syncSortIndicator(false);
@@ -2173,6 +2368,28 @@ class TiCommentsElement extends HTMLElement {
     form.setAttribute("aria-labelledby", id("title"));
     form.noValidate = true;
 
+    // Author mode banner (visible only when authenticated as Author)
+    const authorBanner = document.createElement("div");
+    authorBanner.dataset.part = "author-banner";
+    authorBanner.hidden = true;
+
+    const authorBannerLead = document.createElement("div");
+    authorBannerLead.dataset.part = "author-banner-lead";
+
+    const authorBannerBadge = document.createElement("span");
+    authorBannerBadge.dataset.part = "author-badge";
+
+    const authorBannerText = document.createElement("span");
+    authorBannerText.dataset.part = "author-banner-text";
+
+    authorBannerLead.append(authorBannerBadge, authorBannerText);
+
+    const authorSignOutBtn = document.createElement("button");
+    authorSignOutBtn.type = "button";
+    authorSignOutBtn.dataset.part = "action-btn";
+
+    authorBanner.append(authorBannerLead, authorSignOutBtn);
+
     // Reply context banner
     const replyBanner = document.createElement("div");
     replyBanner.dataset.part = "reply-banner";
@@ -2226,8 +2443,47 @@ class TiCommentsElement extends HTMLElement {
 
     const composerMedia = document.createElement("div");
     composerMedia.dataset.part = "composer-media";
-    composerMedia.setAttribute("role", "list");
     composerMedia.hidden = true;
+
+    const stagedList = document.createElement("div");
+    stagedList.dataset.part = "staged-list";
+    stagedList.setAttribute("role", "list");
+
+    const altDrawer = document.createElement("div");
+    altDrawer.id = id("staged-alt-drawer");
+    altDrawer.dataset.part = "staged-alt-drawer";
+    altDrawer.dataset.open = "false";
+    altDrawer.hidden = true;
+    altDrawer.inert = true;
+
+    const altDrawerInner = document.createElement("div");
+    altDrawerInner.dataset.part = "staged-alt-drawer-inner";
+
+    const altBar = document.createElement("div");
+    altBar.dataset.part = "staged-alt-bar";
+
+    const altCaret = document.createElement("span");
+    altCaret.dataset.part = "staged-alt-caret";
+    altCaret.setAttribute("aria-hidden", "true");
+
+    const altTag = document.createElement("span");
+    altTag.dataset.part = "staged-alt-tag";
+
+    const altInput = document.createElement("input");
+    altInput.type = "text";
+    altInput.setAttribute("form", id("staged-alt-detached"));
+    altInput.dataset.part = "staged-alt";
+    altInput.maxLength = MAX_ALT_LEN;
+    altInput.enterKeyHint = "done";
+
+    const altDoneBtn = document.createElement("button");
+    altDoneBtn.type = "button";
+    altDoneBtn.dataset.part = "staged-alt-done";
+
+    altBar.append(altCaret, altTag, altInput, altDoneBtn);
+    altDrawerInner.append(altBar);
+    altDrawer.append(altDrawerInner);
+    composerMedia.append(stagedList, altDrawer);
 
     const dropCue = document.createElement("div");
     dropCue.dataset.part = "drop-cue";
@@ -2434,7 +2690,7 @@ class TiCommentsElement extends HTMLElement {
 
     composerFoot.append(composerFootMeta, submitBtn);
 
-    form.append(replyBanner, hpWrap, bodyField, metaRow, sealDrawer, composerFoot);
+    form.append(authorBanner, replyBanner, hpWrap, bodyField, metaRow, sealDrawer, composerFoot);
 
     // 4. Thread sub-header & list container
     const threadBar = document.createElement("div");
@@ -2548,7 +2804,149 @@ class TiCommentsElement extends HTMLElement {
     lightboxStage.append(lightboxPrevBtn, lightboxFigure, lightboxNextBtn);
     lightbox.append(lightboxHead, lightboxStage);
 
-    root.append(heading, panel, lightbox);
+    // 6. Native Modal Author Auth Dialog (<dialog closedby="any">)
+    const authDialog = document.createElement("dialog");
+    authDialog.dataset.part = "auth-dialog";
+    authDialog.setAttribute("closedby", "any");
+    authDialog.setAttribute("aria-labelledby", id("auth-title"));
+
+    const authHead = document.createElement("div");
+    authHead.dataset.part = "auth-head";
+
+    const authHeadingWrap = document.createElement("div");
+    authHeadingWrap.dataset.part = "auth-heading-wrap";
+
+    const authBadge = document.createElement("span");
+    authBadge.dataset.part = "author-badge";
+
+    const authTitle = document.createElement("h2");
+    authTitle.id = id("auth-title");
+    authTitle.dataset.part = "auth-title";
+
+    authHeadingWrap.append(authBadge, authTitle);
+
+    const authCloseForm = document.createElement("form");
+    authCloseForm.method = "dialog";
+    const authCloseBtn = document.createElement("button");
+    authCloseBtn.type = "submit";
+    authCloseBtn.dataset.part = "auth-close";
+    authCloseForm.append(authCloseBtn);
+
+    authHead.append(authHeadingWrap, authCloseForm);
+
+    const authForm = document.createElement("form");
+    authForm.dataset.part = "auth-form";
+    authForm.method = "post";
+    authForm.noValidate = true;
+
+    const authDesc = document.createElement("p");
+    authDesc.id = id("auth-desc");
+    authDesc.dataset.part = "auth-desc";
+
+    const authField = document.createElement("div");
+    authField.dataset.part = "auth-field";
+
+    const authLabel = document.createElement("label");
+    authLabel.htmlFor = id("auth-password");
+    authLabel.dataset.part = "label";
+
+    const authInputWrap = document.createElement("div");
+    authInputWrap.dataset.part = "auth-input-wrap";
+
+    const authInput = document.createElement("input");
+    authInput.id = id("auth-password");
+    authInput.name = "password";
+    authInput.type = "password";
+    authInput.required = true;
+    authInput.autofocus = true;
+    authInput.autocomplete = "current-password";
+    authInput.setAttribute("autocorrect", "off");
+    authInput.setAttribute("autocapitalize", "none");
+    authInput.spellcheck = false;
+    authInput.enterKeyHint = "done";
+    authInput.dataset.part = "auth-input";
+    authInput.setAttribute("aria-invalid", "false");
+    authInput.setAttribute("aria-describedby", id("auth-desc"));
+
+    const authRevealBtn = document.createElement("button");
+    authRevealBtn.type = "button";
+    authRevealBtn.dataset.part = "auth-reveal";
+    authRevealBtn.setAttribute("aria-pressed", "false");
+    authRevealBtn.setAttribute("aria-describedby", id("auth-reveal-warn"));
+
+    const eyeSvg = document.createElementNS(svgNS, "svg");
+    eyeSvg.setAttribute("viewBox", "0 0 18 18");
+    eyeSvg.setAttribute("aria-hidden", "true");
+    eyeSvg.dataset.part = "auth-reveal-icon";
+    eyeSvg.dataset.state = "show";
+    const eyePath = document.createElementNS(svgNS, "path");
+    eyePath.setAttribute("d", "M1.75 9s2.75-4.75 7.25-4.75S16.25 9 16.25 9s-2.75 4.75-7.25 4.75S1.75 9 1.75 9Z");
+    eyePath.setAttribute("fill", "none");
+    eyePath.setAttribute("stroke", "currentColor");
+    eyePath.setAttribute("stroke-width", "1.3");
+    const eyePupil = document.createElementNS(svgNS, "circle");
+    eyePupil.setAttribute("cx", "9");
+    eyePupil.setAttribute("cy", "9");
+    eyePupil.setAttribute("r", "2.1");
+    eyePupil.setAttribute("fill", "none");
+    eyePupil.setAttribute("stroke", "currentColor");
+    eyePupil.setAttribute("stroke-width", "1.3");
+    eyeSvg.append(eyePath, eyePupil);
+
+    const eyeOffSvg = document.createElementNS(svgNS, "svg");
+    eyeOffSvg.setAttribute("viewBox", "0 0 18 18");
+    eyeOffSvg.setAttribute("aria-hidden", "true");
+    eyeOffSvg.dataset.part = "auth-reveal-icon";
+    eyeOffSvg.dataset.state = "hide";
+    const eyeOffArc = document.createElementNS(svgNS, "path");
+    eyeOffArc.setAttribute("d", "M3.2 5.9C2.25 7.15 1.75 9 1.75 9s2.75 4.75 7.25 4.75c1.38 0 2.6-.44 3.63-1.08M6.38 4.65A7.6 7.6 0 0 1 9 4.25c4.5 0 7.25 4.75 7.25 4.75a12.3 12.3 0 0 1-1.58 2.1");
+    eyeOffArc.setAttribute("fill", "none");
+    eyeOffArc.setAttribute("stroke", "currentColor");
+    eyeOffArc.setAttribute("stroke-width", "1.3");
+    eyeOffArc.setAttribute("stroke-linecap", "square");
+    const eyeSlash = document.createElementNS(svgNS, "line");
+    eyeSlash.setAttribute("x1", "2.5");
+    eyeSlash.setAttribute("y1", "2.5");
+    eyeSlash.setAttribute("x2", "15.5");
+    eyeSlash.setAttribute("y2", "15.5");
+    eyeSlash.setAttribute("stroke", "currentColor");
+    eyeSlash.setAttribute("stroke-width", "1.3");
+    eyeSlash.setAttribute("stroke-linecap", "square");
+    eyeOffSvg.append(eyeOffArc, eyeSlash);
+
+    authRevealBtn.append(eyeSvg, eyeOffSvg);
+
+    const authRevealWarn = document.createElement("span");
+    authRevealWarn.id = id("auth-reveal-warn");
+    authRevealWarn.dataset.part = "sr-only";
+
+    authInputWrap.append(authInput, authRevealBtn, authRevealWarn);
+
+    const authError = document.createElement("p");
+    authError.id = id("auth-error");
+    authError.dataset.part = "auth-error";
+    authError.setAttribute("role", "alert");
+    authError.setAttribute("aria-live", "polite");
+    authError.hidden = true;
+
+    authField.append(authLabel, authInputWrap, authError);
+
+    const authActions = document.createElement("div");
+    authActions.dataset.part = "auth-actions";
+
+    const authCancelBtn = document.createElement("button");
+    authCancelBtn.type = "button";
+    authCancelBtn.dataset.part = "auth-cancel";
+
+    const authSubmitBtn = document.createElement("button");
+    authSubmitBtn.type = "submit";
+    authSubmitBtn.dataset.part = "auth-submit";
+
+    authActions.append(authCancelBtn, authSubmitBtn);
+    authForm.append(authDesc, authField, authActions);
+    authDialog.append(authHead, authForm);
+
+    root.append(heading, panel, lightbox, authDialog);
     this.replaceChildren(root);
 
     this.#els = {
@@ -2564,6 +2962,10 @@ class TiCommentsElement extends HTMLElement {
       panelBody,
       threadShell,
       form,
+      authorBanner,
+      authorBannerBadge,
+      authorBannerText,
+      authorSignOutBtn,
       replyBanner,
       replyLabel,
       cancelReplyBtn,
@@ -2572,6 +2974,13 @@ class TiCommentsElement extends HTMLElement {
       charCount,
       textarea,
       composerMedia,
+      stagedList,
+      altDrawer,
+      altBar,
+      altCaret,
+      altTag,
+      altInput,
+      altDoneBtn,
       dropCue,
       bodyError,
       mediaError,
@@ -2605,6 +3014,21 @@ class TiCommentsElement extends HTMLElement {
       lightboxNextBtn,
       lightboxImg,
       lightboxMeta,
+      authDialog,
+      authBadge,
+      authTitle,
+      authCloseForm,
+      authCloseBtn,
+      authForm,
+      authDesc,
+      authField,
+      authLabel,
+      authInput,
+      authRevealBtn,
+      authRevealWarn,
+      authError,
+      authCancelBtn,
+      authSubmitBtn,
     };
 
     this.#syncStaticLabels();
@@ -2623,12 +3047,28 @@ class TiCommentsElement extends HTMLElement {
     this.#els.bodyError.textContent = this.#config.imagesEnabled ? c.bodyOrImageError : c.bodyError;
     this.#els.dropCue.textContent = c.dropHint;
     this.#els.nameLabel.textContent = c.nameLabel;
-    this.#els.nameInput.placeholder = c.namePlaceholder;
+    this.#els.nameInput.placeholder = this.#authorMode && this.#authorName ? this.#authorName : c.namePlaceholder;
     this.#els.urlLabel.textContent = c.urlLabel;
     this.#els.urlInput.placeholder = c.urlPlaceholder;
     this.#els.urlError.textContent = c.urlError;
     this.#els.sealDrawerText.textContent = c.interactiveCopy;
     this.#els.cancelReplyBtn.textContent = c.cancelReply;
+    this.#els.authorBannerBadge.textContent = c.authorBadge;
+    this.#els.authorBannerText.textContent = c.authorModeBanner(this.#authorName);
+    this.#els.authorSignOutBtn.textContent = c.authorSignOut;
+    this.#els.authBadge.textContent = c.authorBadge;
+    this.#els.authTitle.textContent = c.authDialogTitle;
+    this.#els.authCloseBtn.textContent = c.lightboxClose;
+    this.#els.authLabel.textContent = c.authPasswordLabel;
+    this.#els.authInput.placeholder = c.authPasswordPlaceholder;
+    this.#els.authRevealWarn.textContent = c.authShowWarning;
+    const isRevealed = this.#els.authInput.type === "text";
+    this.#els.authRevealBtn.setAttribute("aria-label", isRevealed ? c.authHidePassword : c.authShowPassword);
+    this.#els.authCancelBtn.textContent = c.authCancel;
+    this.#syncAuthDialogMode();
+    if (this.#authErrorKey) {
+      this.#setAuthError(this.#authErrorKey);
+    }
     this.#els.sortOldestBtn.textContent = c.sortOldest;
     this.#els.sortNewestBtn.textContent = c.sortNewest;
     this.#els.lightboxCloseBtn.textContent = c.lightboxClose;
@@ -2773,6 +3213,13 @@ class TiCommentsElement extends HTMLElement {
       lightboxCloseForm,
       lightboxPrevBtn,
       lightboxNextBtn,
+      authorSignOutBtn,
+      authDialog,
+      authCloseForm,
+      authForm,
+      authInput,
+      authRevealBtn,
+      authCancelBtn,
     } = this.#els;
 
     // Click-to-expand & load
@@ -2784,19 +3231,29 @@ class TiCommentsElement extends HTMLElement {
     // Silent background warmup when the reader starts interacting with the composer
     const triggerWarmup = () => {
       if (!this.#loaded && !this.#loading) this.#fetchThread();
-      this.#warmupAntiAbuse();
+      if (!this.#authorMode) this.#warmupAntiAbuse();
     };
     textarea.addEventListener("focus", triggerWarmup);
     nameInput.addEventListener("focus", triggerWarmup);
 
-    // Character counter + clear validation errors on input
-    textarea.addEventListener("input", () => {
+    // Character counter + /author slash command + clear validation errors on input
+    textarea.addEventListener("input", (event) => {
+      if (!event.isComposing && this.#isAuthorSlashCommand(textarea.value)) {
+        this.#consumeAuthorCommand();
+        return;
+      }
       const len = textarea.value.trim().length;
       this.#els.charCount.textContent = `${len} / ${this.#config.maxBodyLength}`;
       if (textarea.getAttribute("aria-invalid") === "true") {
         this.#syncFieldAria(textarea, true);
       }
-      if (len >= 2) this.#warmupAntiAbuse();
+      if (len >= 2 && !this.#authorMode) this.#warmupAntiAbuse();
+    });
+
+    textarea.addEventListener("compositionend", () => {
+      if (this.#isAuthorSlashCommand(textarea.value)) {
+        this.#consumeAuthorCommand();
+      }
     });
 
     textarea.addEventListener("blur", () => {
@@ -2890,7 +3347,13 @@ class TiCommentsElement extends HTMLElement {
       if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
         if (event.isComposing || event.keyCode === 229) return;
         event.preventDefault();
-        form.requestSubmit();
+        this.#suppressAltSubmitUntil = 0;
+        this.#explicitSubmit = true;
+        try {
+          form.requestSubmit();
+        } finally {
+          this.#explicitSubmit = false;
+        }
       }
     });
 
@@ -2903,8 +3366,51 @@ class TiCommentsElement extends HTMLElement {
       });
     }
 
+    const getActiveEl = () => {
+      const root = form.getRootNode?.();
+      return root && "activeElement" in root ? root.activeElement : document.activeElement;
+    };
+
+    let explicitSubmitTimer = 0;
+    this.#els.submitBtn?.addEventListener("click", (event) => {
+      // Distinguish explicit activations (pointer, keyboard on submitBtn, programmatic .click())
+      // from Chromium's trusted detail===0 synthetic click emitted during implicit <input> Enter submit.
+      if (!event.isTrusted || event.detail > 0 || getActiveEl() === this.#els.submitBtn) {
+        this.#suppressAltSubmitUntil = 0;
+        this.#explicitSubmit = true;
+        window.clearTimeout(explicitSubmitTimer);
+        explicitSubmitTimer = window.setTimeout(() => {
+          this.#explicitSubmit = false;
+        }, 0);
+      }
+    });
+
     form.addEventListener("submit", (event) => {
       event.preventDefault();
+      window.clearTimeout(explicitSubmitTimer);
+      const explicit = this.#explicitSubmit;
+      this.#explicitSubmit = false;
+      if (explicit) {
+        this.#suppressAltSubmitUntil = 0;
+        this.#handleSubmit();
+        return;
+      }
+      const activeEl = getActiveEl();
+      if (this.#els.altDrawer?.contains(activeEl) && activeEl !== this.#els.submitBtn) {
+        this.#closeAltEditor({ restoreFocus: true });
+        return;
+      }
+      if (
+        this.#suppressAltSubmitUntil > performance.now() &&
+        activeEl !== this.#els.submitBtn &&
+        activeEl !== this.#els.textarea &&
+        activeEl !== this.#els.nameInput &&
+        activeEl !== this.#els.urlInput
+      ) {
+        this.#suppressAltSubmitUntil = 0;
+        return;
+      }
+      this.#suppressAltSubmitUntil = 0;
       this.#handleSubmit();
     });
 
@@ -2992,6 +3498,123 @@ class TiCommentsElement extends HTMLElement {
 
     lightboxPrevBtn.addEventListener("click", () => this.#stepLightbox(-1));
     lightboxNextBtn.addEventListener("click", () => this.#stepLightbox(1));
+
+    // Staged image alt-text drawer interactions
+    const { altInput, altDoneBtn } = this.#els;
+    altInput.addEventListener("input", () => {
+      const uid = this.#editingAltUid;
+      if (!uid) return;
+      const att = this.#attachments.find((a) => a.uid === uid);
+      if (!att) return;
+      att.alt = altInput.value;
+      const btn = this.#els.stagedList?.querySelector(
+        `[data-part="staged-alt-btn"][data-uid="${CSS.escape(uid)}"]`
+      );
+      if (btn) {
+        const filled = Boolean(att.alt.trim());
+        if (filled) btn.dataset.hasAlt = "true";
+        else delete btn.dataset.hasAlt;
+        btn.textContent = filled ? this.#copy.altBtnFilled : this.#copy.altBtn;
+      }
+    });
+    altInput.addEventListener("keydown", (event) => {
+      if (event.isComposing || event.keyCode === 229) return;
+      if (event.key === "Enter" || event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.key === "Enter") {
+          this.#suppressAltSubmitUntil = performance.now() + 250;
+        }
+        this.#closeAltEditor({ restoreFocus: true });
+      }
+    });
+    altDoneBtn.addEventListener("click", () => {
+      this.#closeAltEditor({ restoreFocus: true });
+    });
+
+    // Author mode banner & native modal auth dialog interactions
+    authorSignOutBtn.addEventListener("click", () => {
+      this.#handleAuthorLogout({ fromDialog: false });
+    });
+
+    authInput.addEventListener("input", () => {
+      if (this.#authErrorKey) {
+        this.#setAuthError("");
+      }
+    });
+
+    authInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && (event.isComposing || event.keyCode === 229)) {
+        event.preventDefault();
+      }
+    });
+
+    authRevealBtn.addEventListener("click", () => {
+      const reveal = authInput.type === "password";
+      authInput.type = reveal ? "text" : "password";
+      authRevealBtn.setAttribute("aria-pressed", reveal ? "true" : "false");
+      authRevealBtn.setAttribute("aria-label", reveal ? this.#copy.authHidePassword : this.#copy.authShowPassword);
+      if (reveal) authRevealBtn.dataset.revealed = "true";
+      else delete authRevealBtn.dataset.revealed;
+      authInput.focus({ preventScroll: true });
+    });
+
+    authCancelBtn.addEventListener("click", () => {
+      this.#closeAuthDialog();
+    });
+
+    authForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (this.#authorMode) {
+        this.#handleAuthorLogout({ fromDialog: true });
+      } else {
+        this.#handleAuthVerify();
+      }
+    });
+
+    authDialog.addEventListener("cancel", (event) => {
+      if (!supportsTopLayerExit()) {
+        event.preventDefault();
+        this.#closeAuthDialog();
+      }
+    });
+
+    authCloseForm.addEventListener("submit", (event) => {
+      if (!supportsTopLayerExit()) {
+        event.preventDefault();
+        this.#closeAuthDialog();
+      }
+    });
+
+    authDialog.addEventListener("close", () => {
+      ++this.#authOp;
+      authDialog.removeAttribute("data-closing");
+      authDialog.returnValue = "";
+      this.#resetAuthDialogInputs();
+      if (this.#authReturnFocusToComposer) {
+        this.#authReturnFocusToComposer = false;
+        if (this.#els.textarea?.isConnected && !this.#els.panel?.hidden) {
+          this.#els.textarea.focus({ preventScroll: true });
+        }
+      }
+    });
+
+    if (!("closedBy" in HTMLDialogElement.prototype)) {
+      const isOutsideAuth = (e) => {
+        const r = authDialog.getBoundingClientRect();
+        return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+      };
+      let pressedOutsideAuth = false;
+      authDialog.addEventListener("pointerdown", (e) => {
+        pressedOutsideAuth = isOutsideAuth(e);
+      });
+      authDialog.addEventListener("pointerup", (e) => {
+        if (pressedOutsideAuth && isOutsideAuth(e)) {
+          this.#closeAuthDialog();
+        }
+        pressedOutsideAuth = false;
+      });
+    }
   }
 
   #scheduleStatusReset(delayMs = 2600) {
@@ -3026,13 +3649,28 @@ class TiCommentsElement extends HTMLElement {
     const url = `${this.endpoint}?${query.toString()}`;
 
     const promise = (async () => {
+      let rejectTimeout;
+      const timeoutPromise = new Promise((_, reject) => {
+        rejectTimeout = reject;
+      });
+      let timedOut = false;
+      const timeoutId = window.setTimeout(() => {
+        timedOut = true;
+        ctrl?.abort();
+        rejectTimeout?.(new Error("fetch_timeout"));
+      }, 15000);
+
       try {
-        const res = await fetch(url, {
-          headers: { Accept: "application/json" },
-          signal: ctrl?.signal,
-        });
+        const res = await Promise.race([
+          fetch(url, {
+            credentials: "same-origin",
+            headers: { Accept: "application/json" },
+            signal: ctrl?.signal,
+          }),
+          timeoutPromise,
+        ]);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        const data = await Promise.race([res.json(), timeoutPromise]);
         if (!data || data.ok !== true) throw new Error("Invalid payload");
         if (seq !== this.#fetchSeq || !this.isConnected) return;
 
@@ -3055,6 +3693,11 @@ class TiCommentsElement extends HTMLElement {
             : this.#copy.bodyError;
           const curLen = this.#els.textarea.value.trim().length;
           this.#els.charCount.textContent = `${curLen} / ${this.#config.maxBodyLength}`;
+          this.#setAuthorState(
+            Boolean(data.config.authorMode),
+            String(data.config.authorName || ""),
+            { rerender: refreshGateOnly }
+          );
           this.#syncAttachmentUi();
           if (this.#statusKey === "statusReady" && this.#els.statusLine) {
             this.#els.statusLine.textContent = this.#resolveStatusCopy("statusReady");
@@ -3081,11 +3724,12 @@ class TiCommentsElement extends HTMLElement {
           })
         );
       } catch (err) {
-        if (err?.name === "AbortError" || seq !== this.#fetchSeq || !this.isConnected) return;
+        if ((!timedOut && err?.name === "AbortError") || seq !== this.#fetchSeq || !this.isConnected) return;
         if (refreshGateOnly && this.#loaded) return;
         this.#loadFailed = true;
         this.#renderLoadError();
       } finally {
+        window.clearTimeout(timeoutId);
         if (seq === this.#fetchSeq) {
           this.#loading = false;
           this.#fetchPromise = null;
@@ -3173,7 +3817,7 @@ class TiCommentsElement extends HTMLElement {
   }
 
   #warmupAntiAbuse() {
-    if (this.#submitting) return;
+    if (this.#submitting || this.#authorMode) return;
     this.#warmupTurnstile();
     this.#warmupLightPow();
   }
@@ -3385,6 +4029,11 @@ class TiCommentsElement extends HTMLElement {
     if (this.#submitting || this.#processingImages || Date.now() < this.#cooldownUntil) return;
     const { textarea, nameInput, urlInput, hpInput, submitBtn, submitText } = this.#els;
 
+    if (this.#isAuthorSlashCommand(textarea.value)) {
+      this.#consumeAuthorCommand();
+      return;
+    }
+
     const bodyOk = this.#syncFieldAria(textarea, true);
     const urlOk = this.#syncFieldAria(urlInput, true);
     if (!bodyOk) {
@@ -3398,6 +4047,7 @@ class TiCommentsElement extends HTMLElement {
       return;
     }
 
+    const submitAsAuthor = this.#authorMode;
     const submittedBody = textarea.value;
     const submittedAttachments = this.#attachments.map((att) => ({
       ...att,
@@ -3415,10 +4065,13 @@ class TiCommentsElement extends HTMLElement {
     const submitGen = this.#threadGen;
     const submitId = ++this.#submitSeq;
     this.#activeSubmitId = submitId;
-    safeStorageSet(STORAGE_NAME_KEY, authorName);
+    if (!submitAsAuthor) {
+      safeStorageSet(STORAGE_NAME_KEY, authorName);
+    }
     safeStorageSet(STORAGE_URL_KEY, authorUrl);
 
     this.#clearMediaError();
+    this.#editingAltUid = "";
     this.#submitting = true;
     submitBtn.disabled = true;
     submitText.textContent = this.#copy.submitSub;
@@ -3426,88 +4079,93 @@ class TiCommentsElement extends HTMLElement {
     window.clearTimeout(this.#statusResetTimer);
 
     const startedAt = performance.now();
-    const minRitualMs = reducedMotionQuery.matches ? 0 : 340;
+    const minRitualMs = reducedMotionQuery.matches ? 0 : 280;
     let touchedAntiAbuse = false;
     const isCurrentSubmit = () =>
       this.#threadGen === submitGen && this.#activeSubmitId === submitId && this.isConnected;
 
     try {
       this.#setPhase("inking", "statusInking");
-      this.#setSealProgress(0.24);
+      this.#setSealProgress(submitAsAuthor ? 0.62 : 0.24);
 
-      if (this.#isGateExpired()) {
-        this.#precomputedPow = null;
-        await this.#fetchThread({ refreshGateOnly: this.#loaded });
-      }
-      if (!isCurrentSubmit()) return;
-
-      const gate = this.#gate;
-      if (!gate?.token || this.#isGateExpired()) {
-        throw new Error("missing_gate");
-      }
-
-      touchedAntiAbuse = true;
-      this.#setPhase("verifying", "statusVerifying");
-      this.#setSealProgress(0.48);
-
+      let gate = null;
       let turnstileToken = "";
-      if (this.#config.turnstileSitekey && !this.#turnstileUnavailable) {
-        try {
-          let tok = await this.#acquireTurnstileToken(6500);
-          if (tok === "__interactive_wait__") {
-            tok = await this.#acquireTurnstileToken(90000);
-          }
-          if (tok && tok !== "__interactive_wait__") {
-            turnstileToken = tok;
-          }
-        } catch (err) {
-          if (err?.message === "turnstile_cancelled" || !isCurrentSubmit()) {
-            return;
-          }
-          this.#turnstileUnavailable = true;
-        }
-      }
-      if (!isCurrentSubmit()) return;
-
-      const fallbackMode = !turnstileToken;
-      if (fallbackMode && !this.#config.allowPowFallback) {
-        throw new Error("turnstile_failed");
-      }
-
-      const targetBits = fallbackMode
-        ? Number(gate.fallbackPowBits || 17)
-        : Number(gate.powBits || 12);
-
       let powNonce = "";
-      if (
-        this.#precomputedPow &&
-        this.#precomputedPow.gateToken === gate.token &&
-        this.#precomputedPow.bits >= targetBits
-      ) {
-        powNonce = this.#precomputedPow.nonce;
-        this.#setSealProgress(0.76);
-      } else {
-        if (fallbackMode) {
-          this.#setPhase("verifying", "statusSealing");
-        }
-        this.#powAbort?.abort();
-        const ctrl = new AbortController();
-        this.#powAbort = ctrl;
-        powNonce = await solveProofOfWork(gate.token, targetBits, {
-          signal: ctrl.signal,
-          onProgress: (p) => this.#setSealProgress(0.45 + p * 0.38),
-        });
-      }
-      if (!isCurrentSubmit()) return;
+      let fallbackMode = false;
 
-      const minDwell = fallbackMode
-        ? Number(gate.fallbackMinDwellMs || 2200)
-        : Number(gate.minDwellMs || 1200);
-      const elapsedSinceGate = Date.now() - Number(gate.issuedAt || 0);
-      if (elapsedSinceGate < minDwell) {
-        await new Promise((r) => window.setTimeout(r, Math.min(2500, minDwell - elapsedSinceGate)));
+      if (!submitAsAuthor) {
+        if (this.#isGateExpired()) {
+          this.#precomputedPow = null;
+          await this.#fetchThread({ refreshGateOnly: this.#loaded });
+        }
+        if (!isCurrentSubmit()) return;
+
+        gate = this.#gate;
+        if (!gate?.token || this.#isGateExpired()) {
+          throw new Error("missing_gate");
+        }
+
+        touchedAntiAbuse = true;
+        this.#setPhase("verifying", "statusVerifying");
+        this.#setSealProgress(0.48);
+
+        if (this.#config.turnstileSitekey && !this.#turnstileUnavailable) {
+          try {
+            let tok = await this.#acquireTurnstileToken(6500);
+            if (tok === "__interactive_wait__") {
+              tok = await this.#acquireTurnstileToken(90000);
+            }
+            if (tok && tok !== "__interactive_wait__") {
+              turnstileToken = tok;
+            }
+          } catch (err) {
+            if (err?.message === "turnstile_cancelled" || !isCurrentSubmit()) {
+              return;
+            }
+            this.#turnstileUnavailable = true;
+          }
+        }
+        if (!isCurrentSubmit()) return;
+
+        fallbackMode = !turnstileToken;
+        if (fallbackMode && !this.#config.allowPowFallback) {
+          throw new Error("turnstile_failed");
+        }
+
+        const targetBits = fallbackMode
+          ? Number(gate.fallbackPowBits || 17)
+          : Number(gate.powBits || 12);
+
+        if (
+          this.#precomputedPow &&
+          this.#precomputedPow.gateToken === gate.token &&
+          this.#precomputedPow.bits >= targetBits
+        ) {
+          powNonce = this.#precomputedPow.nonce;
+          this.#setSealProgress(0.76);
+        } else {
+          if (fallbackMode) {
+            this.#setPhase("verifying", "statusSealing");
+          }
+          this.#powAbort?.abort();
+          const ctrl = new AbortController();
+          this.#powAbort = ctrl;
+          powNonce = await solveProofOfWork(gate.token, targetBits, {
+            signal: ctrl.signal,
+            onProgress: (p) => this.#setSealProgress(0.45 + p * 0.38),
+          });
+        }
+        if (!isCurrentSubmit()) return;
+
+        const minDwell = fallbackMode
+          ? Number(gate.fallbackMinDwellMs || 2200)
+          : Number(gate.minDwellMs || 1200);
+        const elapsedSinceGate = Date.now() - Number(gate.issuedAt || 0);
+        if (elapsedSinceGate < minDwell) {
+          await new Promise((r) => window.setTimeout(r, Math.min(2500, minDwell - elapsedSinceGate)));
+        }
+        if (!isCurrentSubmit()) return;
       }
-      if (!isCurrentSubmit()) return;
 
       this.#setSealProgress(0.88);
       if (submittedAttachments.length > 0) {
@@ -3520,6 +4178,7 @@ class TiCommentsElement extends HTMLElement {
         body,
         submittedAttachmentsRev,
         submittedAttachments.map((att) => att.alt),
+        submitAsAuthor,
       ]);
       if (this.#draftFingerprint !== draftFp || !this.#draftRequestId) {
         this.#draftFingerprint = draftFp;
@@ -3538,11 +4197,15 @@ class TiCommentsElement extends HTMLElement {
         authorUrl,
         body,
         websiteHp: hpInput.value,
-        gateToken: gate.token,
-        powNonce,
-        turnstileToken,
-        fallbackMode,
         clientRequestId,
+        ...(submitAsAuthor
+          ? { expectAuthor: true }
+          : {
+              gateToken: gate.token,
+              powNonce,
+              turnstileToken,
+              fallbackMode,
+            }),
         ...(submittedAttachments.length > 0
           ? { imageAlts: submittedAttachments.map((att) => att.alt) }
           : {}),
@@ -3557,12 +4220,14 @@ class TiCommentsElement extends HTMLElement {
         }
         fetchOpts = {
           method: "POST",
+          credentials: "same-origin",
           headers: { Accept: "application/json" },
           body: fd,
         };
       } else {
         fetchOpts = {
           method: "POST",
+          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -3577,7 +4242,7 @@ class TiCommentsElement extends HTMLElement {
         fetchDispatched = true;
         res = await fetch(submitEndpoint, fetchOpts);
       } catch (netErr) {
-        if (fetchDispatched) {
+        if (fetchDispatched && !submitAsAuthor) {
           // Consumed gate & PoW cannot be safely reused after an ambiguous network failure
           this.#gate = null;
           this.#precomputedPow = null;
@@ -3609,6 +4274,14 @@ class TiCommentsElement extends HTMLElement {
       }
 
       if (!res.ok || payload.ok !== true) {
+        if (res.status === 401 && payload.error === "author_session_expired") {
+          this.#setAuthorState(false, "");
+          this.#broadcastAuthorState();
+          this.#setPhase("error", "errAuthorExpired");
+          announcePolite(this.#copy.errAuthorExpired);
+          this.#openAuthDialog({ errorKey: "errAuthorExpired" });
+          return;
+        }
         if (res.status === 429) {
           const secs = Number(payload.retryAfterSec || 20);
           this.#startCooldown(secs);
@@ -3648,7 +4321,7 @@ class TiCommentsElement extends HTMLElement {
       this.#setPhase("stamped", "statusStamped");
 
       if (this.#attachmentsRev === submittedAttachmentsRev) {
-        this.#clearAttachments();
+        this.#clearAttachments({ animate: true });
       }
 
       // Clear text only if the reader hasn't started typing a new draft while POST was in flight
@@ -3697,6 +4370,13 @@ class TiCommentsElement extends HTMLElement {
     }
   }
 
+  #revokeExitingPreviewUrls() {
+    for (const url of this.#exitingPreviewUrls) {
+      URL.revokeObjectURL(url);
+    }
+    this.#exitingPreviewUrls.clear();
+  }
+
   #revokeAttachmentPreviewUrls() {
     for (const att of this.#attachments) {
       if (att.previewUrl) {
@@ -3704,6 +4384,7 @@ class TiCommentsElement extends HTMLElement {
         att.previewUrl = "";
       }
     }
+    this.#revokeExitingPreviewUrls();
   }
 
   #restoreAttachmentPreviewUrls() {
@@ -3716,13 +4397,74 @@ class TiCommentsElement extends HTMLElement {
     this.#syncAttachmentUi();
   }
 
-  #clearAttachments() {
-    const wasProcessing = this.#processingImages;
+  #abortPendingImageQueue() {
     this.#imageOpSeq += 1;
-    this.#pendingFileQueue = [];
     this.#processingImages = false;
+    const pendingBatches = new Set();
+    if (this.#activeImageBatch && !this.#activeImageBatch.settled) {
+      pendingBatches.add(this.#activeImageBatch);
+    }
+    this.#activeImageBatch = null;
+    for (const entry of this.#pendingFileQueue) {
+      if (entry?.batch && !entry.batch.settled) {
+        pendingBatches.add(entry.batch);
+      }
+    }
+    this.#pendingFileQueue = [];
+    for (const batch of pendingBatches) {
+      batch.settled = true;
+      batch.resolve({
+        ok: false,
+        added: batch.added,
+        overflowed: batch.overflowed,
+        error: batch.firstError,
+        addedUids: batch.addedUids,
+        cancelled: true,
+      });
+    }
+  }
+
+  #clearAttachments({ animate = false } = {}) {
+    const wasProcessing = this.#processingImages;
+    const hadItems = this.#attachments.length > 0;
+    this.#abortPendingImageQueue();
+    this.#editingAltUid = "";
+    this.#freshAttachmentUids.clear();
+
+    const shouldAnimate =
+      animate &&
+      hadItems &&
+      this.isConnected &&
+      !this.#els.composerMedia?.hidden &&
+      !reducedMotionQuery.matches &&
+      typeof this.#els.composerMedia?.animate === "function";
+
+    if (shouldAnimate) {
+      for (const att of this.#attachments) {
+        if (att.previewUrl) {
+          this.#exitingPreviewUrls.add(att.previewUrl);
+          att.previewUrl = "";
+        }
+      }
+      this.#attachments = [];
+      this.#attachmentsRev += 1;
+      this.#clearMediaError();
+      if (wasProcessing) {
+        this.#syncComposerReadyState();
+      }
+      this.#els.stagedList?.querySelectorAll('[data-part="staged-item"]').forEach((node) => {
+        node.dataset.closing = "true";
+        node.inert = true;
+        node.setAttribute("aria-hidden", "true");
+      });
+      this.#syncAttachButtonAndConstraints();
+      this.#syncAltDrawer({ animate: true });
+      this.#collapseComposerMedia({ animate: true });
+      return;
+    }
+
     this.#revokeAttachmentPreviewUrls();
-    if (this.#attachments.length > 0) {
+    if (hadItems) {
       this.#attachments = [];
       this.#attachmentsRev += 1;
     }
@@ -3730,7 +4472,7 @@ class TiCommentsElement extends HTMLElement {
     if (wasProcessing) {
       this.#syncComposerReadyState();
     }
-    this.#syncAttachmentUi();
+    this.#syncAttachmentUi({ animateTray: false });
   }
 
   #showMediaError(message) {
@@ -3748,9 +4490,9 @@ class TiCommentsElement extends HTMLElement {
     el.hidden = true;
   }
 
-  #syncAttachmentUi() {
-    const { attachBtn, attachBtnLabel, composerMedia, textarea } = this.#els;
-    if (!attachBtn || !composerMedia || !textarea) return;
+  #syncAttachButtonAndConstraints() {
+    const { attachBtn, attachBtnLabel, textarea } = this.#els;
+    if (!attachBtn || !textarea) return;
     const c = this.#copy;
     const enabled = Boolean(this.#config.imagesEnabled);
     const maxImages = Math.max(1, Number(this.#config.maxImages || DEFAULT_MAX_IMAGES));
@@ -3763,245 +4505,801 @@ class TiCommentsElement extends HTMLElement {
     attachBtn.disabled = !enabled || this.#submitting || count >= maxImages;
     attachBtnLabel.textContent = count > 0 ? c.attachBtnCount(count, maxImages) : c.attachBtn;
     attachBtn.setAttribute("aria-label", c.attachAria(count, maxImages));
+  }
 
-    if (count === 0) {
-      composerMedia.hidden = true;
-      composerMedia.replaceChildren();
+  #buildStagedLightboxEntries() {
+    const c = this.#copy;
+    return this.#attachments.map((att, i) => {
+      const caption = String(att.alt || "").trim();
+      return {
+        src: att.previewUrl,
+        alt: caption || c.previewImage(i + 1),
+        caption,
+        width: att.width,
+        height: att.height,
+        openableUrl: "",
+      };
+    });
+  }
+
+  #createStagedItemNode(att, idx) {
+    const c = this.#copy;
+    const svgNS = "http://www.w3.org/2000/svg";
+    const altDrawerId = this.#els.altDrawer?.id || `${this.#uid}-staged-alt-drawer`;
+
+    const item = document.createElement("div");
+    item.dataset.part = "staged-item";
+    item.dataset.uid = att.uid;
+    item.setAttribute("role", "listitem");
+
+    const thumbBtn = document.createElement("button");
+    thumbBtn.type = "button";
+    thumbBtn.dataset.part = "staged-thumb-btn";
+    thumbBtn.addEventListener("click", () => {
+      const liveIdx = this.#attachments.findIndex((a) => a.uid === att.uid);
+      if (liveIdx >= 0) {
+        this.#openLightbox(this.#buildStagedLightboxEntries(), liveIdx);
+      }
+    });
+
+    const img = document.createElement("img");
+    img.dataset.part = "staged-thumb";
+    img.src = att.previewUrl;
+    img.alt = "";
+    img.decoding = "async";
+    thumbBtn.append(img);
+
+    const altToggleBtn = document.createElement("button");
+    altToggleBtn.type = "button";
+    altToggleBtn.dataset.part = "staged-alt-btn";
+    altToggleBtn.dataset.uid = att.uid;
+    altToggleBtn.setAttribute("aria-controls", altDrawerId);
+    altToggleBtn.addEventListener("click", () => {
+      if (this.#submitting) return;
+      if (this.#editingAltUid === att.uid) {
+        this.#closeAltEditor({ restoreFocus: true });
+      } else {
+        this.#editingAltUid = att.uid;
+        this.#syncAttachmentUi({ focusAltEditor: true });
+      }
+    });
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.dataset.part = "staged-remove";
+    removeBtn.addEventListener("click", () => {
+      this.#removeAttachment(att.uid);
+    });
+
+    const xSvg = document.createElementNS(svgNS, "svg");
+    xSvg.setAttribute("viewBox", "0 0 12 12");
+    xSvg.setAttribute("width", "10");
+    xSvg.setAttribute("height", "10");
+    xSvg.setAttribute("aria-hidden", "true");
+    const xPath = document.createElementNS(svgNS, "path");
+    xPath.setAttribute("d", "M2.5 2.5l7 7M9.5 2.5l-7 7");
+    xPath.setAttribute("stroke", "currentColor");
+    xPath.setAttribute("stroke-width", "1.4");
+    xPath.setAttribute("stroke-linecap", "square");
+    xSvg.append(xPath);
+    removeBtn.append(xSvg);
+
+    item.append(thumbBtn, altToggleBtn, removeBtn);
+    this.#updateStagedItemNode(item, att, idx);
+    return item;
+  }
+
+  #updateStagedItemNode(item, att, idx) {
+    const c = this.#copy;
+    const isEditing = this.#editingAltUid === att.uid;
+    const hasAlt = Boolean(String(att.alt || "").trim());
+
+    if (this.#freshAttachmentUids.has(att.uid)) item.dataset.fresh = "true";
+    else delete item.dataset.fresh;
+    if (isEditing) item.dataset.editing = "true";
+    else delete item.dataset.editing;
+
+    const thumbBtn = item.querySelector('[data-part="staged-thumb-btn"]');
+    if (thumbBtn) thumbBtn.setAttribute("aria-label", c.previewImage(idx + 1));
+
+    const img = item.querySelector('[data-part="staged-thumb"]');
+    if (img && att.previewUrl && img.getAttribute("src") !== att.previewUrl) {
+      img.src = att.previewUrl;
+    }
+
+    const altToggleBtn = item.querySelector('[data-part="staged-alt-btn"]');
+    if (altToggleBtn) {
+      if (hasAlt) altToggleBtn.dataset.hasAlt = "true";
+      else delete altToggleBtn.dataset.hasAlt;
+      altToggleBtn.disabled = this.#submitting;
+      altToggleBtn.textContent = hasAlt ? c.altBtnFilled : c.altBtn;
+      altToggleBtn.setAttribute("aria-label", c.altToggleAria(idx + 1));
+      altToggleBtn.setAttribute("aria-expanded", isEditing ? "true" : "false");
+    }
+
+    const removeBtn = item.querySelector('[data-part="staged-remove"]');
+    if (removeBtn) {
+      removeBtn.disabled = this.#submitting || this.#processingImages;
+      removeBtn.setAttribute("aria-label", c.removeImage(idx + 1));
+    }
+  }
+
+  #closeAltEditor({ restoreFocus = false } = {}) {
+    const prevUid = this.#editingAltUid;
+    if (!prevUid) return;
+    this.#editingAltUid = "";
+    this.#syncAttachmentUi();
+    if (restoreFocus && prevUid) {
+      const btn = this.#els.stagedList?.querySelector(
+        `[data-part="staged-item"]:not([data-closing="true"]) [data-part="staged-alt-btn"][data-uid="${CSS.escape(prevUid)}"]`
+      );
+      btn?.focus({ preventScroll: true });
+    }
+  }
+
+  #syncAltCaret(allowTransition = true, targetRect = null) {
+    const { composerMedia, stagedList, altBar, altCaret } = this.#els;
+    if (!composerMedia || !stagedList || !altBar || !altCaret || !this.#editingAltUid) return;
+    const item = stagedList.querySelector(
+      `[data-part="staged-item"]:not([data-closing="true"])[data-uid="${CSS.escape(this.#editingAltUid)}"]`
+    );
+    if (!targetRect && !item) return;
+
+    let rawX = null;
+    let barWidth = altBar.clientWidth;
+    if (!targetRect && item) {
+      // Untransformed layout coordinates ignore active FLIP transforms & wrapped-row ResizeObserver ticks
+      const itemLeft = layoutLeftIn(item, composerMedia);
+      const barLeft = layoutLeftIn(altBar, composerMedia);
+      if (itemLeft !== null && barLeft !== null && item.offsetWidth > 0 && barWidth > 0) {
+        rawX = itemLeft + item.offsetWidth / 2 - (barLeft + altBar.clientLeft);
+      }
+    }
+    if (rawX === null) {
+      const barRect = altBar.getBoundingClientRect();
+      const itemRect = targetRect || item?.getBoundingClientRect();
+      if (!itemRect || barRect.width <= 0 || itemRect.width <= 0) return;
+      barWidth = barRect.width;
+      rawX = itemRect.left + itemRect.width / 2 - barRect.left;
+    }
+
+    const clampedX = Math.max(14, Math.min(Math.max(14, barWidth - 14), rawX));
+    if (!allowTransition) {
+      delete altBar.dataset.caretAnimated;
+    } else {
+      altBar.dataset.caretAnimated = "true";
+    }
+    altBar.style.setProperty("--alt-caret-x", `${clampedX.toFixed(1)}px`);
+    if (!allowTransition) {
+      void altCaret.offsetWidth;
+      altBar.dataset.caretAnimated = "true";
+    }
+  }
+
+  #syncAltDrawer({ animate = true, focus = false } = {}) {
+    const { altDrawer, altTag, altInput, altDoneBtn } = this.#els;
+    if (!altDrawer || !altTag || !altInput || !altDoneBtn) return;
+    const c = this.#copy;
+    const idx = this.#editingAltUid
+      ? this.#attachments.findIndex((a) => a.uid === this.#editingAltUid)
+      : -1;
+
+    if (idx === -1) {
+      const op = ++this.#altDrawerOp;
+      const wasOpen = !altDrawer.hidden && altDrawer.dataset.open === "true";
+      altDrawer.dataset.open = "false";
+      altDrawer.inert = true;
+      delete altInput.dataset.boundUid;
+
+      const finishClose = () => {
+        if (op === this.#altDrawerOp && !this.#editingAltUid) {
+          altDrawer.hidden = true;
+        }
+      };
+
+      if (!animate || !wasOpen || reducedMotionQuery.matches || this.hasAttribute("unstyled")) {
+        finishClose();
+        return;
+      }
+
+      const anims = altDrawer.getAnimations().filter((a) => a instanceof CSSTransition);
+      if (anims.length === 0) {
+        finishClose();
+      } else {
+        Promise.race([
+          Promise.allSettled(anims.map((a) => a.finished)),
+          new Promise((r) => window.setTimeout(r, 340)),
+        ]).then(finishClose);
+      }
       return;
     }
 
-    // Preserve active alt-text input focus & caret across incremental queue renders
-    let focusedAltUid = "";
-    let selStart = null;
-    let selEnd = null;
-    const active = document.activeElement;
+    const att = this.#attachments[idx];
+    const op = ++this.#altDrawerOp;
+    const wasClosed = altDrawer.hidden || altDrawer.dataset.open !== "true";
+
+    altTag.textContent = c.altTag(idx + 1, this.#attachments.length);
+    altInput.dataset.uid = att.uid;
+    altInput.placeholder = c.altPlaceholder;
+    altInput.setAttribute("aria-label", c.altAria(idx + 1));
+    altInput.disabled = this.#submitting;
+    altDoneBtn.textContent = c.altDone;
+    const expectedAlt = att.alt || "";
     if (
-      active instanceof HTMLInputElement &&
-      active.dataset.part === "staged-alt" &&
-      composerMedia.contains(active)
+      altInput.dataset.boundUid !== att.uid ||
+      (document.activeElement !== altInput && altInput.value !== expectedAlt)
     ) {
-      focusedAltUid = active.dataset.uid || "";
-      selStart = active.selectionStart;
-      selEnd = active.selectionEnd;
+      altInput.dataset.boundUid = att.uid;
+      altInput.value = expectedAlt;
     }
 
-    const svgNS = "http://www.w3.org/2000/svg";
-    const buildStagedLightboxEntries = () =>
-      this.#attachments.map((att, i) => {
-        const caption = String(att.alt || "").trim();
-        return {
-          src: att.previewUrl,
-          alt: caption || c.previewImage(i + 1),
-          caption,
-          width: att.width,
-          height: att.height,
-          openableUrl: "",
-        };
-      });
-
-    const frag = document.createDocumentFragment();
-    let altToRefocus = null;
-    this.#attachments.forEach((att, idx) => {
-      const item = document.createElement("div");
-      item.dataset.part = "staged-item";
-      item.setAttribute("role", "listitem");
-
-      const thumbWrap = document.createElement("div");
-      thumbWrap.dataset.part = "staged-thumb-wrap";
-
-      const thumbBtn = document.createElement("button");
-      thumbBtn.type = "button";
-      thumbBtn.dataset.part = "staged-thumb-btn";
-      thumbBtn.setAttribute("aria-label", c.previewImage(idx + 1));
-      thumbBtn.addEventListener("click", () => {
-        this.#openLightbox(buildStagedLightboxEntries(), idx);
-      });
-
-      const img = document.createElement("img");
-      img.dataset.part = "staged-thumb";
-      img.src = att.previewUrl;
-      img.alt = "";
-      img.decoding = "async";
-      thumbBtn.append(img);
-      thumbWrap.append(thumbBtn);
-
-      const meta = document.createElement("div");
-      meta.dataset.part = "staged-meta";
-
-      const altInput = document.createElement("input");
-      altInput.type = "text";
-      altInput.dataset.part = "staged-alt";
-      altInput.dataset.uid = att.uid;
-      altInput.maxLength = MAX_ALT_LEN;
-      altInput.value = att.alt || "";
-      altInput.placeholder = c.altPlaceholder;
-      altInput.disabled = this.#submitting;
-      altInput.setAttribute("aria-label", c.altAria(idx + 1));
-      altInput.addEventListener("input", () => {
-        att.alt = altInput.value;
-      });
-      altInput.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" && (event.isComposing || event.keyCode === 229)) {
-          event.preventDefault();
-        }
-      });
-      if (focusedAltUid && att.uid === focusedAltUid) {
-        altToRefocus = altInput;
+    if (wasClosed) {
+      altDrawer.hidden = false;
+      altDrawer.inert = false;
+      this.#syncAltCaret(false);
+      void altDrawer.offsetHeight;
+      if (op === this.#altDrawerOp && this.#editingAltUid === att.uid) {
+        altDrawer.dataset.open = "true";
       }
+    } else {
+      altDrawer.hidden = false;
+      altDrawer.inert = false;
+      altDrawer.dataset.open = "true";
+      this.#syncAltCaret(animate && !reducedMotionQuery.matches);
+    }
 
-      const removeBtn = document.createElement("button");
-      removeBtn.type = "button";
-      removeBtn.dataset.part = "staged-remove";
-      removeBtn.disabled = this.#submitting || this.#processingImages;
-      removeBtn.setAttribute("aria-label", c.removeImage(idx + 1));
-      removeBtn.addEventListener("click", () => {
-        this.#removeAttachment(att.uid);
-      });
+    if (focus && !altInput.disabled && this.isConnected) {
+      altInput.focus({ preventScroll: true });
+      const end = altInput.value.length;
+      try {
+        altInput.setSelectionRange(end, end);
+      } catch {
+        /* ignore */
+      }
+    }
+  }
 
-      const xSvg = document.createElementNS(svgNS, "svg");
-      xSvg.setAttribute("viewBox", "0 0 12 12");
-      xSvg.setAttribute("width", "10");
-      xSvg.setAttribute("height", "10");
-      xSvg.setAttribute("aria-hidden", "true");
-      const xPath = document.createElementNS(svgNS, "path");
-      xPath.setAttribute("d", "M2.5 2.5l7 7M9.5 2.5l-7 7");
-      xPath.setAttribute("stroke", "currentColor");
-      xPath.setAttribute("stroke-width", "1.4");
-      xPath.setAttribute("stroke-linecap", "square");
-      xSvg.append(xPath);
-      removeBtn.append(xSvg);
+  #expandComposerMedia({ fromHeight = null } = {}) {
+    const { composerMedia, stagedList } = this.#els;
+    if (!composerMedia) return;
+    const op = ++this.#mediaOp;
+    const wasHidden = composerMedia.hidden;
+    const startH =
+      fromHeight !== null ? fromHeight : wasHidden ? 0 : readLocalHeight(composerMedia);
 
-      meta.append(altInput, removeBtn);
-      item.append(thumbWrap, meta);
-      frag.append(item);
+    this.#mediaAnim?.cancel();
+    this.#mediaAnim = null;
+    this.#mediaAnimatingMode = null;
+    composerMedia.hidden = false;
+    composerMedia.style.height = "";
+    composerMedia.style.overflow = "";
+    composerMedia.style.opacity = "";
+
+    if ((!wasHidden && fromHeight === null) || reducedMotionQuery.matches || typeof composerMedia.animate !== "function") {
+      return;
+    }
+
+    const targetH = readLocalHeight(composerMedia);
+    this.#mediaListHeight = stagedList ? stagedList.offsetHeight : 0;
+    if (targetH <= 2 || Math.abs(targetH - startH) <= 1) return;
+    composerMedia.style.overflow = "clip";
+    const anim = composerMedia.animate(
+      [
+        { height: `${startH}px`, opacity: wasHidden ? 0 : 1 },
+        { height: `${targetH}px`, opacity: 1 },
+      ],
+      {
+        duration: 260,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "forwards",
+      }
+    );
+    this.#mediaAnim = anim;
+    this.#mediaAnimatingMode = "expand";
+    Promise.race([anim.finished.catch(() => {}), new Promise((r) => window.setTimeout(r, 340))]).then(() => {
+      if (op !== this.#mediaOp || this.#mediaAnim !== anim) return;
+      anim.cancel();
+      this.#mediaAnim = null;
+      this.#mediaAnimatingMode = null;
+      composerMedia.style.height = "";
+      composerMedia.style.overflow = "";
+      composerMedia.style.opacity = "";
+    });
+  }
+
+  #collapseComposerMedia({ animate = true } = {}) {
+    const { composerMedia, stagedList } = this.#els;
+    if (!composerMedia || !stagedList) return;
+    const op = ++this.#mediaOp;
+    const startH = composerMedia.hidden ? 0 : readLocalHeight(composerMedia);
+
+    this.#mediaAnim?.cancel();
+    this.#mediaAnim = null;
+    this.#mediaAnimatingMode = null;
+
+    const finishHide = () => {
+      if (op !== this.#mediaOp || this.#attachments.length > 0) return;
+      this.#mediaAnim?.cancel();
+      this.#mediaAnim = null;
+      this.#mediaAnimatingMode = null;
+      stagedList.replaceChildren();
+      this.#revokeExitingPreviewUrls();
+      composerMedia.hidden = true;
+      composerMedia.style.height = "";
+      composerMedia.style.overflow = "";
+      composerMedia.style.opacity = "";
+    };
+
+    if (!animate || composerMedia.hidden || startH <= 1 || reducedMotionQuery.matches || typeof composerMedia.animate !== "function") {
+      finishHide();
+      return;
+    }
+
+    stagedList.querySelectorAll('[data-part="staged-item"]').forEach((node) => {
+      if (typeof node.animate === "function") {
+        node.animate(
+          [
+            { opacity: 1, transform: "scale(1) translateY(0px)" },
+            { opacity: 0, transform: "scale(0.86) translateY(-4px)" },
+          ],
+          { duration: 170, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" }
+        );
+      }
     });
 
-    composerMedia.replaceChildren(frag);
-    composerMedia.hidden = false;
-    if (altToRefocus && altToRefocus.isConnected && !altToRefocus.disabled) {
-      altToRefocus.focus({ preventScroll: true });
-      if (selStart !== null && selEnd !== null) {
-        try {
-          altToRefocus.setSelectionRange(selStart, selEnd);
-        } catch {
-          /* ignore */
-        }
+    composerMedia.style.overflow = "clip";
+    const anim = composerMedia.animate(
+      [
+        { height: `${startH}px`, opacity: 1 },
+        { height: "0px", opacity: 0 },
+      ],
+      {
+        duration: 240,
+        easing: "cubic-bezier(0.32, 0, 0.15, 1)",
+        fill: "forwards",
+      }
+    );
+    this.#mediaAnim = anim;
+    this.#mediaAnimatingMode = "collapse";
+    Promise.race([anim.finished.catch(() => {}), new Promise((r) => window.setTimeout(r, 340))]).then(finishHide);
+  }
+
+  #syncAttachmentUi({ focusAltEditor = false, preserveClosing = false, animateTray = true } = {}) {
+    const { composerMedia, stagedList } = this.#els;
+    if (!composerMedia || !stagedList) return;
+
+    this.#syncAttachButtonAndConstraints();
+    const count = this.#attachments.length;
+
+    if (count === 0) {
+      if (animateTray && this.#mediaAnimatingMode === "collapse" && this.#mediaAnim) {
+        return;
+      }
+      this.#editingAltUid = "";
+      this.#syncAltDrawer({ animate: false });
+      this.#collapseComposerMedia({ animate: false });
+      return;
+    }
+
+    if (this.#editingAltUid && !this.#attachments.some((a) => a.uid === this.#editingAltUid)) {
+      this.#editingAltUid = "";
+    }
+
+    const wasHidden = composerMedia.hidden;
+    const wasCollapsing = this.#mediaAnimatingMode === "collapse" && Boolean(this.#mediaAnim);
+    const wasExpanding = this.#mediaAnimatingMode === "expand" && Boolean(this.#mediaAnim);
+    const currentAnimatedH = wasCollapsing || wasExpanding ? readLocalHeight(composerMedia) : null;
+
+    if (!preserveClosing) {
+      const closingNodes = stagedList.querySelectorAll('[data-part="staged-item"][data-closing="true"]');
+      if (closingNodes.length > 0) {
+        closingNodes.forEach((n) => n.remove());
+        this.#revokeExitingPreviewUrls();
       }
     }
+
+    const existingByUid = new Map();
+    for (const child of [...stagedList.children]) {
+      if (child.dataset?.part === "staged-item" && child.dataset.closing !== "true" && child.dataset.uid) {
+        existingByUid.set(child.dataset.uid, child);
+      }
+    }
+
+    const desiredUids = new Set(this.#attachments.map((a) => a.uid));
+    for (const [uid, node] of existingByUid) {
+      if (!desiredUids.has(uid)) {
+        node.remove();
+        existingByUid.delete(uid);
+      }
+    }
+
+    // Reconcile tiles in place so existing thumbnails never re-trigger entry animation or flicker
+    let cursor = stagedList.firstElementChild;
+    while (cursor && cursor.dataset?.closing === "true") {
+      cursor = cursor.nextElementSibling;
+    }
+
+    this.#attachments.forEach((att, idx) => {
+      let node = existingByUid.get(att.uid);
+      if (node) {
+        this.#updateStagedItemNode(node, att, idx);
+      } else {
+        node = this.#createStagedItemNode(att, idx);
+      }
+      if (node === cursor) {
+        cursor = cursor.nextElementSibling;
+        while (cursor && cursor.dataset?.closing === "true") {
+          cursor = cursor.nextElementSibling;
+        }
+      } else {
+        stagedList.insertBefore(node, cursor);
+      }
+    });
+
+    if ((wasHidden || wasCollapsing) && animateTray) {
+      this.#expandComposerMedia({ fromHeight: wasCollapsing ? currentAnimatedH : null });
+    } else if (wasExpanding && animateTray && !this.#editingAltUid) {
+      if (stagedList.offsetHeight !== this.#mediaListHeight) {
+        this.#expandComposerMedia({ fromHeight: currentAnimatedH });
+      } else {
+        composerMedia.hidden = false;
+      }
+    } else {
+      this.#mediaOp += 1;
+      this.#mediaAnim?.cancel();
+      this.#mediaAnim = null;
+      this.#mediaAnimatingMode = null;
+      composerMedia.hidden = false;
+      composerMedia.style.height = "";
+      composerMedia.style.overflow = "";
+      composerMedia.style.opacity = "";
+    }
+
+    this.#syncAltDrawer({ animate: true, focus: focusAltEditor });
   }
 
   #removeAttachment(uid) {
     if (this.#submitting || this.#processingImages) return;
     const idx = this.#attachments.findIndex((a) => a.uid === uid);
     if (idx === -1) return;
+
+    const { composerMedia, stagedList } = this.#els;
     const hadFocus =
       document.activeElement instanceof Node &&
-      this.#els.composerMedia.contains(document.activeElement);
+      composerMedia.contains(document.activeElement);
+    const itemNode = stagedList?.querySelector(
+      `[data-part="staged-item"]:not([data-closing="true"])[data-uid="${CSS.escape(uid)}"]`
+    );
+
+    // Commit logical removal immediately so submit / paste / rapid removals never race
     const [removed] = this.#attachments.splice(idx, 1);
-    if (removed?.previewUrl) {
-      URL.revokeObjectURL(removed.previewUrl);
-    }
     this.#attachmentsRev += 1;
+    this.#freshAttachmentUids.delete(uid);
+    if (this.#editingAltUid === uid) {
+      this.#editingAltUid = "";
+    }
     this.#clearMediaError();
-    this.#syncAttachmentUi();
-    if (hadFocus) {
-      const remainingBtns = this.#els.composerMedia.querySelectorAll('[data-part="staged-remove"]');
-      if (remainingBtns.length > 0) {
-        const nextFocus = remainingBtns[Math.min(idx, remainingBtns.length - 1)];
-        nextFocus.focus({ preventScroll: true });
-      } else if (!this.#els.attachBtn.hidden && !this.#els.attachBtn.disabled) {
-        this.#els.attachBtn.focus({ preventScroll: true });
+
+    const remainingCount = this.#attachments.length;
+    const shouldAnimate =
+      Boolean(itemNode) &&
+      !reducedMotionQuery.matches &&
+      typeof itemNode.animate === "function";
+
+    if (removed?.previewUrl) {
+      if (shouldAnimate) {
+        this.#exitingPreviewUrls.add(removed.previewUrl);
       } else {
-        this.#els.textarea.focus({ preventScroll: true });
+        URL.revokeObjectURL(removed.previewUrl);
       }
     }
-    announcePolite(this.#copy.imageRemoved);
-  }
 
-  async #addImageFiles(rawFiles) {
-    if (!this.#config.imagesEnabled || this.#submitting) return;
-    const files = [...rawFiles].filter(Boolean);
-    if (files.length === 0) return;
-
-    // Non-destructive FIFO queue so rapid pastes/drops append smoothly instead of cancelling in-flight work
-    this.#pendingFileQueue.push(...files);
-    if (this.#processingImages) return;
-
-    const c = this.#copy;
-    const maxImages = Math.max(1, Number(this.#config.maxImages || DEFAULT_MAX_IMAGES));
-    this.#clearMediaError();
-
-    if (this.#attachments.length >= maxImages) {
-      this.#pendingFileQueue = [];
-      this.#showMediaError(c.errImageCount(maxImages));
+    if (remainingCount === 0) {
+      this.#syncAttachButtonAndConstraints();
+      if (itemNode) {
+        itemNode.dataset.closing = "true";
+        itemNode.inert = true;
+        itemNode.setAttribute("aria-hidden", "true");
+      }
+      if (hadFocus) {
+        if (!this.#els.attachBtn.hidden && !this.#els.attachBtn.disabled) {
+          this.#els.attachBtn.focus({ preventScroll: true });
+        } else {
+          this.#els.textarea.focus({ preventScroll: true });
+        }
+      }
+      this.#syncAltDrawer({ animate: shouldAnimate });
+      this.#collapseComposerMedia({ animate: shouldAnimate });
+      announcePolite(this.#copy.imageRemoved);
       return;
     }
 
+    if (itemNode && shouldAnimate) {
+      itemNode.dataset.closing = "true";
+      itemNode.inert = true;
+      itemNode.setAttribute("aria-hidden", "true");
+    }
+
+    this.#syncAttachmentUi({ preserveClosing: shouldAnimate });
+
+    if (hadFocus) {
+      const remainingBtns = stagedList.querySelectorAll(
+        '[data-part="staged-item"]:not([data-closing="true"]) [data-part="staged-remove"]'
+      );
+      if (remainingBtns.length > 0) {
+        const nextFocus = remainingBtns[Math.min(idx, remainingBtns.length - 1)];
+        nextFocus.focus({ preventScroll: true });
+      }
+    }
+
+    announcePolite(this.#copy.imageRemoved);
+
+    if (!itemNode || !shouldAnimate) {
+      if (itemNode && itemNode.isConnected) itemNode.remove();
+      if (this.#editingAltUid) this.#syncAltCaret(false);
+      return;
+    }
+
+    const exitAnim = itemNode.animate(
+      [
+        { opacity: 1, transform: "scale(1) translateY(0px)" },
+        { opacity: 0, transform: "scale(0.84) translateY(-4px)" },
+      ],
+      { duration: 165, easing: "cubic-bezier(0.4, 0, 1, 1)", fill: "forwards" }
+    );
+
+    Promise.race([exitAnim.finished.catch(() => {}), new Promise((r) => window.setTimeout(r, 240))]).then(() => {
+      if (removed?.previewUrl && this.#exitingPreviewUrls.has(removed.previewUrl)) {
+        URL.revokeObjectURL(removed.previewUrl);
+        this.#exitingPreviewUrls.delete(removed.previewUrl);
+      }
+      if (!itemNode.isConnected) return;
+
+      // FLIP measure remaining live siblings before removing the vacated tile
+      const liveSiblings = [...stagedList.querySelectorAll('[data-part="staged-item"]:not([data-closing="true"])')];
+      const firstRects = new Map();
+      for (const el of liveSiblings) {
+        firstRects.set(el, el.getBoundingClientRect());
+      }
+
+      itemNode.remove();
+
+      if (!this.isConnected) return;
+      // Read final resting layout rects BEFORE applying FLIP transforms so the ALT caret targets the true final slot
+      const lastRects = new Map();
+      let editingLastRect = null;
+      for (const el of liveSiblings) {
+        if (!el.isConnected) continue;
+        const rect = el.getBoundingClientRect();
+        lastRects.set(el, rect);
+        if (this.#editingAltUid && el.dataset.uid === this.#editingAltUid) {
+          editingLastRect = rect;
+        }
+      }
+
+      if (this.#editingAltUid && editingLastRect) {
+        this.#syncAltCaret(!reducedMotionQuery.matches);
+      }
+
+      if (reducedMotionQuery.matches) return;
+      const flipAnims = [];
+      for (const el of liveSiblings) {
+        const last = lastRects.get(el);
+        if (!last) continue;
+        const first = firstRects.get(el);
+        const dx = first.left - last.left;
+        const dy = first.top - last.top;
+        if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+          flipAnims.push(
+            el.animate(
+              [
+                { transform: `translate(${dx}px, ${dy}px)` },
+                { transform: "translate(0px, 0px)" },
+              ],
+              { duration: 240, easing: "cubic-bezier(0.32, 0, 0.15, 1)" }
+            )
+          );
+        }
+      }
+      if (flipAnims.length > 0 && this.#editingAltUid) {
+        Promise.allSettled(flipAnims.map((a) => a.finished)).then(() => {
+          if (this.isConnected && this.#editingAltUid) {
+            this.#syncAltCaret(true);
+          }
+        });
+      }
+    });
+  }
+
+  #markAttachmentsFresh(uids) {
+    if (!Array.isArray(uids) || uids.length === 0) return;
+    for (const uid of uids) {
+      this.#freshAttachmentUids.add(uid);
+      const node = this.#els.stagedList?.querySelector(
+        `[data-part="staged-item"]:not([data-closing="true"])[data-uid="${CSS.escape(uid)}"]`
+      );
+      if (node) node.dataset.fresh = "true";
+    }
+    window.setTimeout(() => {
+      for (const uid of uids) {
+        this.#freshAttachmentUids.delete(uid);
+        const node = this.#els.stagedList?.querySelector(
+          `[data-part="staged-item"]:not([data-closing="true"])[data-uid="${CSS.escape(uid)}"]`
+        );
+        if (node && node.isConnected) delete node.dataset.fresh;
+      }
+    }, 1400);
+  }
+
+  #addImageFiles(rawFiles, options = {}) {
+    if (!this.#config.imagesEnabled || this.#submitting) {
+      return Promise.resolve({
+        ok: false,
+        added: 0,
+        overflowed: false,
+        error: !this.#config.imagesEnabled ? this.#copy.errImagesUnconfigured : "",
+        addedUids: [],
+        reason: !this.#config.imagesEnabled ? "images_disabled" : "submitting",
+      });
+    }
+    const files = [...rawFiles].filter(Boolean);
+    if (files.length === 0) {
+      return Promise.resolve({ ok: false, added: 0, overflowed: false, error: "", addedUids: [], reason: "no_files" });
+    }
+
+    const c = this.#copy;
+    const maxImages = Math.max(1, Number(this.#config.maxImages || DEFAULT_MAX_IMAGES));
+    const prepOpts = {
+      maxEdge: options.maxEdge,
+      targetBytes: options.maxBytes,
+      quality: options.quality,
+    };
+    const defaultAlt = typeof options.alt === "string" ? options.alt.trim().slice(0, MAX_ALT_LEN) : "";
+    const announceAdded = options.announceAdded !== false;
+
+    if (!this.#processingImages && this.#attachments.length >= maxImages) {
+      this.#clearMediaError();
+      const msg = c.errImageCount(maxImages);
+      this.#showMediaError(msg);
+      return Promise.resolve({ ok: false, added: 0, overflowed: true, error: msg, addedUids: [], reason: "max_images" });
+    }
+
+    let resolveBatch;
+    const batchPromise = new Promise((resolve) => {
+      resolveBatch = resolve;
+    });
+    const batch = {
+      remaining: files.length,
+      added: 0,
+      overflowed: false,
+      firstError: "",
+      addedUids: [],
+      announceAdded,
+      settled: false,
+      resolve: resolveBatch,
+    };
+
+    // Non-destructive FIFO queue so rapid pastes/drops/quick-attaches append cleanly
+    for (const file of files) {
+      this.#pendingFileQueue.push({ file, prepOpts, defaultAlt, batch });
+    }
+
+    if (!this.#processingImages) {
+      this.#drainImageQueue();
+    }
+    return batchPromise;
+  }
+
+  async #drainImageQueue() {
+    if (this.#processingImages) return;
     const opSeq = this.#imageOpSeq;
+    const maxImages = Math.max(1, Number(this.#config.maxImages || DEFAULT_MAX_IMAGES));
+    this.#clearMediaError();
     this.#processingImages = true;
     this.#syncComposerReadyState();
     this.#syncAttachmentUi();
 
-    let added = 0;
-    let overflowed = false;
-    let firstError = "";
+    const finishBatchIfReady = (batch) => {
+      if (!batch || batch.settled || batch.remaining > 0) return;
+      batch.settled = true;
+      if (batch.added > 0) {
+        if (this.#els.textarea.getAttribute("aria-invalid") === "true") {
+          this.#syncFieldAria(this.#els.textarea, true);
+        }
+        this.#warmupAntiAbuse();
+        if (batch.announceAdded) {
+          announcePolite(this.#copy.imageAdded(batch.added));
+        }
+      }
+      if (batch.firstError) {
+        this.#showMediaError(batch.firstError);
+      } else if (batch.overflowed) {
+        this.#showMediaError(this.#copy.errImageCount(maxImages));
+      }
+      batch.resolve({
+        ok: batch.added > 0,
+        added: batch.added,
+        overflowed: batch.overflowed,
+        error: batch.firstError || (batch.overflowed ? this.#copy.errImageCount(maxImages) : ""),
+        addedUids: batch.addedUids,
+        reason: batch.added > 0 ? undefined : batch.overflowed ? "max_images" : "invalid_image",
+      });
+    };
+
     try {
       while (this.#pendingFileQueue.length > 0) {
         if (opSeq !== this.#imageOpSeq || !this.isConnected || this.#submitting) {
           return;
         }
+        const entry = this.#pendingFileQueue.shift();
+        if (!entry) continue;
+        const { file, prepOpts, defaultAlt, batch } = entry;
+        this.#activeImageBatch = batch;
+
         if (this.#attachments.length >= maxImages) {
-          overflowed = true;
-          this.#pendingFileQueue = [];
-          break;
+          batch.overflowed = true;
+          batch.remaining -= 1;
+          finishBatchIfReady(batch);
+          continue;
         }
-        const file = this.#pendingFileQueue.shift();
-        if (!file) continue;
+
         try {
-          const prepared = await prepareImageAttachment(file, this.#config.maxImageBytes);
+          const prepared = await prepareImageAttachment(file, this.#config.maxImageBytes, prepOpts);
           if (opSeq !== this.#imageOpSeq || !this.isConnected || this.#submitting) {
             if (prepared.previewUrl) URL.revokeObjectURL(prepared.previewUrl);
             return;
           }
           if (this.#attachments.length >= maxImages) {
             if (prepared.previewUrl) URL.revokeObjectURL(prepared.previewUrl);
-            overflowed = true;
-            this.#pendingFileQueue = [];
-            break;
+            batch.overflowed = true;
+          } else {
+            if (defaultAlt) prepared.alt = defaultAlt;
+            this.#attachments.push(prepared);
+            this.#attachmentsRev += 1;
+            batch.added += 1;
+            batch.addedUids.push(prepared.uid);
+            this.#syncAttachmentUi();
           }
-          this.#attachments.push(prepared);
-          this.#attachmentsRev += 1;
-          added += 1;
-          this.#syncAttachmentUi();
         } catch (err) {
           if (opSeq !== this.#imageOpSeq || !this.isConnected || this.#submitting) return;
-          if (!firstError) {
+          if (!batch.firstError) {
             const code = err?.code;
-            firstError = code && typeof c[code] === "string" ? c[code] : c.errImageProcess;
+            const c = this.#copy;
+            batch.firstError = code && typeof c[code] === "string" ? c[code] : c.errImageProcess;
+          }
+        } finally {
+          if (opSeq === this.#imageOpSeq) {
+            batch.remaining -= 1;
+            finishBatchIfReady(batch);
           }
         }
       }
     } finally {
       if (opSeq === this.#imageOpSeq) {
-        this.#processingImages = false;
+        const unfinished = new Set();
+        if (this.#activeImageBatch && !this.#activeImageBatch.settled) {
+          unfinished.add(this.#activeImageBatch);
+        }
+        for (const item of this.#pendingFileQueue) {
+          if (item?.batch && !item.batch.settled) unfinished.add(item.batch);
+        }
+        this.#activeImageBatch = null;
         this.#pendingFileQueue = [];
+        this.#processingImages = false;
         this.#syncComposerReadyState();
         this.#syncAttachmentUi();
+        for (const batch of unfinished) {
+          batch.settled = true;
+          batch.resolve({
+            ok: false,
+            added: batch.added,
+            overflowed: batch.overflowed,
+            error: batch.firstError,
+            addedUids: batch.addedUids,
+            cancelled: true,
+          });
+        }
       }
-    }
-
-    if (added > 0) {
-      if (this.#els.textarea.getAttribute("aria-invalid") === "true") {
-        this.#syncFieldAria(this.#els.textarea, true);
-      }
-      this.#warmupAntiAbuse();
-      announcePolite(c.imageAdded(added));
-    }
-
-    if (firstError) {
-      this.#showMediaError(firstError);
-    } else if (overflowed) {
-      this.#showMediaError(c.errImageCount(maxImages));
     }
   }
 
@@ -4079,6 +5377,367 @@ class TiCommentsElement extends HTMLElement {
     lightbox.close();
   }
 
+  #isAuthorSlashCommand(value) {
+    return /^\/author$/i.test(String(value || "").trim());
+  }
+
+  #consumeAuthorCommand() {
+    const { form, textarea, nameInput, urlInput } = this.#els;
+    if (form && textarea) {
+      const curName = nameInput?.value ?? "";
+      const curUrl = urlInput?.value ?? "";
+      // Preserve staged alt inputs (they live inside form) while clearing textarea's :user-invalid state
+      const stagedAlts = this.#attachments.map((att) => att.alt);
+      form.reset();
+      if (nameInput) nameInput.value = curName;
+      if (urlInput) urlInput.value = curUrl;
+      this.#attachments.forEach((att, idx) => {
+        att.alt = stagedAlts[idx] || "";
+      });
+      if (this.#attachments.length > 0) {
+        this.#syncAttachmentUi();
+      }
+      this.#els.charCount.textContent = `0 / ${this.#config.maxBodyLength}`;
+      this.#syncFieldAria(textarea, false);
+      if (urlInput) this.#syncFieldAria(urlInput, false);
+    } else if (textarea) {
+      textarea.value = "";
+      this.#els.charCount.textContent = `0 / ${this.#config.maxBodyLength}`;
+      this.#syncFieldAria(textarea, false);
+    }
+    this.#openAuthDialog();
+  }
+
+  #siteAuthorFallback() {
+    return (document.querySelector(".site-header")?.dataset?.siteAuthor || "").trim();
+  }
+
+  #bindAuthorSync() {
+    if (this.#onAuthorChange) return;
+    this.#onAuthorChange = (event) => {
+      const detail = event?.detail;
+      if (!detail || detail.source === this || detail.endpoint !== this.endpoint) return;
+      this.#setAuthorState(Boolean(detail.authorMode), String(detail.authorName || ""));
+    };
+    window.addEventListener("ti-comments:author-change", this.#onAuthorChange);
+  }
+
+  #unbindAuthorSync() {
+    if (!this.#onAuthorChange) return;
+    window.removeEventListener("ti-comments:author-change", this.#onAuthorChange);
+    this.#onAuthorChange = null;
+  }
+
+  #broadcastAuthorState() {
+    window.dispatchEvent(
+      new CustomEvent("ti-comments:author-change", {
+        detail: {
+          source: this,
+          endpoint: this.endpoint,
+          authorMode: this.#authorMode,
+          authorName: this.#authorName,
+        },
+      })
+    );
+  }
+
+  #setAuthorState(active, authorName = "", { rerender = true } = {}) {
+    const nextActive = Boolean(active);
+    const prevActive = this.#authorMode;
+    this.#authorMode = nextActive;
+    this.#authorName = nextActive
+      ? String(authorName || this.#authorName || this.#siteAuthorFallback()).trim()
+      : "";
+
+    if (nextActive) {
+      this.dataset.authorMode = "true";
+    } else {
+      delete this.dataset.authorMode;
+    }
+    this.#setCustomState("author", nextActive);
+
+    const { authorBanner, authorBannerText, nameInput, statusLine } = this.#els;
+    const c = this.#copy;
+    if (authorBannerText) {
+      authorBannerText.textContent = c.authorModeBanner(this.#authorName);
+    }
+    if (authorBanner) {
+      if (nextActive) this.#showDiscrete(authorBanner);
+      else this.#hideDiscrete(authorBanner);
+    }
+    if (nameInput) {
+      nameInput.placeholder = nextActive && this.#authorName ? this.#authorName : c.namePlaceholder;
+      if (nextActive && !prevActive) {
+        const storedGuest = safeStorageGet(STORAGE_NAME_KEY);
+        if (nameInput.value.trim() === storedGuest) {
+          nameInput.value = "";
+        }
+      } else if (!nextActive && prevActive && !nameInput.value.trim()) {
+        nameInput.value = safeStorageGet(STORAGE_NAME_KEY);
+      }
+    }
+    if (statusLine && this.#statusKey === "statusReady") {
+      statusLine.textContent = this.#resolveStatusCopy("statusReady");
+    }
+    if (this.#els.authDialog?.open) {
+      this.#syncAuthDialogMode();
+    }
+    if (rerender && this.#loaded && prevActive !== nextActive) {
+      this.#renderThread();
+    }
+  }
+
+  #syncAuthDialogMode() {
+    const { authDesc, authField, authInput, authSubmitBtn } = this.#els;
+    if (!authDesc || !authField || !authInput || !authSubmitBtn) return;
+    const c = this.#copy;
+    if (this.#authorMode) {
+      authDesc.textContent = c.authDialogActiveDesc(this.#authorName);
+      authField.hidden = true;
+      authInput.required = false;
+      authSubmitBtn.dataset.mode = "logout";
+      authSubmitBtn.textContent = this.#authSubmitting ? c.authSubmitting : c.authSignOutBtn;
+    } else {
+      authDesc.textContent = c.authDialogDesc;
+      authField.hidden = false;
+      authInput.required = true;
+      delete authSubmitBtn.dataset.mode;
+      authSubmitBtn.textContent = this.#authSubmitting ? c.authSubmitting : c.authSubmit;
+    }
+  }
+
+  #setAuthError(errorKey = "") {
+    const { authError, authInput } = this.#els;
+    if (!authError || !authInput) return;
+    this.#authErrorKey = errorKey;
+    const descId = this.#els.authDesc?.id || "";
+    if (!errorKey) {
+      authError.textContent = "";
+      authError.hidden = true;
+      authInput.setAttribute("aria-invalid", "false");
+      if (descId) authInput.setAttribute("aria-describedby", descId);
+      else authInput.removeAttribute("aria-describedby");
+      return;
+    }
+    const msg = typeof this.#copy[errorKey] === "string" ? this.#copy[errorKey] : errorKey;
+    authError.textContent = msg;
+    authError.hidden = false;
+    authInput.setAttribute("aria-invalid", "true");
+    const ids = [descId, authError.id].filter(Boolean);
+    authInput.setAttribute("aria-describedby", ids.join(" "));
+  }
+
+  #resetAuthDialogInputs() {
+    const { authInput, authRevealBtn, authSubmitBtn } = this.#els;
+    this.#authSubmitting = false;
+    if (authInput) {
+      authInput.value = "";
+      authInput.type = "password";
+    }
+    if (authRevealBtn) {
+      authRevealBtn.setAttribute("aria-pressed", "false");
+      authRevealBtn.setAttribute("aria-label", this.#copy.authShowPassword);
+      delete authRevealBtn.dataset.revealed;
+    }
+    if (authSubmitBtn) {
+      authSubmitBtn.disabled = false;
+    }
+    this.#setAuthError("");
+    this.#syncAuthDialogMode();
+  }
+
+  #openAuthDialog({ errorKey = "" } = {}) {
+    const { authDialog, authInput, authSubmitBtn } = this.#els;
+    if (!authDialog) return;
+    this.#authOp += 1;
+    authDialog.removeAttribute("data-closing");
+    this.#resetAuthDialogInputs();
+    if (errorKey) {
+      this.#setAuthError(errorKey);
+    }
+    if (!authDialog.open) {
+      authDialog.showModal();
+    }
+    if (!this.#authorMode && authInput) {
+      authInput.focus();
+    } else if (authSubmitBtn) {
+      authSubmitBtn.focus();
+    }
+  }
+
+  async #closeAuthDialog() {
+    const { authDialog } = this.#els;
+    if (!authDialog || !authDialog.open) return;
+    if (!supportsTopLayerExit()) {
+      if (authDialog.hasAttribute("data-closing")) return;
+      const op = ++this.#authOp;
+      authDialog.setAttribute("data-closing", "");
+      const anims = authDialog.getAnimations({ subtree: true });
+      if (anims.length > 0) {
+        await Promise.race([
+          Promise.allSettled(anims.map((a) => a.finished)),
+          new Promise((r) => window.setTimeout(r, 500)),
+        ]);
+      }
+      if (op !== this.#authOp || !authDialog.hasAttribute("data-closing")) return;
+      authDialog.removeAttribute("data-closing");
+    }
+    authDialog.close();
+  }
+
+  async #handleAuthVerify() {
+    if (this.#authSubmitting) return;
+    const { authInput, authSubmitBtn } = this.#els;
+    const password = String(authInput?.value || "").trim();
+    if (!password) {
+      this.#setAuthError("authErrEmpty");
+      authInput?.focus();
+      return;
+    }
+
+    this.#authSubmitting = true;
+    this.#setAuthError("");
+    if (authSubmitBtn) {
+      authSubmitBtn.disabled = true;
+      authSubmitBtn.textContent = this.#copy.authSubmitting;
+    }
+
+    try {
+      const res = await fetch(`${this.endpoint}/author/verify`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!this.isConnected) return;
+
+      if (res.ok && data.ok === true && data.author === true) {
+        this.#setAuthorState(true, String(data.authorName || this.#siteAuthorFallback()));
+        this.#broadcastAuthorState();
+        this.#authReturnFocusToComposer = true;
+        await this.#closeAuthDialog();
+        announcePolite(this.#copy.authorSignInDone(this.#authorName));
+        if (this.#expanded && !this.#loaded && !this.#loading) {
+          this.#fetchThread();
+        }
+        return;
+      }
+
+      if (res.status === 429) {
+        this.#setAuthError("authErrRateLimited");
+      } else if (res.status === 503 || data.error === "auth_unconfigured") {
+        this.#setAuthError("authErrUnconfigured");
+      } else {
+        this.#setAuthError("authErrInvalid");
+      }
+      if (authInput) {
+        authInput.focus();
+        authInput.select?.();
+      }
+    } catch {
+      if (!this.isConnected) return;
+      this.#setAuthError("authErrNetwork");
+    } finally {
+      this.#authSubmitting = false;
+      if (authSubmitBtn) {
+        authSubmitBtn.disabled = false;
+      }
+      this.#syncAuthDialogMode();
+    }
+  }
+
+  async #handleAuthorLogout({ fromDialog = false } = {}) {
+    if (this.#authSubmitting) return;
+    this.#authSubmitting = true;
+    if (this.#els.authSubmitBtn) {
+      this.#els.authSubmitBtn.disabled = true;
+      this.#els.authSubmitBtn.textContent = this.#copy.authSubmitting;
+    }
+    try {
+      await fetch(`${this.endpoint}/author/logout`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      });
+    } catch {
+      /* clear local state even if network hiccups */
+    } finally {
+      this.#authSubmitting = false;
+      if (this.#els.authSubmitBtn) {
+        this.#els.authSubmitBtn.disabled = false;
+      }
+    }
+    if (!this.isConnected) return;
+    this.#setAuthorState(false, "");
+    this.#broadcastAuthorState();
+    if (fromDialog) {
+      this.#authReturnFocusToComposer = true;
+      await this.#closeAuthDialog();
+    }
+    announcePolite(this.#copy.authorSignOutDone);
+  }
+
+  #clearDeleteConfirmTimers() {
+    for (const timer of this.#deleteConfirmTimers.values()) {
+      window.clearTimeout(timer);
+    }
+    this.#deleteConfirmTimers.clear();
+  }
+
+  async #deleteComment(commentId, triggerBtn) {
+    if (!this.#authorMode || !commentId) return;
+    const prevTimer = this.#deleteConfirmTimers.get(commentId);
+    if (prevTimer) {
+      window.clearTimeout(prevTimer);
+      this.#deleteConfirmTimers.delete(commentId);
+    }
+    if (triggerBtn) {
+      triggerBtn.disabled = true;
+      triggerBtn.textContent = this.#copy.deleting;
+    }
+    try {
+      const res = await fetch(`${this.endpoint}/${encodeURIComponent(commentId)}`, {
+        method: "DELETE",
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!this.isConnected) return;
+      if (res.status === 401) {
+        this.#setAuthorState(false, "");
+        this.#broadcastAuthorState();
+        this.#setPhase("error", "errAuthorExpired");
+        announcePolite(this.#copy.errAuthorExpired);
+        this.#openAuthDialog({ errorKey: "errAuthorExpired" });
+        return;
+      }
+      if (!res.ok || data.ok !== true) {
+        throw new Error(data.error || "delete_failed");
+      }
+      this.#comments = this.#comments.filter((c) => c.id !== commentId && c.parentId !== commentId);
+      if (this.#replyTarget && (this.#replyTarget.id === commentId || !this.#comments.some((c) => c.id === this.#replyTarget.id))) {
+        this.#clearReplyTarget();
+      }
+      this.#syncCount();
+      this.#renderThread();
+      announcePolite(this.#copy.deleteDone);
+    } catch {
+      if (!this.isConnected) return;
+      if (triggerBtn && triggerBtn.isConnected) {
+        triggerBtn.disabled = false;
+        delete triggerBtn.dataset.confirm;
+        triggerBtn.textContent = this.#copy.delete;
+      }
+      this.#setPhase("error", "deleteFailed");
+      announcePolite(this.#copy.deleteFailed);
+      this.#scheduleStatusReset(3200);
+    }
+  }
+
   #setReplyTarget(comment) {
     this.#replyTarget = {
       id: comment.id,
@@ -4135,6 +5794,162 @@ class TiCommentsElement extends HTMLElement {
       textarea.setSelectionRange?.(len, len);
     }, reducedMotionQuery.matches ? 20 : 280);
     return true;
+  }
+
+  async #waitForPanelExpand(maxWaitMs = 520) {
+    const deadline = performance.now() + maxWaitMs;
+    while (
+      this.isConnected &&
+      this.#expanded &&
+      this.#panelAnimatingMode === "expand" &&
+      this.#panelAnims.length > 0
+    ) {
+      const rem = deadline - performance.now();
+      if (rem <= 0) break;
+      const current = [...this.#panelAnims];
+      await Promise.race([
+        Promise.allSettled(current.map((a) => a.finished)),
+        new Promise((r) => window.setTimeout(r, rem)),
+      ]);
+      await Promise.resolve();
+    }
+  }
+
+  /**
+   * Public helper for interactive article pieces to attach image files directly
+   * into the composer (expanding, loading live config, compressing locally, scrolling
+   * cleanly into view, and moving focus to the note textarea once scrolling completes).
+   */
+  async attachImageFiles(rawFiles, options = {}) {
+    const files = rawFiles instanceof Blob ? [rawFiles] : [...(rawFiles || [])].filter((f) => f instanceof Blob);
+    if (files.length === 0) {
+      return { ok: false, added: 0, reason: "no_files" };
+    }
+    if (!this.isConnected || !this.#initialized) {
+      return { ok: false, added: 0, reason: "uninitialized" };
+    }
+
+    const {
+      expand = true,
+      scroll = true,
+      focus = true,
+      maxEdge,
+      maxBytes,
+      quality,
+      alt = "",
+      announceAdded = true,
+    } = options;
+    const startGen = this.#threadGen;
+    const scrollBehavior = reducedMotionQuery.matches ? "auto" : "smooth";
+
+    if (expand && !this.#expanded) {
+      this.expand({ animate: true });
+    }
+
+    if (scroll && !this.#loaded) {
+      const rootRect = this.#els.root?.getBoundingClientRect?.();
+      if (rootRect && rootRect.top > window.innerHeight * 0.85) {
+        this.#els.root.scrollIntoView({ behavior: scrollBehavior, block: "nearest" });
+      }
+    }
+
+    if (!this.#loaded) {
+      await this.#fetchThread();
+    }
+    if (!this.isConnected || startGen !== this.#threadGen) {
+      return { ok: false, added: 0, reason: "cancelled" };
+    }
+    if (!this.#loaded || this.#loadFailed) {
+      if (scroll) {
+        await scrollIntoViewAsync(this.#els.root, { behavior: scrollBehavior, block: "nearest" });
+      }
+      return { ok: false, added: 0, reason: "load_failed" };
+    }
+    if (this.#submitting) {
+      return { ok: false, added: 0, reason: "submitting" };
+    }
+    if (!this.#config.imagesEnabled) {
+      this.#showMediaError(this.#copy.errImagesUnconfigured);
+      if (scroll) {
+        await this.#waitForPanelExpand();
+        if (this.isConnected && !this.#els.panel.hidden) {
+          await scrollIntoViewAsync(this.#els.form, { behavior: scrollBehavior, block: "center" });
+        }
+      }
+      return { ok: false, added: 0, reason: "images_disabled" };
+    }
+
+    const result = await this.#addImageFiles(files, {
+      maxEdge,
+      maxBytes,
+      quality,
+      alt,
+      announceAdded,
+    });
+    if (!this.isConnected || startGen !== this.#threadGen) {
+      return { ok: false, added: 0, reason: "cancelled" };
+    }
+
+    const reconcileLiveResult = () => {
+      if (!result.addedUids?.length) return result;
+      const liveIds = new Set(this.#attachments.map((a) => a.uid));
+      const remainingUids = result.addedUids.filter((uid) => liveIds.has(uid));
+      if (remainingUids.length === 0) {
+        return { ok: false, added: 0, overflowed: false, error: "", addedUids: [], reason: "cancelled" };
+      }
+      return { ...result, added: remainingUids.length, addedUids: remainingUids };
+    };
+
+    if (scroll && this.#expanded && !this.#els.panel.hidden) {
+      const scrollOp = ++this.#scrollOp;
+      await this.#waitForPanelExpand();
+      if (!this.isConnected || startGen !== this.#threadGen) {
+        return { ok: false, added: 0, reason: "cancelled" };
+      }
+      if (!this.#expanded || this.#els.panel.hidden) {
+        return reconcileLiveResult();
+      }
+      await scrollIntoViewAsync(this.#els.form, { behavior: scrollBehavior, block: "center" });
+      if (!this.isConnected || startGen !== this.#threadGen) {
+        return { ok: false, added: 0, reason: "cancelled" };
+      }
+      const liveResult = reconcileLiveResult();
+      if (scrollOp !== this.#scrollOp || !this.#expanded || this.#els.panel.hidden) {
+        return liveResult;
+      }
+      if (liveResult.addedUids?.length > 0) {
+        this.#markAttachmentsFresh(liveResult.addedUids);
+      }
+      if (
+        liveResult.ok &&
+        focus &&
+        this.#els.textarea &&
+        !this.#els.form.contains(document.activeElement)
+      ) {
+        this.#els.textarea.focus({ preventScroll: true });
+        const len = this.#els.textarea.value.length;
+        this.#els.textarea.setSelectionRange?.(len, len);
+      }
+      return liveResult;
+    }
+
+    const liveResult = reconcileLiveResult();
+    if (liveResult.addedUids?.length > 0) {
+      this.#markAttachmentsFresh(liveResult.addedUids);
+      if (
+        focus &&
+        this.#expanded &&
+        !this.#els.panel.hidden &&
+        this.#els.textarea &&
+        !this.#els.form.contains(document.activeElement)
+      ) {
+        this.#els.textarea.focus({ preventScroll: true });
+        const len = this.#els.textarea.value.length;
+        this.#els.textarea.setSelectionRange?.(len, len);
+      }
+    }
+
+    return liveResult;
   }
 
   #buildCommentNode(comment, isReply, freshId, indexNum = 0) {
@@ -4213,6 +6028,32 @@ class TiCommentsElement extends HTMLElement {
     replyBtn.textContent = c.reply;
     replyBtn.addEventListener("click", () => this.#setReplyTarget(comment));
     actions.append(replyBtn);
+
+    if (this.#authorMode) {
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.dataset.part = "delete-btn";
+      deleteBtn.textContent = c.delete;
+      deleteBtn.addEventListener("click", () => {
+        if (deleteBtn.dataset.confirm === "true") {
+          this.#deleteComment(comment.id, deleteBtn);
+          return;
+        }
+        deleteBtn.dataset.confirm = "true";
+        deleteBtn.textContent = this.#copy.deleteConfirm;
+        const prev = this.#deleteConfirmTimers.get(comment.id);
+        if (prev) window.clearTimeout(prev);
+        const timer = window.setTimeout(() => {
+          this.#deleteConfirmTimers.delete(comment.id);
+          if (deleteBtn.isConnected && !deleteBtn.disabled) {
+            delete deleteBtn.dataset.confirm;
+            deleteBtn.textContent = this.#copy.delete;
+          }
+        }, 4000);
+        this.#deleteConfirmTimers.set(comment.id, timer);
+      });
+      actions.append(deleteBtn);
+    }
 
     head.append(meta, actions);
     li.append(head);
@@ -4364,6 +6205,7 @@ class TiCommentsElement extends HTMLElement {
   #renderThread(freshId = "", { sortDirection = 0, revealOnLoad = false, prevPanelHeight = 0, prevBodyMotion = null } = {}) {
     const { list, stateNote, threadBar, threadSummary, sortGroup, sortOldestBtn, sortNewestBtn } = this.#els;
     if (!this.#loaded) return;
+    this.#clearDeleteConfirmTimers();
 
     delete stateNote.dataset.state;
     if (this.#comments.length === 0) {

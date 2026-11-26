@@ -1010,8 +1010,143 @@ async function runTests() {
   assert.equal(h.db.prepare("SELECT COUNT(*) AS c FROM comment_image_deletions").get().c, 0, "M1: GET must drain pending outbox");
   assert.equal(h.r2.has(n3ImgRow.r2_key), false, "M1: drained R2 blob must be deleted");
 
+  // 10. Author session cookie auth: JSON verify, HttpOnly/SameSite/Secure cookie, cookie-authenticated GET/POST/DELETE,
+  //     expectAuthor expired-session guard, admin-token rotation revocation, and logout.
+  const badVerify = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments/author/verify`, {
+      method: "POST",
+      headers: { Origin: ORIGIN, "Content-Type": "application/json" },
+      body: JSON.stringify({ password: "wrong-password" }),
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal(badVerify.status, 401, "AUTH: wrong password must return 401");
+  assert.equal(badVerify.headers.get("Set-Cookie"), null, "AUTH: failed verify must not issue cookie");
+
+  const okVerify = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments/author/verify`, {
+      method: "POST",
+      headers: { Origin: ORIGIN, "Content-Type": "application/json" },
+      body: JSON.stringify({ password: h.env.COMMENT_ADMIN_TOKEN }),
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal(okVerify.status, 200, "AUTH: valid JSON password must return 200");
+  const okVerifyJson = await okVerify.json();
+  assert.equal(okVerifyJson.ok, true);
+  assert.equal(okVerifyJson.author, true);
+  assert.equal(okVerifyJson.authorName, "Tong");
+  const setCookie = okVerify.headers.get("Set-Cookie") || "";
+  assert.ok(setCookie.startsWith("ti_author_session="), "AUTH: must set ti_author_session cookie");
+  assert.ok(/;\s*HttpOnly\b/i.test(setCookie), "AUTH: session cookie must be HttpOnly");
+  assert.ok(/;\s*SameSite=Strict\b/i.test(setCookie), "AUTH: session cookie must be SameSite=Strict");
+  assert.ok(/;\s*Secure\b/i.test(setCookie), "AUTH: HTTPS session cookie must be Secure");
+  assert.ok(/;\s*Path=\/api\/comments\b/i.test(setCookie), "AUTH: session cookie must be scoped to /api/comments");
+  const cookiePair = setCookie.split(";")[0];
+
+  // Cookie-authenticated GET restores authorMode + authorName
+  const authGet = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments?slug=test-post`, {
+      headers: { Cookie: cookiePair },
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal(authGet.status, 200);
+  const authGetJson = await authGet.json();
+  assert.equal(authGetJson.config.authorMode, true, "AUTH: GET with valid cookie must report authorMode=true");
+  assert.equal(authGetJson.config.authorName, "Tong");
+
+  // Explicit wrong X-Author-Key header must NOT fall back to a valid cookie
+  const badHdrWithCookie = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments?slug=test-post`, {
+      headers: { Cookie: cookiePair, "X-Author-Key": "explicitly-wrong" },
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal((await badHdrWithCookie.json()).config.authorMode, false, "AUTH: wrong X-Author-Key must not fall back to cookie");
+
+  // Cookie-authenticated POST skips PoW/gate and marks isAuthor=true + defaults name to SITE_AUTHOR
+  const cookiePost = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments`, {
+      method: "POST",
+      headers: { Origin: ORIGIN, "Content-Type": "application/json", Cookie: cookiePair },
+      body: JSON.stringify({
+        slug: "test-post",
+        lang: "zh",
+        body: "Author note via HttpOnly cookie",
+        expectAuthor: true,
+      }),
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal(cookiePost.status, 201, "AUTH: cookie-authenticated author POST must succeed without PoW");
+  const cookiePostJson = await cookiePost.json();
+  assert.equal(cookiePostJson.comment.isAuthor, true);
+  assert.equal(cookiePostJson.comment.authorName, "Tong");
+
+  // Cookie-authenticated DELETE removes that comment
+  const cookieDel = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments/${cookiePostJson.comment.id}`, {
+      method: "DELETE",
+      headers: { Origin: ORIGIN, Cookie: cookiePair },
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal(cookieDel.status, 200, "AUTH: cookie-authenticated DELETE must succeed");
+
+  // Rotating COMMENT_ADMIN_TOKEN immediately invalidates previously issued cookies
+  const origAdminToken = h.env.COMMENT_ADMIN_TOKEN;
+  h.env.COMMENT_ADMIN_TOKEN = "rotated-admin-token-000";
+  const expiredPost = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments`, {
+      method: "POST",
+      headers: { Origin: ORIGIN, "Content-Type": "application/json", Cookie: cookiePair },
+      body: JSON.stringify({
+        slug: "test-post",
+        lang: "zh",
+        body: "Should fail after secret rotation",
+        expectAuthor: true,
+      }),
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal(expiredPost.status, 401, "AUTH: expectAuthor with revoked cookie must return 401");
+  assert.equal((await expiredPost.json()).error, "author_session_expired");
+  assert.ok(/Max-Age=0/i.test(expiredPost.headers.get("Set-Cookie") || ""), "AUTH: expired session must clear cookie");
+
+  const staleGet = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments?slug=test-post`, {
+      headers: { Cookie: cookiePair },
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal((await staleGet.json()).config.authorMode, false);
+  assert.ok(/Max-Age=0/i.test(staleGet.headers.get("Set-Cookie") || ""), "AUTH: GET with stale cookie must clear cookie");
+  h.env.COMMENT_ADMIN_TOKEN = origAdminToken;
+
+  // Logout clears cookie
+  const logoutRes = await worker.fetch(
+    new Request(`${ORIGIN}/api/comments/author/logout`, {
+      method: "POST",
+      headers: { Origin: ORIGIN, Cookie: cookiePair },
+    }),
+    h.env,
+    h.ctx
+  );
+  assert.equal(logoutRes.status, 200);
+  assert.equal((await logoutRes.json()).author, false);
+  assert.ok(/Max-Age=0/i.test(logoutRes.headers.get("Set-Cookie") || ""), "AUTH: logout must clear cookie");
+
   h.db.close();
-  console.log("[test_comments_worker] ALL CONTRACT TESTS PASSED (N1, N2, N3, H2, H3, M1-M4, M7-M9, M14, L7)");
+  console.log("[test_comments_worker] ALL CONTRACT TESTS PASSED (N1, N2, N3, H2, H3, M1-M4, M7-M9, M14, L7, AUTH)");
 }
 
 runTests().catch((err) => {

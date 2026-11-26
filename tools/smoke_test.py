@@ -634,6 +634,90 @@ def run_suite(
                     if del_st != 200:
                         errors.append(f"DELETE /api/comments/{cid}: expected 200, got {del_st}")
 
+                    # JSON-body author auth + HttpOnly session cookie round-trip (verify -> GET -> POST -> DELETE -> logout)
+                    json_auth_st, json_auth_hdrs, json_auth_body = fetch(
+                        base_url,
+                        "/api/comments/author/verify",
+                        local=True,
+                        method="POST",
+                        headers={"Content-Type": "application/json"},
+                        body=json.dumps({"password": "smoke-test-author-key"}).encode("utf-8"),
+                    )
+                    set_cookie = json_auth_hdrs.get("set-cookie", "")
+                    if json_auth_st != 200 or "ti_author_session=" not in set_cookie or "httponly" not in set_cookie.lower():
+                        errors.append(
+                            f"POST /api/comments/author/verify (JSON cookie): expected 200 + HttpOnly cookie, got {json_auth_st} ({set_cookie!r})"
+                        )
+                    else:
+                        cookie_pair = set_cookie.split(";", 1)[0].strip()
+                        cget_st, _, cget_body = fetch(
+                            base_url,
+                            f"/api/comments?slug={urllib.parse.quote(lead_slug)}",
+                            local=True,
+                            headers={"Cookie": cookie_pair},
+                        )
+                        cget_cfg = (json.loads(cget_body.decode("utf-8")).get("config") or {}) if cget_st == 200 else {}
+                        if cget_cfg.get("authorMode") is not True:
+                            errors.append(f"GET /api/comments (author cookie): expected authorMode=True, got {cget_cfg!r}")
+
+                        cpost_st, _, cpost_body = fetch(
+                            base_url,
+                            "/api/comments",
+                            local=True,
+                            method="POST",
+                            headers={"Content-Type": "application/json", "Cookie": cookie_pair},
+                            body=json.dumps({
+                                "slug": lead_slug,
+                                "lang": "zh",
+                                "body": "Smoke author cookie post",
+                                "expectAuthor": True,
+                            }).encode("utf-8"),
+                        )
+                        if cpost_st != 201:
+                            errors.append(f"POST /api/comments (author cookie): expected 201, got {cpost_st}")
+                        else:
+                            cpost_cmt = json.loads(cpost_body.decode("utf-8")).get("comment") or {}
+                            if cpost_cmt.get("isAuthor") is not True:
+                                errors.append(f"POST /api/comments (author cookie): expected isAuthor=True, got {cpost_cmt!r}")
+                            cdel_st, _, _ = fetch(
+                                base_url,
+                                f"/api/comments/{urllib.parse.quote(str(cpost_cmt.get('id') or ''))}",
+                                local=True,
+                                method="DELETE",
+                                headers={"Cookie": cookie_pair},
+                            )
+                            if cdel_st != 200:
+                                errors.append(f"DELETE /api/comments (author cookie): expected 200, got {cdel_st}")
+
+                        exp_st, _, exp_body = fetch(
+                            base_url,
+                            "/api/comments",
+                            local=True,
+                            method="POST",
+                            headers={"Content-Type": "application/json"},
+                            body=json.dumps({
+                                "slug": lead_slug,
+                                "lang": "zh",
+                                "body": "Unauthenticated expectAuthor probe",
+                                "expectAuthor": True,
+                            }).encode("utf-8"),
+                        )
+                        exp_err = json.loads(exp_body.decode("utf-8", "replace")).get("error") if exp_body else None
+                        if exp_st != 401 or exp_err != "author_session_expired":
+                            errors.append(
+                                f"POST /api/comments (expectAuthor without cookie): expected 401 author_session_expired, got {exp_st} ({exp_err!r})"
+                            )
+
+                        lo_st, lo_hdrs, _ = fetch(
+                            base_url,
+                            "/api/comments/author/logout",
+                            local=True,
+                            method="POST",
+                            headers={"Cookie": cookie_pair},
+                        )
+                        if lo_st != 200 or "max-age=0" not in lo_hdrs.get("set-cookie", "").lower():
+                            errors.append(f"POST /api/comments/author/logout: expected 200 + Max-Age=0, got {lo_st}")
+
                 # 8e. Comment image attachment contract (upload, serve, ETag 304, security headers, reject SVG/truncated/overflow, parent+reply cascade delete)
                 cfg = cdata.get("config") or {}
                 if cfg.get("imagesEnabled") is not True or cfg.get("maxImages") != 3:

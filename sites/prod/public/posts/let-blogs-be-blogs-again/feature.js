@@ -760,17 +760,159 @@ function initSketch() {
   const selected = { ink: "ink", nib: "fine", paper: "blank" };
   const undo = lab.querySelector('[data-action="undo"]');
   const clear = lab.querySelector('[data-action="clear"]');
+  const sendComment = lab.querySelector('[data-action="send-comment"]');
+  const sendCommentLabel = sendComment?.textContent?.trim() || (en ? "Send to Notes" : "发送到评论区");
   const swatches = [...lab.querySelectorAll("[data-ink]:not([data-ink=eraser])")];
+  const forcedColors = matchMedia("(forced-colors: active)");
+  const darkSchemeQuery = matchMedia("(prefers-color-scheme: dark)");
+  const guideCanvas = document.createElement("canvas");
+  guideCanvas.className = "sketch-guide";
+  guideCanvas.setAttribute("aria-hidden", "true");
+  guideCanvas.hidden = true;
+  sheet.append(guideCanvas);
+  const guideCtx = guideCanvas.getContext("2d");
   let colors = {};
   let pointer = null;
   let current = null;
   let lastTime = 0;
   let rasterDpr = 0;
+  let sendingToComments = false;
+  let sendConfirmTimer = 0;
+
+  function isDarkSchemeActive() {
+    const meta = document.querySelector('meta[name="color-scheme"]')?.content?.trim();
+    if (meta === "dark") return true;
+    if (meta === "light") return false;
+    return darkSchemeQuery.matches;
+  }
+
+  function parseColorRgb(str) {
+    const raw = String(str || "").trim();
+    const hex = raw.match(/^#([0-9a-f]{6})$/i);
+    if (hex) {
+      const n = parseInt(hex[1], 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    }
+    const m = raw.match(/rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
+    return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
+  }
+
+  function relativeLuminance([r, g, b]) {
+    const lin = (v) => {
+      const c = Math.max(0, Math.min(255, v)) / 255;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  }
+
+  function contrastRatio(rgbA, rgbB) {
+    const la = relativeLuminance(rgbA);
+    const lb = relativeLuminance(rgbB);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+
+  function pickContrastingColor(paperRgb, candidates, minRatio) {
+    let bestColor = candidates[candidates.length - 1];
+    let bestRatio = -1;
+    for (const candidate of candidates) {
+      const rgb = parseColorRgb(candidate);
+      if (!rgb) continue;
+      const ratio = contrastRatio(rgb, paperRgb);
+      if (ratio >= minRatio) return candidate;
+      if (ratio > bestRatio) {
+        bestRatio = ratio;
+        bestColor = candidate;
+      }
+    }
+    return bestColor;
+  }
+
+  function forcedPalette() {
+    const sheetStyle = getComputedStyle(sheet);
+    const bgStr = sheetStyle.backgroundColor;
+    const bgRgb = parseColorRgb(bgStr);
+    const fgStr = sheetStyle.color;
+    const fgRgb = parseColorRgb(fgStr);
+    const paperRgb = bgRgb || (isDarkSchemeActive() ? [13, 15, 19] : [255, 255, 255]);
+    const paperIsDark = relativeLuminance(paperRgb) < 0.179;
+    const paper = bgRgb ? bgStr : paperIsDark ? "#0d0f13" : "#ffffff";
+    const poles = paperIsDark ? ["#ffffff", "#000000"] : ["#000000", "#ffffff"];
+    return {
+      paper,
+      dots: pickContrastingColor(
+        paperRgb,
+        paperIsDark
+          ? ["#768299", "#9aa5b8", "#556073", ...poles]
+          : ["#8a94a6", "#667085", "#4e5666", ...poles],
+        3.0
+      ),
+      inks: {
+        ink: pickContrastingColor(paperRgb, [...(fgRgb ? [fgStr] : []), ...poles], 4.5),
+        cobalt: pickContrastingColor(
+          paperRgb,
+          paperIsDark ? ["#689bff", "#8fb6ff", "#0047ff", ...poles] : ["#0047ff", "#0033cc", "#689bff", ...poles],
+          3.0
+        ),
+        vermilion: pickContrastingColor(
+          paperRgb,
+          paperIsDark ? ["#ff6b4e", "#ff9680", "#d9381a", ...poles] : ["#d9381a", "#b0250c", "#ff6b4e", ...poles],
+          3.0
+        ),
+        graphite: pickContrastingColor(
+          paperRgb,
+          paperIsDark ? ["#b8c0cc", "#d5dce6", "#4e5666", ...poles] : ["#4e5666", "#373f4d", "#b8c0cc", ...poles],
+          3.0
+        ),
+      },
+    };
+  }
 
   function readColors() {
+    if (forcedColors.matches) {
+      colors = { ...forcedPalette().inks };
+      return;
+    }
     for (const swatch of swatches) {
       colors[swatch.dataset.ink] = getComputedStyle(swatch, "::before").backgroundColor;
     }
+  }
+
+  function drawDotGrid(context, width, height, dotColor, cssWidth) {
+    context.save();
+    context.setTransform(width / paperWidth, 0, 0, height / paperHeight, 0, 0);
+    const scale = paperWidth / Math.max(1, cssWidth || paperWidth);
+    context.fillStyle = dotColor;
+    for (let y = 10 * scale; y < paperHeight; y += 20 * scale) {
+      for (let x = 10 * scale; x < paperWidth; x += 20 * scale) {
+        context.beginPath();
+        context.arc(x, y, 0.9 * scale, 0, Math.PI * 2);
+        context.fill();
+      }
+    }
+    context.restore();
+  }
+
+  function updateGuide() {
+    if (!guideCtx) return;
+    const sheetStyle = getComputedStyle(sheet);
+    const showCanvasDots =
+      selected.paper === "dots" &&
+      (forcedColors.matches || sheetStyle.backgroundImage === "none");
+    guideCanvas.hidden = !showCanvasDots;
+    if (!showCanvasDots) return;
+    if (guideCanvas.width !== canvas.width) guideCanvas.width = canvas.width;
+    if (guideCanvas.height !== canvas.height) guideCanvas.height = canvas.height;
+    if (!guideCanvas.width || !guideCanvas.height) return;
+    guideCtx.setTransform(1, 0, 0, 1, 0, 0);
+    guideCtx.clearRect(0, 0, guideCanvas.width, guideCanvas.height);
+    const dotColor = forcedColors.matches ? forcedPalette().dots : sheetStyle.borderTopColor;
+    drawDotGrid(
+      guideCtx,
+      guideCanvas.width,
+      guideCanvas.height,
+      dotColor,
+      canvas.getBoundingClientRect().width
+    );
   }
 
   // Store positions as fractions of the sheet. A fixed paper aspect ratio and a
@@ -826,14 +968,25 @@ function initSketch() {
     if (canvas.height !== height) canvas.height = height;
     readColors();
     replay(ctx, width, height);
+    updateGuide();
   }
 
   function updateActions() {
-    undo.disabled = clear.disabled = strokes.length === 0;
-    sheet.toggleAttribute("data-marked", strokes.length > 0);
+    const empty = strokes.length === 0;
+    undo.disabled = clear.disabled = empty;
+    if (sendComment) {
+      sendComment.disabled = empty || sendingToComments;
+      if (empty && sendConfirmTimer) {
+        clearTimeout(sendConfirmTimer);
+        sendConfirmTimer = 0;
+        sendComment.textContent = sendCommentLabel;
+      }
+    }
+    sheet.toggleAttribute("data-marked", !empty);
   }
 
   function newStroke(ink = selected.ink) {
+    if (forcedColors.matches) readColors();
     const eraser = ink === "eraser";
     const stroke = { color: eraser ? "ink" : ink, nib: selected.nib, eraser, points: [] };
     strokes.push(stroke);
@@ -910,27 +1063,53 @@ function initSketch() {
     announce(en ? "Last stroke undone." : "已撤销上一笔。");
   }
 
-  function savePNG() {
+  function renderExportCanvas(targetWidth) {
+    readColors();
     const output = document.createElement("canvas");
-    output.width = Math.max(paperWidth * 2, canvas.width);
-    output.height = Math.round(output.width * paperHeight / paperWidth);
+    output.width = Math.max(1, Math.round(targetWidth));
+    output.height = Math.max(1, Math.round(output.width * paperHeight / paperWidth));
     const context = output.getContext("2d");
+    if (!context) return null;
+    const sheetStyle = getComputedStyle(sheet);
+    const useForced = forcedColors.matches || colors.ink === sheetStyle.backgroundColor;
+    const fallbackPal = useForced ? forcedPalette() : null;
+    if (useForced) {
+      colors = { ...fallbackPal.inks };
+    }
     replay(context, output.width, output.height);
     // Put guides and paper behind the transparent ink, including erased areas.
     context.globalCompositeOperation = "destination-over";
-    const scale = paperWidth / canvas.getBoundingClientRect().width;
+    const cssWidth = canvas.getBoundingClientRect().width;
     if (selected.paper === "dots") {
-      context.fillStyle = getComputedStyle(sheet).borderTopColor;
-      for (let y = 10 * scale; y < paperHeight; y += 20 * scale) {
-        for (let x = 10 * scale; x < paperWidth; x += 20 * scale) {
-          context.beginPath();
-          context.arc(x, y, 0.9 * scale, 0, Math.PI * 2);
-          context.fill();
-        }
-      }
+      drawDotGrid(
+        context,
+        output.width,
+        output.height,
+        fallbackPal ? fallbackPal.dots : sheetStyle.borderTopColor,
+        cssWidth
+      );
     }
-    context.fillStyle = getComputedStyle(sheet).backgroundColor;
+    context.fillStyle = fallbackPal ? fallbackPal.paper : sheetStyle.backgroundColor;
     context.fillRect(0, 0, paperWidth, paperHeight);
+    return output;
+  }
+
+  function exportCanvasBlob(output, mimeType, quality) {
+    return new Promise((resolve) => {
+      try {
+        output.toBlob((blob) => resolve(blob || null), mimeType, quality);
+      } catch {
+        resolve(null);
+      }
+    });
+  }
+
+  function savePNG() {
+    const output = renderExportCanvas(Math.max(paperWidth * 2, canvas.width));
+    if (!output) {
+      announce(en ? "The PNG could not be created." : "未能生成 PNG。");
+      return;
+    }
     output.toBlob(blob => {
       if (!blob) { announce(en ? "The PNG could not be created." : "未能生成 PNG。"); return; }
       const url = URL.createObjectURL(blob);
@@ -941,6 +1120,84 @@ function initSketch() {
       setTimeout(() => URL.revokeObjectURL(url), 30000);
       announce(en ? "PNG ready to save." : "画作已生成 PNG。");
     }, "image/png");
+  }
+
+  async function sendToComments() {
+    if (!sendComment || sendingToComments) return;
+    if (strokes.length === 0) {
+      announce(en ? "Draw something on the sheet first." : "请先在画纸上画几笔。");
+      return;
+    }
+    const commentsEl = document.querySelector("ti-comments");
+    if (!commentsEl) {
+      announce(en ? "Reader Notes is unavailable on this page." : "当前页面未找到评论区。");
+      return;
+    }
+
+    clearTimeout(sendConfirmTimer);
+    sendConfirmTimer = 0;
+    sendingToComments = true;
+    sendComment.disabled = true;
+    sendComment.setAttribute("aria-busy", "true");
+    sendComment.textContent = en ? "Attaching…" : "正在附入…";
+
+    let attached = false;
+    try {
+      // Export at a crisp 1200x750 intermediate PNG so <ti-comments> compresses once (WebP/PNG/JPEG) with zero double-loss
+      const output = renderExportCanvas(1200);
+      const blob = output ? await exportCanvasBlob(output, "image/png") : null;
+      if (!blob) {
+        announce(en ? "Could not export the sketch." : "未能导出当前画作。");
+        return;
+      }
+      const file = new File([blob], "tongs-sketch-issue-01.png", { type: "image/png" });
+
+      if (!customElements.get("ti-comments")) {
+        await import("/assets/js/comments.js");
+      }
+      await customElements.whenDefined("ti-comments");
+
+      if (typeof commentsEl.attachImageFiles !== "function") {
+        announce(en ? "Reader Notes could not accept the sketch." : "评论区暂不支持直接附入画作。");
+        return;
+      }
+
+      const res = await commentsEl.attachImageFiles([file], {
+        maxEdge: 1200,
+        maxBytes: 400 * 1024,
+        quality: 0.82,
+        announceAdded: false,
+      });
+
+      if (res?.ok && res.added > 0) {
+        attached = true;
+        sendComment.textContent = en ? "Attached ✓" : "已附入评论区 ✓";
+        announce(
+          en
+            ? "Compressed sketch attached to Reader Notes. Write a note or post directly."
+            : "已将压缩后的画作附入评论区，可继续留言或直接投递。"
+        );
+        sendConfirmTimer = setTimeout(() => {
+          sendConfirmTimer = 0;
+          if (!sendingToComments && sendComment.isConnected) {
+            sendComment.textContent = sendCommentLabel;
+          }
+        }, 2200);
+      } else if (res?.reason === "load_failed") {
+        announce(en ? "Could not load Reader Notes right now." : "暂时无法读取评论区，请稍后再试。");
+      } else if (res?.reason === "submitting") {
+        announce(en ? "A note is currently being posted. Try again in a moment." : "当前正在投递评论，请稍后再试。");
+      }
+    } catch {
+      announce(en ? "Could not attach the sketch to Reader Notes right now." : "暂时无法将画作发送到评论区，请稍后再试。");
+    } finally {
+      sendingToComments = false;
+      sendComment.removeAttribute("aria-busy");
+      if (!attached) {
+        sendComment.textContent = sendCommentLabel;
+      }
+      updateActions();
+    }
   }
 
   workspace.addEventListener("click", event => {
@@ -954,6 +1211,7 @@ function initSketch() {
         option.setAttribute("aria-pressed", String(option === button));
       }
       sheet.dataset.guide = selected.paper;
+      if (key === "paper") updateGuide();
       announce(button.parentElement.getAttribute("aria-label") + " · " + button.textContent);
       return;
     }
@@ -961,6 +1219,7 @@ function initSketch() {
       case "undo": undoStroke(); break;
       case "doodle": doodle(); break;
       case "save": savePNG(); break;
+      case "send-comment": sendToComments(); break;
       case "clear":
         strokes.length = 0;
         replay(ctx, canvas.width, canvas.height);
@@ -985,7 +1244,8 @@ function initSketch() {
   new MutationObserver(updatePaper).observe(document.querySelector('meta[name="color-scheme"]'), {
     attributes: true, attributeFilter: ["content"],
   });
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", updatePaper);
+  darkSchemeQuery.addEventListener("change", updatePaper);
+  forcedColors.addEventListener("change", updatePaper);
   // Some display/emulation changes update devicePixelRatio without a CSS resize
   // or resolution event. Check only while the paper is on screen.
   let densityTimer;

@@ -261,7 +261,30 @@
   .sketch-group, .sketch-actions { gap: 0.125rem 0.25rem; }
   .sketch-group [data-ink] { padding-inline: 0.25rem; }
   .sketch-actions { margin-block-start: var(--space-2); }
-  .sketch-actions [data-action="save"] { margin-inline-start: auto; }
+  .sketch-actions-end {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.125rem 0.5rem;
+    margin-inline-start: auto;
+  }
+  .sketch-actions [data-action="send-comment"]:not(:disabled) {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .sketch-actions [data-action="send-comment"]:hover:not(:disabled) {
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+    text-decoration-thickness: 1.5px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sketch-actions [data-action="send-comment"]:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+  }
+  .sketch-actions [data-action="send-comment"][aria-busy="true"] {
+    cursor: progress;
+  }
   .sketch-workspace button:disabled { color: var(--ink-muted); cursor: default; }
 
   [data-ink]::before {
@@ -282,6 +305,7 @@
 
   .sketch-sheet {
     position: relative;
+    isolation: isolate;
     border: 1px solid var(--rule);
     background-color: var(--bg-canvas);
   }
@@ -300,10 +324,27 @@
     cursor: crosshair;
   }
 
+  .sketch-sheet canvas[hidden] { display: none; }
+  .sketch-sheet canvas:not(.sketch-guide) {
+    position: relative;
+    z-index: 1;
+  }
+  .sketch-sheet .sketch-guide {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    aspect-ratio: auto;
+    pointer-events: none;
+    cursor: default;
+  }
+
   .sketch-sheet canvas:focus-visible { outline-offset: -3px; }
   .sketch-prompt {
     position: absolute;
     inset: 0;
+    z-index: 2;
     display: grid;
     place-content: center;
     padding: var(--space-5);

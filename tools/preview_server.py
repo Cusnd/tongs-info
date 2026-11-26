@@ -66,7 +66,10 @@ URL_COUNT_RE = re.compile(r"(?:https?://|www\.)\S+", re.IGNORECASE)
 CONTROL_AND_BIDI_RE = re.compile(r"[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F\u202A-\u202E\u2066-\u2069]")
 
 MAX_JSON_BYTES = 16 * 1024
+MAX_AUTH_JSON_BYTES = 2 * 1024
 MAX_MULTIPART_BYTES = 7 * 1024 * 1024
+AUTHOR_COOKIE_NAME = "ti_author_session"
+AUTHOR_SESSION_TTL_SEC = 30 * 24 * 60 * 60
 MAX_MULTIPART_PARTS = 32
 MAX_IMAGES_PER_COMMENT = 3
 MAX_IMAGE_BYTES = 2 * 1024 * 1024
@@ -747,6 +750,17 @@ def _parse_multipart_form_data(content_type: str, raw: bytes) -> tuple[dict[str,
     return fields, plural_files + singular_files
 
 
+def _parse_cookie(cookie_header: str, name: str) -> str:
+    if not cookie_header:
+        return ""
+    prefix = f"{name}="
+    for part in cookie_header.split(";"):
+        trimmed = part.strip()
+        if trimmed.startswith(prefix):
+            return trimmed[len(prefix) :].strip()
+    return ""
+
+
 class LocalCommentsStore:
     """Thread-safe local SQLite + blob comments backend mirroring worker/index.mjs."""
 
@@ -926,6 +940,81 @@ class LocalCommentsStore:
             return False
         return hmac.compare_digest(provided.strip(), self.author_key)
 
+    def _author_session_key(self) -> bytes | None:
+        if not self.author_key:
+            return None
+        return hashlib.sha256(f"ti-author-session-v1:{self.gate_secret}:{self.author_key}".encode("utf-8")).hexdigest().encode("utf-8")
+
+    def issue_author_cookie(self, *, is_https: bool = False) -> str | None:
+        key = self._author_session_key()
+        if key is None:
+            return None
+        now_ms = int(time.time() * 1000)
+        payload = {
+            "v": 1,
+            "site": self.site,
+            "iat": now_ms,
+            "exp": now_ms + AUTHOR_SESSION_TTL_SEC * 1000,
+        }
+        b64 = _b64url_encode(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
+        sig = _b64url_encode(hmac.new(key, b64.encode("utf-8"), hashlib.sha256).digest())
+        parts = [
+            f"{AUTHOR_COOKIE_NAME}={b64}.{sig}",
+            "Path=/api/comments",
+            "HttpOnly",
+            "SameSite=Strict",
+            f"Max-Age={AUTHOR_SESSION_TTL_SEC}",
+        ]
+        if is_https:
+            parts.append("Secure")
+        return "; ".join(parts)
+
+    def clear_author_cookie(self, *, is_https: bool = False) -> str:
+        parts = [
+            f"{AUTHOR_COOKIE_NAME}=",
+            "Path=/api/comments",
+            "HttpOnly",
+            "SameSite=Strict",
+            "Max-Age=0",
+        ]
+        if is_https:
+            parts.append("Secure")
+        return "; ".join(parts)
+
+    def verify_author_cookie(self, cookie_header: str) -> bool:
+        raw = _parse_cookie(cookie_header, AUTHOR_COOKIE_NAME)
+        if not raw or len(raw) < 20 or len(raw) > 512 or "." not in raw:
+            return False
+        key = self._author_session_key()
+        if key is None:
+            return False
+        parts = raw.split(".")
+        if len(parts) != 2:
+            return False
+        b64, sig = parts
+        exp_sig = _b64url_encode(hmac.new(key, b64.encode("utf-8"), hashlib.sha256).digest())
+        if not hmac.compare_digest(sig, exp_sig):
+            return False
+        try:
+            payload = json.loads(_b64url_decode(b64).decode("utf-8"))
+        except Exception:
+            return False
+        if (
+            payload.get("v") != 1
+            or payload.get("site") != self.site
+            or not isinstance(payload.get("exp"), (int, float))
+            or int(time.time() * 1000) > int(payload["exp"])
+        ):
+            return False
+        return True
+
+    def verify_author_request(self, author_header: str, cookie_header: str = "") -> bool:
+        if not self.author_key:
+            return False
+        if author_header and author_header.strip():
+            return self.verify_author(author_header)
+        return self.verify_author_cookie(cookie_header)
+
     def _sign_gate(self, slug: str) -> dict[str, object]:
         now_ms = int(time.time() * 1000)
         payload = {
@@ -974,7 +1063,7 @@ class LocalCommentsStore:
             return False, "gate_expired"
         return True, payload
 
-    def list_comments(self, slug: str, author_header: str) -> tuple[int, dict[str, object]]:
+    def list_comments(self, slug: str, author_header: str, cookie_header: str = "") -> tuple[int, dict[str, object]]:
         if not slug or len(slug) > 120 or not SLUG_RE.match(slug):
             return 400, {"ok": False, "error": "invalid_slug"}
         with self._lock:
@@ -1031,6 +1120,7 @@ class LocalCommentsStore:
             }
             for r in rows
         ]
+        is_author = self.verify_author_request(author_header, cookie_header)
         return 200, {
             "ok": True,
             "site": self.site,
@@ -1048,7 +1138,8 @@ class LocalCommentsStore:
                 "maxImages": MAX_IMAGES_PER_COMMENT,
                 "maxImageBytes": MAX_IMAGE_BYTES,
                 "acceptedImageTypes": ACCEPTED_IMAGE_TYPES,
-                "authorMode": self.verify_author(author_header),
+                "authorMode": is_author,
+                "authorName": self.site_author if is_author else "",
             },
         }
 
@@ -1114,7 +1205,12 @@ class LocalCommentsStore:
         client_ip: str,
         author_header: str,
         raw_files: list[bytes] | None = None,
+        cookie_header: str = "",
     ) -> tuple[int, dict[str, object]]:
+        is_author = self.verify_author_request(author_header, cookie_header)
+        if data.get("expectAuthor") is True and not is_author:
+            return 401, {"ok": False, "error": "author_session_expired"}
+
         files = raw_files or []
         if len(files) > MAX_IMAGES_PER_COMMENT:
             return 400, {"ok": False, "error": "too_many_images"}
@@ -1141,7 +1237,6 @@ class LocalCommentsStore:
         if len(body) > 2000:
             return 400, {"ok": False, "error": "body_too_long"}
 
-        is_author = self.verify_author(author_header)
         now_ms = int(time.time() * 1000)
 
         # Silent shadow-drop honeypot
@@ -1508,8 +1603,8 @@ class LocalCommentsStore:
             "nextGate": self._sign_gate(slug),
         }
 
-    def delete_comment(self, comment_id: str, author_header: str) -> tuple[int, dict[str, object]]:
-        if not self.verify_author(author_header):
+    def delete_comment(self, comment_id: str, author_header: str, cookie_header: str = "") -> tuple[int, dict[str, object]]:
+        if not self.verify_author_request(author_header, cookie_header):
             return 401, {"ok": False, "error": "unauthorized"}
         if not COMMENT_ID_RE.match(comment_id):
             return 400, {"ok": False, "error": "invalid_id"}
@@ -1635,12 +1730,22 @@ class PreviewRequestHandler(http.server.BaseHTTPRequestHandler):
             return f"{ctype}; charset=utf-8"
         return ctype
 
-    def _send_json(self, status: int, payload: dict[str, object], *, head_only: bool = False) -> None:
+    def _send_json(
+        self,
+        status: int,
+        payload: dict[str, object],
+        *,
+        head_only: bool = False,
+        extra_headers: dict[str, str] | None = None,
+    ) -> None:
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
+        if extra_headers:
+            for k, v in extra_headers.items():
+                self.send_header(k, v)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         if not head_only:
@@ -1734,6 +1839,8 @@ class PreviewRequestHandler(http.server.BaseHTTPRequestHandler):
                     data[key] = fields[key][0]
             if "fallbackMode" in fields:
                 data["fallbackMode"] = fields["fallbackMode"][0] in ("true", "1")
+            if "expectAuthor" in fields:
+                data["expectAuthor"] = fields["expectAuthor"][0] in ("true", "1")
             return data, files, 200, ""
 
         if not lower_ct or "application/json" in lower_ct:
@@ -1791,6 +1898,28 @@ class PreviewRequestHandler(http.server.BaseHTTPRequestHandler):
         if not head_only:
             self.wfile.write(body)
 
+    def _read_author_verify_candidate(self, author_hdr: str) -> tuple[str | None, int, str]:
+        if author_hdr and author_hdr.strip():
+            return author_hdr.strip(), 200, ""
+        raw_ct = (self.headers.get("Content-Type") or "").lower()
+        if "application/json" not in raw_ct:
+            return "", 200, ""
+        try:
+            length = int(self.headers.get("Content-Length") or "0")
+        except ValueError:
+            return None, 400, "invalid_json"
+        raw, st, err = self._read_exact_bounded(length, MAX_AUTH_JSON_BYTES)
+        if raw is None:
+            return None, st, "invalid_json" if err == "invalid_payload" else err
+        try:
+            obj = json.loads(raw.decode("utf-8"))
+            if not isinstance(obj, dict):
+                return None, 400, "invalid_json"
+            cand = obj.get("password") if isinstance(obj.get("password"), str) else obj.get("authorKey")
+            return (cand.strip() if isinstance(cand, str) else ""), 200, ""
+        except Exception:
+            return None, 400, "invalid_json"
+
     def _handle_comments_api(self, method: str, norm_path: str, query_str: str, *, head_only: bool = False) -> bool:
         if self.comments_store is None:
             return False
@@ -1798,12 +1927,22 @@ class PreviewRequestHandler(http.server.BaseHTTPRequestHandler):
             return False
 
         author_hdr = self.headers.get("X-Author-Key", "")
+        cookie_hdr = self.headers.get("Cookie", "")
+        has_session_cookie = bool(_parse_cookie(cookie_hdr, AUTHOR_COOKIE_NAME))
+
         if norm_path in ("/api/comments", "/api/comments/"):
             if method == "GET":
                 qs = urllib.parse.parse_qs(query_str)
                 slug = (qs.get("slug", [""])[0] or "").strip().lower()
-                status, payload = self.comments_store.list_comments(slug, author_hdr)
-                self._send_json(status, payload, head_only=head_only)
+                status, payload = self.comments_store.list_comments(slug, author_hdr, cookie_hdr)
+                extra_hdrs = None
+                if (
+                    status == 200
+                    and has_session_cookie
+                    and not bool((payload.get("config") or {}).get("authorMode"))  # type: ignore[union-attr]
+                ):
+                    extra_hdrs = {"Set-Cookie": self.comments_store.clear_author_cookie(is_https=False)}
+                self._send_json(status, payload, head_only=head_only, extra_headers=extra_hdrs)
                 return True
             if method == "POST":
                 if not self._is_origin_allowed():
@@ -1818,8 +1957,14 @@ class PreviewRequestHandler(http.server.BaseHTTPRequestHandler):
                     self.client_address[0],
                     author_hdr,
                     raw_files=files,
+                    cookie_header=cookie_hdr,
                 )
-                self._send_json(status, payload)
+                extra_hdrs = (
+                    {"Set-Cookie": self.comments_store.clear_author_cookie(is_https=False)}
+                    if status == 401 and payload.get("error") == "author_session_expired"
+                    else None
+                )
+                self._send_json(status, payload, extra_headers=extra_hdrs)
                 return True
             self._send_json(405, {"ok": False, "error": "method_not_allowed"})
             return True
@@ -1829,10 +1974,37 @@ class PreviewRequestHandler(http.server.BaseHTTPRequestHandler):
                 if not self._is_origin_allowed():
                     self._send_json(403, {"ok": False, "error": "forbidden_origin"})
                     return True
-                if self.comments_store.verify_author(author_hdr):
-                    self._send_json(200, {"ok": True, "author": True})
+                if not self.comments_store.author_key:
+                    self._send_json(503, {"ok": False, "error": "auth_unconfigured"})
+                    return True
+                cand, err_st, err_code = self._read_author_verify_candidate(author_hdr)
+                if cand is None:
+                    self._send_json(err_st, {"ok": False, "error": err_code})
+                    return True
+                if self.comments_store.verify_author(cand):
+                    cookie = self.comments_store.issue_author_cookie(is_https=False)
+                    extra_hdrs = {"Set-Cookie": cookie} if cookie else None
+                    self._send_json(
+                        200,
+                        {"ok": True, "author": True, "authorName": self.comments_store.site_author},
+                        extra_headers=extra_hdrs,
+                    )
                 else:
                     self._send_json(401, {"ok": False, "error": "invalid_author_key"})
+                return True
+            self._send_json(405, {"ok": False, "error": "method_not_allowed"})
+            return True
+
+        if norm_path == "/api/comments/author/logout":
+            if method == "POST":
+                if not self._is_origin_allowed():
+                    self._send_json(403, {"ok": False, "error": "forbidden_origin"})
+                    return True
+                self._send_json(
+                    200,
+                    {"ok": True, "author": False},
+                    extra_headers={"Set-Cookie": self.comments_store.clear_author_cookie(is_https=False)},
+                )
                 return True
             self._send_json(405, {"ok": False, "error": "method_not_allowed"})
             return True
@@ -1855,8 +2027,13 @@ class PreviewRequestHandler(http.server.BaseHTTPRequestHandler):
             if not self._is_origin_allowed():
                 self._send_json(403, {"ok": False, "error": "forbidden_origin"})
                 return True
-            status, payload = self.comments_store.delete_comment(cid, author_hdr)
-            self._send_json(status, payload)
+            status, payload = self.comments_store.delete_comment(cid, author_hdr, cookie_hdr)
+            extra_hdrs = (
+                {"Set-Cookie": self.comments_store.clear_author_cookie(is_https=False)}
+                if status == 401 and has_session_cookie
+                else None
+            )
+            self._send_json(status, payload, extra_headers=extra_hdrs)
             return True
         self._send_json(405, {"ok": False, "error": "method_not_allowed"})
         return True
